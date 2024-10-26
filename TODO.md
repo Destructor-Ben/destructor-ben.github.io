@@ -1,3 +1,4 @@
 # To Do List
 
-- Setup SvelteKit with Deno 2
+- Setup deploy action
+- Build website
