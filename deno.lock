@@ -1,7 +1,7 @@
 {
   "version": "4",
   "specifiers": {
-    "npm:@sveltejs/adapter-auto@3": "3.3.1_@sveltejs+kit@2.7.3__@sveltejs+vite-plugin-svelte@4.0.0___svelte@5.1.3____acorn@8.13.0___vite@5.4.8__svelte@5.1.3___acorn@8.13.0__vite@5.4.8_@sveltejs+vite-plugin-svelte@4.0.0__svelte@5.1.3___acorn@8.13.0__vite@5.4.8_svelte@5.1.3__acorn@8.13.0_vite@5.4.8",
+    "npm:@sveltejs/adapter-static@3": "3.0.6_@sveltejs+kit@2.7.3__@sveltejs+vite-plugin-svelte@4.0.0___svelte@5.1.3____acorn@8.13.0___vite@5.4.8__svelte@5.1.3___acorn@8.13.0__vite@5.4.8_@sveltejs+vite-plugin-svelte@4.0.0__svelte@5.1.3___acorn@8.13.0__vite@5.4.8_svelte@5.1.3__acorn@8.13.0_vite@5.4.8",
     "npm:@sveltejs/kit@2": "2.7.3_@sveltejs+vite-plugin-svelte@4.0.0__svelte@5.1.3___acorn@8.13.0__vite@5.4.8_svelte@5.1.3__acorn@8.13.0_vite@5.4.8",
     "npm:@sveltejs/vite-plugin-svelte@4": "4.0.0_svelte@5.1.3__acorn@8.13.0_vite@5.4.8",
     "npm:svelte@5": "5.1.3_acorn@8.13.0",
@@ -160,11 +160,10 @@
     "@rollup/rollup-win32-x64-msvc@4.24.0": {
       "integrity": "sha512-fbMkAF7fufku0N2dE5TBXcNlg0pt0cJue4xBRE2Qc5Vqikxr4VCgKj/ht6SMdFcOacVA9rqF70APJ8RN/4vMJw=="
     },
-    "@sveltejs/adapter-auto@3.3.1_@sveltejs+kit@2.7.3__@sveltejs+vite-plugin-svelte@4.0.0___svelte@5.1.3____acorn@8.13.0___vite@5.4.8__svelte@5.1.3___acorn@8.13.0__vite@5.4.8_@sveltejs+vite-plugin-svelte@4.0.0__svelte@5.1.3___acorn@8.13.0__vite@5.4.8_svelte@5.1.3__acorn@8.13.0_vite@5.4.8": {
-      "integrity": "sha512-5Sc7WAxYdL6q9j/+D0jJKjGREGlfIevDyHSQ2eNETHcB1TKlQWHcAo8AS8H1QdjNvSXpvOwNjykDUHPEAyGgdQ==",
+    "@sveltejs/adapter-static@3.0.6_@sveltejs+kit@2.7.3__@sveltejs+vite-plugin-svelte@4.0.0___svelte@5.1.3____acorn@8.13.0___vite@5.4.8__svelte@5.1.3___acorn@8.13.0__vite@5.4.8_@sveltejs+vite-plugin-svelte@4.0.0__svelte@5.1.3___acorn@8.13.0__vite@5.4.8_svelte@5.1.3__acorn@8.13.0_vite@5.4.8": {
+      "integrity": "sha512-MGJcesnJWj7FxDcB/GbrdYD3q24Uk0PIL4QIX149ku+hlJuj//nxUbb0HxUTpjkecWfHjVveSUnUaQWnPRXlpg==",
       "dependencies": [
-        "@sveltejs/kit",
-        "import-meta-resolve"
+        "@sveltejs/kit"
       ]
     },
     "@sveltejs/kit@2.7.3_@sveltejs+vite-plugin-svelte@4.0.0__svelte@5.1.3___acorn@8.13.0__vite@5.4.8_svelte@5.1.3__acorn@8.13.0_vite@5.4.8": {
@@ -432,7 +431,7 @@
   "workspace": {
     "packageJson": {
       "dependencies": [
-        "npm:@sveltejs/adapter-auto@3",
+        "npm:@sveltejs/adapter-static@3",
         "npm:@sveltejs/kit@2",
         "npm:@sveltejs/vite-plugin-svelte@4",
         "npm:svelte@5",
