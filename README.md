@@ -1,4 +1,3 @@
-# destructor-ben.github.io
- Personal website
+# Destructor_Ben's Website
 
-Test change
+Personal website for various uses. Visit it to find out.
