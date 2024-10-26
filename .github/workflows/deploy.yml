@@ -27,8 +27,11 @@ jobs:
       - name: Build site
         run: deno task build
 
+      - name: Verify Pages Publish Status
+        run: gh api -H "Accept: application/vnd.github.v3+json" /repos/${{ github.repository }}/pages | jq
+
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./build
