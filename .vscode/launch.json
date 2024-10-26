@@ -1,0 +1,83 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Dev",
+            "request": "launch",
+            "type": "node",
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "runtimeExecutable": "deno",
+            "runtimeArgs": [
+                "task",
+                "dev"
+            ],
+            "attachSimplePort": 9229
+        },
+        {
+            "name": "Build",
+            "request": "launch",
+            "type": "node",
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "runtimeExecutable": "deno",
+            "runtimeArgs": [
+                "task",
+                "dev"
+            ],
+            "attachSimplePort": 9229
+        },
+        {
+            "name": "Preview",
+            "request": "launch",
+            "type": "node",
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "runtimeExecutable": "deno",
+            "runtimeArgs": [
+                "task",
+                "dev"
+            ],
+            "attachSimplePort": 9229
+        },
+        {
+            "name": "Lint",
+            "request": "launch",
+            "type": "node",
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "runtimeExecutable": "deno",
+            "runtimeArgs": [
+                "task",
+                "lint"
+            ],
+            "attachSimplePort": 9229
+        },
+        {
+            "name": "Check",
+            "request": "launch",
+            "type": "node",
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "runtimeExecutable": "deno",
+            "runtimeArgs": [
+                "task",
+                "check"
+            ],
+            "attachSimplePort": 9229
+        },
+        {
+            "name": "Format",
+            "request": "launch",
+            "type": "node",
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "runtimeExecutable": "deno",
+            "runtimeArgs": [
+                "task",
+                "format"
+            ],
+            "attachSimplePort": 9229
+        }
+    ]
+}

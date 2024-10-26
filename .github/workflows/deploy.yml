@@ -1,6 +1,7 @@
 name: Deploy to GitHub Pages
 
-on: workflow-dispatch
+on:
+  workflow-dispatch:
 
 jobs:
   deploy:
@@ -10,8 +11,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Setup Deno
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: vx.x.x
+
       - name: Install dependencies
-        run: npm install
+        run: deno install
 
       - name: Build site
         run: deno task build
