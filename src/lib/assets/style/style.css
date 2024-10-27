@@ -97,6 +97,14 @@ button, a.button {
       var(--col-highlight) 50%
     );
   }
+
+  &:active {
+    background-color: color-mix(
+      in hsl,
+      var(--col-fg),
+      var(--col-highlight) 75%
+    );
+  }
 }
 
 body, html, :root {
