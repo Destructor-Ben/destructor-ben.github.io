@@ -53,11 +53,11 @@ a:not(.button) {
   transition-property: color;
 
   color: var(--col4);
-  
+
   &:visited {
     color: var(--col5);
   }
-  
+
   &:hover {
     color: color-mix(in hsl, var(--col4), white 15%);
 
@@ -91,7 +91,11 @@ button, a.button {
   cursor: pointer;
 
   &:hover {
-    background-color: color-mix(in hsl, var(--col-fg), var(--col-highlight) 50%);
+    background-color: color-mix(
+      in hsl,
+      var(--col-fg),
+      var(--col-highlight) 50%
+    );
   }
 }
 

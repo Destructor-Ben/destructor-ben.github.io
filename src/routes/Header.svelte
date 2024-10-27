@@ -1,6 +1,6 @@
 <header>
   <a href="/" class="button">Home</a>
-  <a href="/a" class="button">To Do</a>
+  <a href="/projects" class="button">Projects</a>
   <a href="/b" class="button">To Do</a>
   <a href="/c" class="button">To Do</a>
 </header>
@@ -20,5 +20,6 @@
 
     background-color: var(--col-mg);
     border-bottom: 2px solid var(--col-highlight);
+    box-shadow: var(--shadow-lg);
   }
 </style>

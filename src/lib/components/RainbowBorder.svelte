@@ -6,8 +6,12 @@
 
 <style>
   @keyframes border-animation {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
   }
 
   .container {
@@ -17,7 +21,7 @@
     position: relative;
     overflow: hidden;
     z-index: -1;
-  
+
     /* The rainbow border, which is a spinning rectangle cropped to the root element */
     &::before {
       content: "";
@@ -31,7 +35,14 @@
       right: var(--size);
       bottom: var(--size);
       animation: border-animation 10s linear infinite;
-      background: conic-gradient(var(--col1), var(--col2), var(--col3), var(--col4), var(--col5), var(--col1));
+      background: conic-gradient(
+        var(--col1),
+        var(--col2),
+        var(--col3),
+        var(--col4),
+        var(--col5),
+        var(--col1)
+      );
     }
   }
 </style>
