@@ -17,7 +17,9 @@
     padding: 1em;
 
     background-color: var(--col-mg);
-    border-bottom: 2px solid var(--col-highlight);
+    border-bottom: var(--border);
     box-shadow: var(--shadow-lg);
+    
+    z-index: 1;
   }
 </style>
