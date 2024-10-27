@@ -1,0 +1,103 @@
+/* Default styles */
+*, :before, :after {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+
+  font-family: var(--font);
+  font-size: 1rem;
+  font-weight: normal;
+  color: var(--col-text);
+  -webkit-tap-highlight-color: transparent;
+
+  transition-duration: var(--transition-duration);
+  transition-timing-function: var(--transition-function);
+  transition-property: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  color: var(--col-heading);
+  font-weight: bold;
+  text-align: center;
+}
+
+h1 {
+  font-size: 2rem;
+}
+h2 {
+  font-size: 1.8rem;
+}
+h3 {
+  font-size: 1.6rem;
+}
+h4 {
+  font-size: 1.4rem;
+}
+h5 {
+  font-size: 1.2rem;
+}
+h6 {
+  font-size: 1rem;
+}
+
+hr {
+  border: 1px solid var(--col-highlight);
+  border-radius: 1000rem;
+  margin: 0.5em 0em;
+}
+
+a:not(.button) {
+  /* Ugly, but I can't make it work any other way :'( */
+  cursor: pointer;
+  transition-property: color;
+
+  color: var(--col4);
+  
+  &:visited {
+    color: var(--col5);
+  }
+  
+  &:hover {
+    color: color-mix(in hsl, var(--col4), white 15%);
+
+    &:visited {
+      color: color-mix(in hsl, var(--col5), white 15%);
+    }
+  }
+
+  &:active {
+    color: color-mix(in hsl, var(--col4), white 30%);
+
+    &:visited {
+      color: color-mix(in hsl, var(--col5), white 30%);
+    }
+  }
+}
+
+button, a.button {
+  background-color: var(--col-fg);
+  padding: 0.6em 1em;
+  border: 2px solid var(--col-highlight);
+  border-radius: 1000rem;
+  box-shadow: var(--shadow-lg);
+
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-decoration: none;
+
+  transition-property: background-color;
+  cursor: pointer;
+
+  &:hover {
+    background-color: color-mix(in hsl, var(--col-fg), var(--col-highlight) 50%);
+  }
+}
+
+body, html, :root {
+  min-height: 100vh;
+  scroll-behavior: smooth;
+  background-color: var(--col-bg);
+  z-index: -999;
+}

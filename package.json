@@ -7,8 +7,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "lint": "deno lint",
-    "check": "deno fmt --check",
-    "format": "deno fmt"
+    "check": "deno fmt --unstable-component --check",
+    "format": "deno fmt --unstable-component"
   },
   "devDependencies": {
     "@sveltejs/adapter-static": "^3.0.0",

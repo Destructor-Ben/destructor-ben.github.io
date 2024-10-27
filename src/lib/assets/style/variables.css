@@ -3,18 +3,20 @@
 :root {
   /* Fonts */
   --font: -apple-system, BlinkMacSystemFont, "Poppins", sans-serif;
-  --font-heading: "Poppins", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-heading: "Consolas", monospace;
 
-  /* TODO: Colours */
-  --col-text: white;
+  /* Colours */
+  --col-text: #f1f1f1;
   --col-heading: white;
-  --col-red: red;
-  --col-green: rgb(17, 176, 115);
-  --col-bg1: #3ec8dd;
-  --col-bg2: #00ffd0;
-  --col-glass: rgba(255, 255, 255, 0.4);
-  --col-glass-glare: rgba(255, 255, 255, 0.35);
-  --col-glass-border: rgba(255, 255, 255, 0.5);
+  --col-bg: #010409;
+  --col-mg: #0d1117;
+  --col-fg: #0f1931;
+  --col-highlight: #3d444d;
+  --col1: #df406f;
+  --col2: #fbda34;
+  --col3: #86f9b8;
+  --col4: #4f79f0;
+  --col5: #8539f3;
 
   /* Miscellaneous */
   --transition-duration: 150ms;
