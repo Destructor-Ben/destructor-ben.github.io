@@ -4,6 +4,7 @@
   function goToTop()
   {
     window.scroll(0, 0);
+    history.pushState({}, "", window.location.pathname + window.location.search);
   }
 
   // TODO: this is a bit dodgy while loading, maybe just make an opt out for certain pages?
