@@ -1,6 +1,19 @@
-<script>
+<script lang="ts">
   import NZFlag from "$lib/assets/img/nz-flag.png";
   import ProfilePicture from "$lib/assets/img/pfp.png";
+
+  import Julia from "$lib/julia";
+
+  let juliaCanvas: HTMLCanvasElement;
+
+  // Create the julia renderer
+  $effect(() => {
+    const julia = new Julia(juliaCanvas);
+
+    return () => {
+      julia.destroy();
+    }
+  })
 </script>
 
 <svelte:head>
@@ -9,12 +22,13 @@
 
 <div id="intro">
   <!-- Appears behind everything -->
-  <canvas id="julia-canvas" width=100 height=100></canvas>
+  <canvas id="julia-canvas" bind:this={juliaCanvas} width=500 height=500></canvas>
 
   <!-- Basic info about me -->
   <h1>About Me - Destructor_Ben</h1>
   <hr />
   <div>
+    <!-- svelte-ignore a11y_img_redundant_alt -->
     <img class="pfp" src={ProfilePicture} alt="Profile Picture" />
     <p>
       I'm a 16 year old guy from New Zealand <img
@@ -58,11 +72,6 @@
 
   #julia-canvas {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100%;
 
     z-index: -1;
   }
