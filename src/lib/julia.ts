@@ -1,32 +1,90 @@
 const frameRate = 10;
 
 const vertexShaderSource = `
+precision highp float;
+
 attribute vec4 VertexPosition;
+
+varying vec2 TexCoord;
 
 void main() {
   gl_Position = VertexPosition;
+  TexCoord = VertexPosition.xy;
 }
 `;
 
-// TODO: implement julia here
+// TODO: allow swapping the shader to change fractals
+// TODO: move these into separate files
 // Background colour is (1, 4, 9) (rgb)
 const fragmentShaderSource = `
+precision highp float;
+
+uniform float Real;
+uniform float Imaginary;
+
+varying vec2 TexCoord;
+
+float Julia(float x, float y, float cx, float cy, float radius)
+{
+    float radiusSquared = radius * radius;
+
+    for (int iteration = 0; iteration < 100; iteration++)
+    { 
+        // The point escaped
+        if (x * x + y * y >= radiusSquared)
+        {
+            // Smoothing formula
+            float z = x * x + y * y;
+            float ret = float(iteration) + 1.0 - log(log(z)) / log(2.0);
+            return ret < 0.0 ? 0.0 : ret;
+        }
+
+        // Update position
+        float tempX = x * x - y * y;
+        y = 2.0 * x * y + cy;
+        x = tempX + cx;
+    }
+
+    // If the point never escaped
+    return -1.0;
+}
+
 void main() {
-  gl_FragColor = vec4(1.0, 0.0, 1.0, 1.0);
+  float fractalValue = Julia(TexCoord.x, TexCoord.y, Real, Imaginary, 4.0);
+  gl_FragColor = vec4(fractalValue, fractalValue, fractalValue, 1.0);
 }
 `;
 
+function lerp(start: number, end: number, t: number) {
+  return start + (end - start) * t;
+}
+
+function easeInOutQuad(t: number) {
+  if (t < 0.5) {
+      return 2 * t * t;
+  } else {
+      return -1 + (4 - 2 * t) * t;
+  }
+}
+
+// TODO: change to JuliaRenderer
+// TODO: allow not rendering every frame
+// TODO: animations
+// TODO: config and also animations
 export default class Julia
 {
   canvas: HTMLCanvasElement | null;
   gl: WebGL2RenderingContext | null;
   intervalID: number | null = null;
-  frameCount = 0;
 
   vertexBuffer: WebGLBuffer | null = null;
   vertexShader: WebGLShader | null = null;
   fragmentShader: WebGLShader | null = null;
   glProgram: WebGLProgram | null = null;
+  
+  frameCount = 0;
+  real = 0;
+  imaginary = 0;
 
   constructor(canvas: HTMLCanvasElement) {
     console.log("[Julia] Initializing...")
@@ -43,7 +101,7 @@ export default class Julia
     this.prepare();
 
     this.intervalID = setInterval(() => {
-      this.draw();
+      this.render();
     }, 1000 / frameRate);
   }
 
@@ -135,15 +193,31 @@ export default class Julia
     console.log("[Julia] Successfully initialized")
   }
 
-  draw() {
+  render() {
     const gl = this.gl;
     if (!gl)
+      return;
+
+    if (!this.glProgram)
       return;
 
     // Clear
     gl.clear(gl.COLOR_BUFFER_BIT)
 
+    // Animate values
+    // -0.7, 0.27015 and 0.355, 0.355 are both cool
+    let t = (this.frameCount / 100) % 1;
+    t = easeInOutQuad(t);
+
+    this.real = lerp(-0.7, 0.355, t);
+    this.imaginary = lerp(0.27015, 0.355, t);
+    console.log(`${t} ${this.real} ${this.imaginary}`);
+
     // Draw fullscreen quad with shader
+    const location1 = gl.getUniformLocation(this.glProgram, "Real");
+    const location2 = gl.getUniformLocation(this.glProgram, "Imaginary");
+    gl.uniform1f(location1, this.real);
+    gl.uniform1f(location2, this.imaginary);
     // TODO: set a uniform in the fragment shader
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
