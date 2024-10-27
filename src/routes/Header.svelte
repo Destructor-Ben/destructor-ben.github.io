@@ -1,8 +1,8 @@
 <header>
   <a href="/" class="button">Home</a>
-  <a href="/" class="button">To Do</a>
-  <a href="/" class="button">To Do</a>
-  <a href="/" class="button">To Do</a>
+  <a href="/a" class="button">To Do</a>
+  <a href="/b" class="button">To Do</a>
+  <a href="/c" class="button">To Do</a>
 </header>
 
 <style>
