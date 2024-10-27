@@ -1,8 +1,6 @@
 <header>
   <a href="/" class="button">Home</a>
   <a href="/projects" class="button">Projects</a>
-  <a href="/" class="button">To Do</a>
-  <a href="/" class="button">To Do</a>
 </header>
 
 <style>

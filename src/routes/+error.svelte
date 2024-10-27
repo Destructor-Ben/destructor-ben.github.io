@@ -2,18 +2,25 @@
   import { page } from "$app/stores";
 </script>
 
-<div>
-  <h1>An error occurred</h1>
-  <h2>{$page.status} - {$page.error?.message}</h2>
+<div class="error-root">
+  <div>
+    <h1>An error occurred</h1>
+    <h2>{$page.status} - {$page.error?.message}</h2>
+  </div>
   <p>Navigate back <a href="/">Home</a></p>
 </div>
 
 <style>
-  div {
-    height: 100%;
+  .error-root {
+    flex: 1;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10rem;
+
+    h1 {
+      font-size: 5rem;
+    }
   }
 </style>

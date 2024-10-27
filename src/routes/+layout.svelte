@@ -25,6 +25,8 @@
 
   main {
     flex: 1; /* Makes it grow to take up the remaining space */
+    display: flex;
+    flex-direction: column;
     height: 100%;
     padding: 1em;
   }
