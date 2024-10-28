@@ -22,8 +22,8 @@
       gl.uniform1f(imaginary, 0.355);
     });
 
-    julia.setFractal(fractal);
-    julia.render();
+    //julia.setFractal(fractal);
+    //julia.render();
 
     return () => {
       julia.destroy();
@@ -35,11 +35,11 @@
   <title>Destructor_Ben</title>
 </svelte:head>
 
-<div id="intro">
-  <!-- Appears behind everything -->
-  <canvas id="julia-canvas" bind:this={juliaCanvas} width=500 height=500></canvas>
+<!-- Appears behind everything -->
+<canvas id="julia-canvas" bind:this={juliaCanvas} width=500 height=500></canvas>
 
   <!-- Basic info about me -->
+<div id="intro">
   <h1>About Me - Destructor_Ben</h1>
   <hr />
   <div>
@@ -53,7 +53,7 @@
       /> with a passion for programming, electronics, and maths.
     </p>
   </div>
-  <a href="#more-about-me">See More</a>
+  <a class="button" href="#more-about-me">See More</a>
 </div>
 
 <!-- SVGs used in my GitHub profile -->
@@ -85,6 +85,7 @@
     height: 10em;
   }
 
+  /* TODO: finish the julia canvas */
   #julia-canvas {
     position: fixed;
 
@@ -92,7 +93,23 @@
   }
 
   #intro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1em;
+    height: 100vh;
 
+    & > div {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2em;
+      padding: 2em;
+      
+      & > p {
+        width: 50%;
+      }
+    }
   }
 
   #more-about-me {
@@ -100,6 +117,7 @@
     flex-direction: column;
     align-items: center;
     gap: 46px;
+    padding: 1em;
 
     & > img {
       width: 846px;
