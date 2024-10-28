@@ -2,13 +2,18 @@
   import NZFlag from "$lib/assets/img/nz-flag.png";
   import ProfilePicture from "$lib/assets/img/pfp.png";
 
-  import Julia from "$lib/julia";
+  import JuliaRenderer from "$lib/julia/julia-renderer";
+  import Fractal from "$lib/julia/fractal";
+  import JuliaVert from "$lib/julia/vert.glsl?raw";
+  import JuliaFrag from "$lib/julia/frag-julia.glsl?raw";
 
   let juliaCanvas: HTMLCanvasElement;
 
   // Create the julia renderer
   $effect(() => {
-    const julia = new Julia(juliaCanvas);
+    const julia = new JuliaRenderer(juliaCanvas);
+    const fractal = new Fractal(JuliaVert, JuliaFrag);
+    julia.setFractal(fractal);
 
     return () => {
       julia.destroy();
