@@ -35,9 +35,13 @@
 </div>
 
 <style>
+  hr {
+    margin-bottom: 1em;
+  }
+
   div {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(20vw, 1fr));
+    grid-template-columns: 1fr 1fr 1fr 1fr;
     gap: 1em;
   }
 </style>
