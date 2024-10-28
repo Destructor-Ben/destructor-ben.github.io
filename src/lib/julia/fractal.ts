@@ -1,17 +1,19 @@
-import { log, error } from "./julia-logger";
+import { error } from "./julia-logger";
 
 export default class Fractal {
   vertSource: string;
   fragSource: string;
+  updateCallback: (gl: WebGL2RenderingContext, program: WebGLProgram) => void;
 
   gl: WebGL2RenderingContext | null = null;
   vertexShader: WebGLShader | null = null;
   fragmentShader: WebGLShader | null = null;
   program: WebGLProgram | null = null;
 
-  constructor(vertSource: string, fragSource: string) {
+  constructor(vertSource: string, fragSource: string, updateCallback: (gl: WebGL2RenderingContext, program: WebGLProgram) => void) {
     this.vertSource = vertSource;
     this.fragSource = fragSource;
+    this.updateCallback = updateCallback;
   }
 
   prepare(gl: WebGL2RenderingContext | null) {
@@ -89,10 +91,6 @@ export default class Fractal {
     if (!program)
       return;
 
-    // -0.7, 0.27015 and 0.355, 0.355 are both cool
-    const location1 = gl.getUniformLocation(program, "Real");
-    const location2 = gl.getUniformLocation(program, "Imaginary");
-    gl.uniform1f(location1, 0.355);
-    gl.uniform1f(location2, 0.355);
+    this.updateCallback(gl, program);
   }
 }

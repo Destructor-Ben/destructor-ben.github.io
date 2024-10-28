@@ -10,9 +10,18 @@
   let juliaCanvas: HTMLCanvasElement;
 
   // Create the julia renderer
+  // TODO: streamlined rendering and config + animations
   $effect(() => {
     const julia = new JuliaRenderer(juliaCanvas);
-    const fractal = new Fractal(JuliaVert, JuliaFrag);
+    const fractal = new Fractal(JuliaVert, JuliaFrag, (gl, program) => {
+      // Set the fractal location
+      // -0.7, 0.27015 and 0.355, 0.355 are both cool
+      const real = gl.getUniformLocation(program, "Real");
+      const imaginary = gl.getUniformLocation(program, "Imaginary");
+      gl.uniform1f(real, 0.355);
+      gl.uniform1f(imaginary, 0.355);
+    });
+
     julia.setFractal(fractal);
     julia.render();
 
