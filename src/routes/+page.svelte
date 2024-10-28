@@ -14,6 +14,7 @@
     const julia = new JuliaRenderer(juliaCanvas);
     const fractal = new Fractal(JuliaVert, JuliaFrag);
     julia.setFractal(fractal);
+    julia.render();
 
     return () => {
       julia.destroy();
