@@ -45,16 +45,17 @@
     if (!useMouseForCoords)
       return;
 
-    const x = event.clientX;
-    const y = event.clientY;
+    const canvasSize = canvas.getBoundingClientRect();
+
+    const x = event.clientX - canvasSize.x;
+    const y = event.clientY- canvasSize.y;
+
+    const width = canvasSize.width;
+    const height = canvasSize.height;
 
     // Normalize to coordinate space for fractal
-    // TODO: do this properly
-    const width = canvas.width;
-    const height = canvas.height;
-
-    const mouseReal = (x - width) / width;
-    const mouseImaginary = (y - height) / height;
+    const mouseReal = (x - width / 2) / width * 2;
+    const mouseImaginary = (y - height / 2) / height * 2;
 
     real = mouseReal;
     imaginary = mouseImaginary;
