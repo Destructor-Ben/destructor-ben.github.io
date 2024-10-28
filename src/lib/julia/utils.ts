@@ -4,8 +4,8 @@ export function lerp(start: number, end: number, t: number) {
 
 export function easeInOutQuad(t: number) {
   if (t < 0.5) {
-      return 2 * t * t;
+    return 2 * t * t;
   } else {
-      return -1 + (4 - 2 * t) * t;
+    return -1 + (4 - 2 * t) * t;
   }
 }

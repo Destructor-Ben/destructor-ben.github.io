@@ -32,8 +32,9 @@ export default class JuliaRenderer {
 
   prepare() {
     const gl = this.gl;
-    if (!gl)
+    if (!gl) {
       return;
+    }
 
     // Prepare screen clearing
     gl.clearColor(0, 0, 0, 0);
@@ -43,8 +44,12 @@ export default class JuliaRenderer {
     const bufferData = [1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, -1.0];
     this.vertexBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(bufferData), gl.STATIC_DRAW);
-  
+    gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array(bufferData),
+      gl.STATIC_DRAW,
+    );
+
     // Setup the vertex attribute array
     const location = 0; // Always the same, don't need to change - gl.getAttribLocation(program, "VertexPosition");
     const numComponents = 2; // Pull out 2 values per iteration
@@ -63,41 +68,44 @@ export default class JuliaRenderer {
     );
 
     gl.enableVertexAttribArray(location);
-
   }
 
   destroy() {
-    log("Destroying...")
-    
+    log("Destroying...");
+
     this.setFractal(null);
     this.gl?.deleteBuffer(this.vertexBuffer);
     this.gl = null;
     this.canvas = null;
 
-    log("Successfully destroyed")
+    log("Successfully destroyed");
   }
 
   setFractal(fractal: Fractal | null) {
-    if (this.fractal)
+    if (this.fractal) {
       this.fractal.destroy();
+    }
 
     this.fractal = fractal;
 
-    if (this.fractal)
+    if (this.fractal) {
       this.fractal.prepare(this.gl);
+    }
   }
 
   render() {
     const gl = this.gl;
-    if (!gl)
+    if (!gl) {
       return;
-    
+    }
+
     // Clear
-    gl.clear(gl.COLOR_BUFFER_BIT)
+    gl.clear(gl.COLOR_BUFFER_BIT);
 
     // Render
-    if (this.fractal)
+    if (this.fractal) {
       this.fractal.updateShader();
+    }
 
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
   }
