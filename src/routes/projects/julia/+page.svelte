@@ -30,12 +30,14 @@
     }
   })
 
-  // Mouse control
+  // Mouse and keybind control
   $effect(() => {
     canvas.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("keypress", handleKeyPress)
 
     return () => {
       canvas.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("keypress", handleKeyPress)
     }
   })
 
@@ -57,6 +59,15 @@
     real = mouseReal;
     imaginary = mouseImaginary;
   }
+
+  // Toggle whether mouse movement is used
+  function handleKeyPress(event: KeyboardEvent)
+  {
+    if (event.code === "KeyM")
+    {
+      useMouseForCoords = !useMouseForCoords;
+    }
+  }
 </script>
 
 <svelte:head>
@@ -69,7 +80,7 @@
 <div>
   <label>
     <input type="checkbox" bind:checked={useMouseForCoords} />
-    <span>Use mouse for coordinates</span>
+    <span>Use mouse for coordinates - Press m to toggle</span>
   </label>
 
   <label>
