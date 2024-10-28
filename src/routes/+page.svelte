@@ -1,6 +1,6 @@
 <script lang="ts">
-  import NZFlag from "$lib/assets/img/nz-flag.png";
-  import ProfilePicture from "$lib/assets/img/pfp.png";
+  import NZFlag from "$lib/img/nz-flag.png";
+  import ProfilePicture from "$lib/img/pfp.png";
 
   import JuliaRenderer from "$lib/julia/julia-renderer";
   import Fractal from "$lib/julia/fractal";
@@ -22,8 +22,8 @@
       gl.uniform1f(imaginary, 0.355);
     });
 
-    //julia.setFractal(fractal);
-    //julia.render();
+    julia.setFractal(fractal);
+    julia.render();
 
     return () => {
       julia.destroy();
@@ -53,7 +53,11 @@
       /> with a passion for programming, electronics, and maths.
     </p>
   </div>
-  <a class="button" href="#more-about-me">See More</a>
+
+  <div>
+    <a class="button" href="#more-about-me">See More</a>
+    <a class="button" href="/projects">Projects</a>
+  </div>
 </div>
 
 <!-- SVGs used in my GitHub profile -->
@@ -88,7 +92,10 @@
   /* TODO: finish the julia canvas */
   #julia-canvas {
     position: fixed;
-
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
     z-index: -1;
   }
 

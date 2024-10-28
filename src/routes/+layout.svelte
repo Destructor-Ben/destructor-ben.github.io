@@ -1,6 +1,6 @@
 <script>
-  import "$lib/assets/style/variables.css";
-  import "$lib/assets/style/style.css";
+  import "$lib/style/variables.css";
+  import "$lib/style/style.css";
 
   import Header from "./Header.svelte";
   import Footer from "./Footer.svelte";

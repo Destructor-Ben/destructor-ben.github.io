@@ -48,7 +48,7 @@ hr {
   margin: 0.5em 0em;
 }
 
-a:not(.button) {
+a:not(.button):not(.no-style) {
   /* Ugly, but I can't make it work any other way :'( */
   cursor: pointer;
   transition-property: color;
