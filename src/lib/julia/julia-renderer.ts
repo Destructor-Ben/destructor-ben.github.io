@@ -144,7 +144,6 @@ export default class JuliaRenderer {
 
     this.gl?.deleteBuffer(this.vertexBuffer);
     this.gl = null;
-    this.canvas = null;
 
     Logger.log("Successfully destroyed");
   }
