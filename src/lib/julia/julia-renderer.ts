@@ -7,7 +7,11 @@ import FragShaderJulia from "./shaders/frag-julia.glsl?raw";
 
 import { mat4 } from "gl-matrix";
 
-// TODO: config, animations, streamlined rendering
+// TODO: scaling, rotating, and translating
+// TODO: image size settings
+// TODO: colour, falloff, and background settings
+// TODO: multilayering settings
+// TODO: animation with keyframes and different interpolation types
 export default class JuliaRenderer {
   private canvas: HTMLCanvasElement | null;
   private gl: WebGL2RenderingContext | null = null;
@@ -117,7 +121,7 @@ export default class JuliaRenderer {
 
         const transform = mat4.create();
         const aspectRatio = this.canvas.width / this.canvas.height;
-        const scale = 1; // TODO: make this customizable
+        const scale = 1;
         const halfWidth = scale / 2;
         const halfHeight = halfWidth * aspectRatio;
 
