@@ -1,11 +1,12 @@
+#version 300 es
 precision highp float;
-
-attribute vec4 aVertexPosition;
-attribute vec4 aTexCoord;
 
 uniform mat4 uTransform;
 
-varying vec2 TexCoord;
+layout(location = 0) in vec4 aVertexPosition;
+layout(location = 1) in vec4 aTexCoord;
+
+out vec2 TexCoord;
 
 void main() {
   // Only modify the texcoords because we still want the quad to be fullscreen

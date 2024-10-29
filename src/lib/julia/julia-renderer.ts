@@ -16,7 +16,6 @@ import { mat4 } from "gl-matrix";
 // TODO: animation with keyframes and different interpolation types
 // TODO: random helpful article - https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Adding_2D_content_to_a_WebGL_context#creating_the_square_plane
 export default class JuliaRenderer {
-  private canvas: HTMLCanvasElement | null;
   private gl: WebGL2RenderingContext | null = null;
   private vertexBuffer: WebGLBuffer | null = null;
 
@@ -28,7 +27,6 @@ export default class JuliaRenderer {
     Logger.log("Initializing...");
 
     // Initialize OpenGL
-    this.canvas = canvas;
     const gl = canvas.getContext("webgl2") as WebGL2RenderingContext;
 
     if (!gl) {
@@ -118,16 +116,12 @@ export default class JuliaRenderer {
         const imaginaryLocation = gl.getUniformLocation(program, "uImaginary");
 
         // Create transform matrix
-        if (!this.canvas) {
-          return;
-        }
-
-        const transform = mat4.create();
-        const aspectRatio = this.canvas.width / this.canvas.height;
+        const aspectRatio = config.width / config.height;
         const scale = 1;
         const halfWidth = scale / 2;
         const halfHeight = halfWidth * aspectRatio;
 
+        const transform = mat4.create();
         mat4.ortho(transform, -halfWidth, halfWidth, -halfHeight, halfHeight, -1, 1);
 
         // Set uniforms
@@ -166,6 +160,9 @@ export default class JuliaRenderer {
       return;
     }
 
+    // Start frame timer
+    const startTime = performance.now();
+
     // Clear
     gl.clear(gl.COLOR_BUFFER_BIT);
 
@@ -179,5 +176,10 @@ export default class JuliaRenderer {
 
     // Render
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+
+    // Calculate frame time
+    const endTime = performance.now();
+    const frameTime = endTime - startTime;
+    Logger.log(`Frame time: ${frameTime}ms`);
   }
 }

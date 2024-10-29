@@ -1,9 +1,11 @@
+#version 300 es
 precision highp float;
 
 uniform float uReal;
 uniform float uImaginary;
 
-varying vec2 TexCoord;
+in vec2 TexCoord;
+out vec4 FragColor;
 
 float Julia(float x, float y, float cx, float cy, float radius)
 {
@@ -31,6 +33,16 @@ float Julia(float x, float y, float cx, float cy, float radius)
 }
 
 void main() {
-  float fractalValue = Julia(TexCoord.x, TexCoord.y, uReal, uImaginary, 4.0);
-  gl_FragColor = vec4(fractalValue, fractalValue, fractalValue, 1.0);
+    float fractalValue = Julia(TexCoord.x, TexCoord.y, uReal, uImaginary, 4.0);
+
+    // Calculate color
+    float pixelValue = 1.0; // TODO: default non escaping value
+
+    // Only color parts of the set
+    if (fractalValue >= 0.0)
+        pixelValue = fractalValue / (fractalValue + 5.0); // TODO: use falloff strength
+
+    // Banding (can be sin, cos, or tan (tan is best))
+
+    FragColor = vec4(tan(pixelValue * 100.0), pixelValue * pixelValue, pixelValue, pixelValue);
 }
