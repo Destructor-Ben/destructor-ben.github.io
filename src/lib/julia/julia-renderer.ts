@@ -2,9 +2,6 @@ import Logger from "./julia-logger";
 import Fractal from "./fractal";
 import FractalType from "./fractal-type";
 
-import VertShader from "./shaders/vert.glsl?raw";
-import FragShaderJulia from "./shaders/frag-julia.glsl?raw";
-
 import { mat4 } from "gl-matrix";
 
 // TODO: scaling, rotating, and translating
@@ -120,8 +117,15 @@ export default class JuliaRenderer {
       FractalType.Julia,
       new Fractal(
         gl,
-        VertShader,
-        FragShaderJulia,
+        {
+          paramUniforms: `
+          uniform float uReal;
+          uniform float uImaginary;`,
+          paramFuncDef: "float cx, float cy",
+          paramFuncUsage: "uReal, uImaginary",
+          maxIterations: 100,
+          radius: 4,
+        },
         (gl, program, config) => {
           // Get uniform locations
           // TODO: probably cache these, also null checks
@@ -177,6 +181,7 @@ export default class JuliaRenderer {
     Logger.log("Successfully destroyed");
   }
 
+  // TODO: allow setting compile config, and if do, then recompile shader
   setFractal(fractal: FractalType, config: any) {
     this.fractal = fractal;
     this.config = config;

@@ -1,21 +1,19 @@
 #version 300 es
 precision highp float;
 
-uniform float uReal;
-uniform float uImaginary;
+{{params_uniforms}}
 
 in vec2 TexCoord;
 out vec4 FragColor;
 
-float Julia(float x, float y, float cx, float cy, float radius)
+float Fractal(float x, float y {{params_def}})
 {
-    float radiusSquared = radius * radius;
-
-    for (int iteration = 0; iteration < 100; iteration++)
+    for (int iteration = 0; iteration < {{max_iterations}}; iteration++)
     { 
         // The point escaped
-        if (x * x + y * y >= radiusSquared)
+        if (x * x + y * y >= {{radius_squared}})
         {
+            // TODO: customizable smoothing formula
             // Smoothing formula
             float z = x * x + y * y;
             float ret = float(iteration) + 1.0 - log(log(z)) / log(2.0);
@@ -23,6 +21,7 @@ float Julia(float x, float y, float cx, float cy, float radius)
         }
 
         // Update position
+        // TODO: customizable equation
         float tempX = x * x - y * y;
         y = 2.0 * x * y + cy;
         x = tempX + cx;
@@ -33,8 +32,9 @@ float Julia(float x, float y, float cx, float cy, float radius)
 }
 
 void main() {
-    float fractalValue = Julia(TexCoord.x, TexCoord.y, uReal, uImaginary, 4.0);
+    float fractalValue = Fractal(TexCoord.x, TexCoord.y {{params_call}});
 
+// TODO: make the colour calculation customizable
     // Calculate color
     float pixelValue = 1.0; // TODO: default non escaping value
 
@@ -42,7 +42,7 @@ void main() {
     if (fractalValue >= 0.0)
         pixelValue = fractalValue / (fractalValue + 5.0); // TODO: use falloff strength
 
-    // Banding (can be sin, cos, or tan (tan is best))
+    // Banding (can be sin, cos, or tan (tan is best)), also multiply by 100
 
-    FragColor = vec4(tan(pixelValue * 100.0), pixelValue * pixelValue, pixelValue, pixelValue);
+    FragColor = vec4(pixelValue, pixelValue * pixelValue, pixelValue, pixelValue);
 }
