@@ -10,8 +10,11 @@ import { mat4 } from "gl-matrix";
 // TODO: scaling, rotating, and translating
 // TODO: image size settings
 // TODO: colour, falloff, and background settings
+// TODO: non escaping point colour settings
 // TODO: multilayering settings
+// TODO: escape radius and max iter settings
 // TODO: animation with keyframes and different interpolation types
+// TODO: random helpful article - https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Adding_2D_content_to_a_WebGL_context#creating_the_square_plane
 export default class JuliaRenderer {
   private canvas: HTMLCanvasElement | null;
   private gl: WebGL2RenderingContext | null = null;
