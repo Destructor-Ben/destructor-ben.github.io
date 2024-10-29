@@ -5,6 +5,8 @@ import FractalType from "./fractal-type";
 import VertShader from "./shaders/vert.glsl?raw";
 import FragShaderJulia from "./shaders/frag-julia.glsl?raw";
 
+import { mat4 } from "gl-matrix";
+
 // TODO: config, animations, streamlined rendering
 export default class JuliaRenderer {
   private canvas: HTMLCanvasElement | null;
@@ -48,7 +50,13 @@ export default class JuliaRenderer {
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     // Create the fullscreen quad
-    const bufferData = [1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, -1.0];
+    const bufferData = [
+      1.0, 1.0, 1.0, 1.0,
+      -1.0, 1.0, -1.0, 1.0,
+      1.0, -1.0, 1.0, -1.0,
+      -1.0, -1.0, -1.0, -1.0,
+    ];
+  
     this.vertexBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
     gl.bufferData(
@@ -58,42 +66,72 @@ export default class JuliaRenderer {
     );
 
     // Setup the vertex attribute array
-    const location = 0; // Always the same, don't need to change - gl.getAttribLocation(program, "VertexPosition");
-    const numComponents = 2; // Pull out 2 values per iteration
-    const type = gl.FLOAT; // The data in the buffer is 32bit floats
-    const normalize = false; // Don't normalize
-    const stride = 0; // How many bytes to get from one set of values to the next
-    // 0 = use type and numComponents above
-    const offset = 0; // How many bytes inside the buffer to start from
+    // LLTT - Each character is one float, L is location, T is texcoord
+    const floatSize = 32 / 8;
+    const locationSize = floatSize * 2;
+    const texCoordSize = floatSize * 2;
+    const vertexSize = locationSize + texCoordSize;
+
     gl.vertexAttribPointer(
-      location,
-      numComponents,
-      type,
-      normalize,
-      stride,
-      offset,
+      0, // Location - constant
+      2, // Pull out 2 values
+      gl.FLOAT, // Type is 32 bit float
+      false, // Don't normalize
+      vertexSize, // Stride - Size of one vertex
+      0, // Offset - How many bytes from the start of the vertex
     );
 
-    gl.enableVertexAttribArray(location);
+    gl.vertexAttribPointer(
+      1, // Location - constant
+      2, // Pull out 2 values
+      gl.FLOAT, // Type is 32 bit float
+      false, // Don't normalize
+      vertexSize, // Stride - Size of one vertex
+      locationSize, // Offset - How many bytes from the start of the vertex
+    );
+
+    gl.enableVertexAttribArray(0);
+    gl.enableVertexAttribArray(1);
 
     // Create fractals
+    this.prepareFractals(gl);
+  }
+
+  prepareFractals(gl: WebGL2RenderingContext) {
+    // Julia
     this.fractals.set(FractalType.Julia, new Fractal(
       gl,
       VertShader,
       FragShaderJulia,
       (gl, program, config) => {
         // Get uniform locations
-        const realLocation = gl.getUniformLocation(program, "Real");
-        const imaginaryLocation = gl.getUniformLocation(program, "Imaginary");
+        // TODO: probably cache these, also null checks
+        const transformLocation = gl.getUniformLocation(program, "uTransform");
+        const realLocation = gl.getUniformLocation(program, "uReal");
+        const imaginaryLocation = gl.getUniformLocation(program, "uImaginary");
+
+        // Create transform matrix
+        if (!this.canvas) {
+          return;
+        }
+
+        const transform = mat4.create();
+        const aspectRatio = this.canvas.width / this.canvas.height;
+        const scale = 1; // TODO: make this customizable
+        const halfWidth = scale / 2;
+        const halfHeight = halfWidth * aspectRatio;
+
+        mat4.ortho(transform, -halfWidth, halfWidth, -halfHeight, halfHeight, -1, 1);
 
         // Set uniforms
+        gl.uniformMatrix4fv(transformLocation, false, transform)
         gl.uniform1f(realLocation, config.real);
         gl.uniform1f(imaginaryLocation, config.imaginary);
       }
     ));
 
-    // TODO: mandelbrot
-    //this.fractals.set(FractalType.Mandelbrot, new Fractal());
+    // TODO: Mandelbrot
+    //this.fractals.set(FractalType.Mandelbrot, new Fractal());    
   }
 
   destroy() {

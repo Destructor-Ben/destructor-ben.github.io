@@ -1,7 +1,7 @@
 precision highp float;
 
-uniform float Real;
-uniform float Imaginary;
+uniform float uReal;
+uniform float uImaginary;
 
 varying vec2 TexCoord;
 
@@ -31,6 +31,6 @@ float Julia(float x, float y, float cx, float cy, float radius)
 }
 
 void main() {
-  float fractalValue = Julia(TexCoord.x, TexCoord.y, Real, Imaginary, 4.0);
+  float fractalValue = Julia(TexCoord.x, TexCoord.y, uReal, uImaginary, 4.0);
   gl_FragColor = vec4(fractalValue, fractalValue, fractalValue, 1.0);
 }
