@@ -21,7 +21,7 @@ export default class JuliaRenderer {
 
   private fractals = new Map<FractalType, Fractal>();
   private fractal = FractalType.None;
-  private config: any = {}
+  private config: any = {};
 
   constructor(canvas: HTMLCanvasElement) {
     Logger.log("Initializing...");
@@ -56,12 +56,24 @@ export default class JuliaRenderer {
 
     // Create the fullscreen quad
     const bufferData = [
-      1.0, 1.0, 1.0, 1.0,
-      -1.0, 1.0, -1.0, 1.0,
-      1.0, -1.0, 1.0, -1.0,
-      -1.0, -1.0, -1.0, -1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      -1.0,
+      1.0,
+      -1.0,
+      1.0,
+      1.0,
+      -1.0,
+      1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
+      -1.0,
     ];
-  
+
     this.vertexBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
     gl.bufferData(
@@ -104,35 +116,52 @@ export default class JuliaRenderer {
 
   prepareFractals(gl: WebGL2RenderingContext) {
     // Julia
-    this.fractals.set(FractalType.Julia, new Fractal(
-      gl,
-      VertShader,
-      FragShaderJulia,
-      (gl, program, config) => {
-        // Get uniform locations
-        // TODO: probably cache these, also null checks
-        const transformLocation = gl.getUniformLocation(program, "uTransform");
-        const realLocation = gl.getUniformLocation(program, "uReal");
-        const imaginaryLocation = gl.getUniformLocation(program, "uImaginary");
+    this.fractals.set(
+      FractalType.Julia,
+      new Fractal(
+        gl,
+        VertShader,
+        FragShaderJulia,
+        (gl, program, config) => {
+          // Get uniform locations
+          // TODO: probably cache these, also null checks
+          const transformLocation = gl.getUniformLocation(
+            program,
+            "uTransform",
+          );
+          const realLocation = gl.getUniformLocation(program, "uReal");
+          const imaginaryLocation = gl.getUniformLocation(
+            program,
+            "uImaginary",
+          );
 
-        // Create transform matrix
-        const aspectRatio = config.width / config.height;
-        const scale = 1;
-        const halfWidth = scale / 2;
-        const halfHeight = halfWidth * aspectRatio;
+          // Create transform matrix
+          const aspectRatio = config.width / config.height;
+          const scale = 1;
+          const halfWidth = scale / 2;
+          const halfHeight = halfWidth * aspectRatio;
 
-        const transform = mat4.create();
-        mat4.ortho(transform, -halfWidth, halfWidth, -halfHeight, halfHeight, -1, 1);
+          const transform = mat4.create();
+          mat4.ortho(
+            transform,
+            -halfWidth,
+            halfWidth,
+            -halfHeight,
+            halfHeight,
+            -1,
+            1,
+          );
 
-        // Set uniforms
-        gl.uniformMatrix4fv(transformLocation, false, transform)
-        gl.uniform1f(realLocation, config.real);
-        gl.uniform1f(imaginaryLocation, config.imaginary);
-      }
-    ));
+          // Set uniforms
+          gl.uniformMatrix4fv(transformLocation, false, transform);
+          gl.uniform1f(realLocation, config.real);
+          gl.uniform1f(imaginaryLocation, config.imaginary);
+        },
+      ),
+    );
 
     // TODO: Mandelbrot
-    //this.fractals.set(FractalType.Mandelbrot, new Fractal());    
+    //this.fractals.set(FractalType.Mandelbrot, new Fractal());
   }
 
   destroy() {
@@ -165,8 +194,7 @@ export default class JuliaRenderer {
     // Update the shader
     if (this.fractal !== FractalType.None) {
       this.fractals.get(this.fractal)?.updateShader(this.config);
-    }
-    else {
+    } else {
       gl.useProgram(null);
     }
 

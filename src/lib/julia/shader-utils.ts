@@ -1,9 +1,13 @@
-import Logger from "./julia-logger"
+import Logger from "./julia-logger";
 
-export function createShader(gl: WebGL2RenderingContext, type: GLenum, source: string) {
+export function createShader(
+  gl: WebGL2RenderingContext,
+  type: GLenum,
+  source: string,
+) {
   const shader = gl?.createShader(type);
   if (!shader) {
-    Logger.error(`Failed to create shader (shader type ${type})`)
+    Logger.error(`Failed to create shader (shader type ${type})`);
     return null;
   }
 
@@ -15,7 +19,7 @@ export function createShader(gl: WebGL2RenderingContext, type: GLenum, source: s
   if (!gl?.getShaderParameter(shader, gl.COMPILE_STATUS)) {
     const infoLog = gl?.getShaderInfoLog(shader);
     Logger.error(`An error occurred while compiling the shaders: ${infoLog}`);
-  
+
     gl?.deleteShader(shader);
     return null;
   }
@@ -23,7 +27,11 @@ export function createShader(gl: WebGL2RenderingContext, type: GLenum, source: s
   return shader;
 }
 
-export function createProgram(gl: WebGL2RenderingContext, vert: WebGLShader, frag: WebGLShader) {
+export function createProgram(
+  gl: WebGL2RenderingContext,
+  vert: WebGLShader,
+  frag: WebGLShader,
+) {
   const program = gl.createProgram();
   if (!program) {
     Logger.error("Failed to create shader program");
@@ -39,20 +47,25 @@ export function createProgram(gl: WebGL2RenderingContext, vert: WebGLShader, fra
   if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
     const infoLog = gl?.getProgramInfoLog(program);
     Logger.error(`An error occurred while linking the shaders: ${infoLog}`);
-  
+
     return null;
   }
 
   return program;
 }
 
-export function createProgramFromSource(gl: WebGL2RenderingContext, vertSource: string, fragSource: string) {
+export function createProgramFromSource(
+  gl: WebGL2RenderingContext,
+  vertSource: string,
+  fragSource: string,
+) {
   const vertShader = createShader(gl, gl.VERTEX_SHADER, vertSource);
   const fragShader = createShader(gl, gl.FRAGMENT_SHADER, fragSource);
 
   // Don't need to make error message because it is already handled
-  if (!vertShader || !fragShader)
+  if (!vertShader || !fragShader) {
     return null;
+  }
 
   const program = createProgram(gl, vertShader, fragShader);
 
