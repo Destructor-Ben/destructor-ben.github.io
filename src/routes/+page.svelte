@@ -3,26 +3,20 @@
   import ProfilePicture from "$lib/img/pfp.png";
 
   import JuliaRenderer from "$lib/julia/julia-renderer";
-  import Fractal from "$lib/julia/fractal";
-  import JuliaVert from "$lib/julia/vert.glsl?raw";
-  import JuliaFrag from "$lib/julia/frag-julia.glsl?raw";
+  import FractalType from "$lib/julia/fractal-type";
 
   let juliaCanvas: HTMLCanvasElement;
 
   // Create the julia renderer
-  // TODO: streamlined rendering and config + animations
+  // TODO: maybe separate the renderer creation and updating, also finish integrating it properly
   $effect(() => {
     const julia = new JuliaRenderer(juliaCanvas);
-    const fractal = new Fractal(JuliaVert, JuliaFrag, (gl, program) => {
-      // Set the fractal location
-      // -0.7, 0.27015 and 0.355, 0.355 are both cool
-      const real = gl.getUniformLocation(program, "Real");
-      const imaginary = gl.getUniformLocation(program, "Imaginary");
-      gl.uniform1f(real, 0.355);
-      gl.uniform1f(imaginary, 0.355);
+
+    julia.setFractal(FractalType.Julia, {
+      real: 0.355,
+      imaginary: 0.355,
     });
 
-    julia.setFractal(fractal);
     julia.render();
 
     return () => {

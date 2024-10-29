@@ -3,7 +3,7 @@ import Fractal from "./fractal";
 import FractalType from "./fractal-type";
 
 import VertShader from "./shaders/vert.glsl?raw";
-import FragShaderJulia from "./shaders/vert.glsl?raw";
+import FragShaderJulia from "./shaders/frag-julia.glsl?raw";
 
 // TODO: config, animations, streamlined rendering
 export default class JuliaRenderer {
