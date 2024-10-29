@@ -1,33 +1,37 @@
-import { error, log } from "./julia-logger";
+import Logger from "./julia-logger";
 import Fractal from "./fractal";
+import FractalType from "./fractal-type";
 
 // TODO: config, animations, streamlined rendering
 export default class JuliaRenderer {
   private canvas: HTMLCanvasElement | null;
   private gl: WebGL2RenderingContext | null = null;
   private vertexBuffer: WebGLBuffer | null = null;
-  private fractal: Fractal | null = null;
+
+  private fractals = new Map<FractalType, Fractal>();
+  private fractal = FractalType.None;
+  private config: Object = {}
 
   constructor(canvas: HTMLCanvasElement) {
-    log("Initializing...");
+    Logger.log("Initializing...");
 
     // Initialize OpenGL
     this.canvas = canvas;
     const gl = canvas.getContext("webgl2") as WebGL2RenderingContext;
 
     if (!gl) {
-      error("Unable to initialize WebGL 2");
+      Logger.error("Unable to initialize WebGL 2");
       return;
     }
 
     this.gl = gl;
+    Logger.log(gl.getParameter(gl.VERSION));
+    Logger.log(gl.getParameter(gl.SHADING_LANGUAGE_VERSION));
 
-    console.log(gl.getParameter(gl.VERSION));
-    console.log(gl.getParameter(gl.SHADING_LANGUAGE_VERSION));
-
-    // Prepare resources
+    // Create gl resources
     this.prepare();
-    log("Successfully initialized");
+
+    Logger.log("Successfully initialized");
   }
 
   prepare() {
@@ -68,29 +72,30 @@ export default class JuliaRenderer {
     );
 
     gl.enableVertexAttribArray(location);
+
+    // Create fractals
+    //this.fractals.set(FractalType.Julia, new Fractal());
+    //this.fractals.set(FractalType.Mandelbrot, new Fractal());
+    // TODO: create the fractal types
   }
 
   destroy() {
-    log("Destroying...");
+    Logger.log("Destroying...");
 
-    this.setFractal(null);
+    this.fractals.forEach((v, _k, _map) => {
+      v.destroy();
+    });
+
     this.gl?.deleteBuffer(this.vertexBuffer);
     this.gl = null;
     this.canvas = null;
 
-    log("Successfully destroyed");
+    Logger.log("Successfully destroyed");
   }
 
-  setFractal(fractal: Fractal | null) {
-    if (this.fractal) {
-      this.fractal.destroy();
-    }
-
+  setFractal(fractal: FractalType, config: Object) {
     this.fractal = fractal;
-
-    if (this.fractal) {
-      this.fractal.prepare(this.gl);
-    }
+    this.config = config;
   }
 
   render() {
@@ -102,11 +107,15 @@ export default class JuliaRenderer {
     // Clear
     gl.clear(gl.COLOR_BUFFER_BIT);
 
-    // Render
-    if (this.fractal) {
-      this.fractal.updateShader();
+    // Update the shader
+    if (this.fractal !== FractalType.None) {
+      this.fractals.get(this.fractal)?.updateShader(this.config);
+    }
+    else {
+      gl.useProgram(null);
     }
 
+    // Render
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
   }
 }

@@ -1,102 +1,41 @@
-import { error } from "./julia-logger";
+import Logger from "./julia-logger";
+import { createProgramFromSource } from "./shader-utils";
 
 export default class Fractal {
-  vertSource: string;
-  fragSource: string;
-  updateCallback: (gl: WebGL2RenderingContext, program: WebGLProgram) => void;
-
-  gl: WebGL2RenderingContext | null = null;
-  vertexShader: WebGLShader | null = null;
-  fragmentShader: WebGLShader | null = null;
+  gl: WebGL2RenderingContext;
   program: WebGLProgram | null = null;
+  updateCallback: (gl: WebGL2RenderingContext, program: WebGLProgram, config: Object) => void;
 
+  // TODO: reduce the boilerplate for shader code by using string interpolation
   constructor(
+    gl: WebGL2RenderingContext,
     vertSource: string,
     fragSource: string,
-    updateCallback: (gl: WebGL2RenderingContext, program: WebGLProgram) => void,
+    updateCallback: (gl: WebGL2RenderingContext, program: WebGLProgram, config: Object) => void,
   ) {
-    this.vertSource = vertSource;
-    this.fragSource = fragSource;
-    this.updateCallback = updateCallback;
-  }
-
-  prepare(gl: WebGL2RenderingContext | null) {
     this.gl = gl;
+    this.updateCallback = updateCallback;
 
     if (!gl) {
       return;
     }
 
-    // Create the shaders
-    function loadShader(type: GLenum, source: string) {
-      const shader = gl?.createShader(type);
-      if (!shader) {
-        return null;
-      }
-
-      gl?.shaderSource(shader, source);
-      gl?.compileShader(shader);
-
-      // Check complication
-      if (!gl?.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-        error(
-          `An error occurred while compiling the shaders: ${
-            gl?.getShaderInfoLog(shader)
-          }`,
-        );
-        gl?.deleteShader(shader);
-        return null;
-      }
-
-      return shader;
-    }
-
-    this.vertexShader = loadShader(gl?.VERTEX_SHADER, this.vertSource);
-    this.fragmentShader = loadShader(gl?.FRAGMENT_SHADER, this.fragSource);
-
-    if (!this.vertexShader) {
-      error("Failed to create vertex shader");
+    // Create the program
+    const program = createProgramFromSource(this.gl, vertSource, fragSource);
+    if (!program) {
+      Logger.error("Unable to create fractal shader");
       return;
     }
 
-    if (!this.fragmentShader) {
-      error("Failed to create fragment shader");
-      return;
-    }
-
-    // Create the shader program
-    this.program = gl?.createProgram();
-    if (!this.program) {
-      error("Failed to create shader program");
-      return;
-    }
-
-    // Link the shaders
-    gl.attachShader(this.program, this.vertexShader);
-    gl.attachShader(this.program, this.fragmentShader);
-    gl.linkProgram(this.program);
-
-    // Error checking
-    if (!gl.getProgramParameter(this.program, gl.LINK_STATUS)) {
-      error(
-        `Unable to initialize the shader program: ${
-          gl.getProgramInfoLog(this.program)
-        }`,
-      );
-      return;
-    }
-
-    // Enable program
-    gl.useProgram(this.program);
+    this.program = program;
   }
 
   destroy() {
-    this.gl?.deleteShader(this.vertexShader);
-    this.gl?.deleteShader(this.fragmentShader);
     this.gl?.deleteProgram(this.program);
   }
 
-  updateShader() {
+  updateShader(config: Object) {
+    // Null checks
     const gl = this.gl;
     if (!gl) {
       return;
@@ -107,6 +46,8 @@ export default class Fractal {
       return;
     }
 
-    this.updateCallback(gl, program);
+    // Set the program to be active and let the shader update it's parameters
+    gl.useProgram(program);
+    this.updateCallback(gl, program, config);
   }
 }
