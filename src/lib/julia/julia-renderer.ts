@@ -2,6 +2,9 @@ import Logger from "./julia-logger";
 import Fractal from "./fractal";
 import FractalType from "./fractal-type";
 
+import VertShader from "./shaders/vert.glsl?raw";
+import FragShaderJulia from "./shaders/vert.glsl?raw";
+
 // TODO: config, animations, streamlined rendering
 export default class JuliaRenderer {
   private canvas: HTMLCanvasElement | null;
@@ -10,7 +13,7 @@ export default class JuliaRenderer {
 
   private fractals = new Map<FractalType, Fractal>();
   private fractal = FractalType.None;
-  private config: Object = {}
+  private config: any = {}
 
   constructor(canvas: HTMLCanvasElement) {
     Logger.log("Initializing...");
@@ -74,9 +77,23 @@ export default class JuliaRenderer {
     gl.enableVertexAttribArray(location);
 
     // Create fractals
-    //this.fractals.set(FractalType.Julia, new Fractal());
+    this.fractals.set(FractalType.Julia, new Fractal(
+      gl,
+      VertShader,
+      FragShaderJulia,
+      (gl, program, config) => {
+        // Get uniform locations
+        const realLocation = gl.getUniformLocation(program, "Real");
+        const imaginaryLocation = gl.getUniformLocation(program, "Imaginary");
+
+        // Set uniforms
+        gl.uniform1f(realLocation, config.real);
+        gl.uniform1f(imaginaryLocation, config.imaginary);
+      }
+    ));
+
+    // TODO: mandelbrot
     //this.fractals.set(FractalType.Mandelbrot, new Fractal());
-    // TODO: create the fractal types
   }
 
   destroy() {
@@ -93,7 +110,7 @@ export default class JuliaRenderer {
     Logger.log("Successfully destroyed");
   }
 
-  setFractal(fractal: FractalType, config: Object) {
+  setFractal(fractal: FractalType, config: any) {
     this.fractal = fractal;
     this.config = config;
   }

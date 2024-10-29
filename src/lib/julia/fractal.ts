@@ -4,14 +4,14 @@ import { createProgramFromSource } from "./shader-utils";
 export default class Fractal {
   gl: WebGL2RenderingContext;
   program: WebGLProgram | null = null;
-  updateCallback: (gl: WebGL2RenderingContext, program: WebGLProgram, config: Object) => void;
+  updateCallback: (gl: WebGL2RenderingContext, program: WebGLProgram, config: any) => void;
 
   // TODO: reduce the boilerplate for shader code by using string interpolation
   constructor(
     gl: WebGL2RenderingContext,
     vertSource: string,
     fragSource: string,
-    updateCallback: (gl: WebGL2RenderingContext, program: WebGLProgram, config: Object) => void,
+    updateCallback: (gl: WebGL2RenderingContext, program: WebGLProgram, config: any) => void,
   ) {
     this.gl = gl;
     this.updateCallback = updateCallback;
@@ -34,7 +34,7 @@ export default class Fractal {
     this.gl?.deleteProgram(this.program);
   }
 
-  updateShader(config: Object) {
+  updateShader(config: any) {
     // Null checks
     const gl = this.gl;
     if (!gl) {

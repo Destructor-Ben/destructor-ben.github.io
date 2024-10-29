@@ -1,29 +1,17 @@
 <script lang="ts">
   import JuliaRenderer from "$lib/julia/julia-renderer";
-  import Fractal from "$lib/julia/fractal";
-  import JuliaVert from "$lib/julia/vert.glsl?raw";
-  import JuliaFrag from "$lib/julia/frag-julia.glsl?raw";
+  import FractalType from "$lib/julia/fractal-type";
 
   let useMouseForCoords = $state(false);
   let real = $state(0);
   let imaginary = $state(0);
 
   let canvas: HTMLCanvasElement;
+  let renderer: JuliaRenderer;
 
   // Setup the renderer
   $effect(() => {
-    const renderer = new JuliaRenderer(canvas);
-    const fractal = new Fractal(JuliaVert, JuliaFrag, (gl, program) => {
-      // Set the fractal location
-      // -0.7, 0.27015 and 0.355, 0.355 are both cool
-      const realLocation = gl.getUniformLocation(program, "Real");
-      const imaginaryLocation = gl.getUniformLocation(program, "Imaginary");
-      gl.uniform1f(realLocation, real);
-      gl.uniform1f(imaginaryLocation, imaginary);
-    });
-
-    renderer.setFractal(fractal);
-    renderer.render();
+    renderer = new JuliaRenderer(canvas);
 
     return () => {
       renderer.destroy();
@@ -41,6 +29,19 @@
     }
   })
 
+  // Render the fractal when the input changes
+  $effect(() => {
+    // Set the fractal info
+    renderer.setFractal(FractalType.Julia, {
+      real: real,
+      imaginary: imaginary
+    });
+
+    // Draw
+    renderer.render();
+  })
+
+  // Recalculates the mouse movement
   function handleMouseMove(event: MouseEvent) {
     if (!useMouseForCoords)
       return;
