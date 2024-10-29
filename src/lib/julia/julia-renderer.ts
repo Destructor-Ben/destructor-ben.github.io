@@ -159,9 +159,6 @@ export default class JuliaRenderer {
       return;
     }
 
-    // Start frame timer
-    const startTime = performance.now();
-
     // Clear
     gl.clear(gl.COLOR_BUFFER_BIT);
 
@@ -175,10 +172,5 @@ export default class JuliaRenderer {
 
     // Render
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-
-    // Calculate frame time
-    const endTime = performance.now();
-    const frameTime = endTime - startTime;
-    Logger.log(`Frame time: ${frameTime}ms`);
   }
 }
