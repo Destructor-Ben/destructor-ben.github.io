@@ -236,6 +236,13 @@ export default class JuliaRenderer {
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
   }
 
+  resize() {
+    console.log("resizing canvas");
+    console.log(this.config.width);
+    console.log(this.config.height);
+    this.gl?.viewport(0, 0, this.config.width, this.config.height);
+  }
+
   private updateShader(gl: WebGL2RenderingContext) {
     this.updateTransform(gl);
   
@@ -248,24 +255,27 @@ export default class JuliaRenderer {
     }
   }
 
-  // TODO - Fix
   private updateTransform(gl: WebGL2RenderingContext) {
-    // Create transform matrix
-    const aspectRatio = this.config.width / this.config.height;
-    const scale = 1;
-    const halfWidth = scale / 2;
-    const halfHeight = halfWidth * aspectRatio;
-
+    // Accounts for aspect ratio
     const transform = mat4.create();
-    mat4.ortho(
-      transform,
-      -halfWidth,
-      halfWidth,
-      -halfHeight,
-      halfHeight,
-      -1,
-      1,
-    );
+    
+    // Rotation
+    const rotation = (Date.now() * 0.001);
+    mat4.rotate(transform, transform, rotation, [0, 0, 1]);
+    
+    // Scale
+    const scale = 1 / 2; // TODO: put the config scale in here, we reciprocate because of some reason
+    mat4.scale(transform, transform, [scale, scale, scale])
+
+    // Translation
+    mat4.translate(transform, transform, [1, 1, 0]);
+
+    // Aspect ratio
+    const aspectRatio = this.config.width / this.config.height;
+    mat4.scale(transform, transform, [aspectRatio, 1, 1]);
+
+    // TODO: scale, rotate, and translate
+
     
     gl.uniformMatrix4fv(this.uniformLocations.transform, false, transform);
   }

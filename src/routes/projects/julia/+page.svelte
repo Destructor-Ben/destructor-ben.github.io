@@ -36,6 +36,17 @@
     }
   })
 
+  // When the canvas is resized we need to change the viewport size
+  // TODO: be more accurate
+  $effect(() => {
+    const resizeObserver = new ResizeObserver(() => renderer.resize());
+    resizeObserver.observe(canvas);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  })
+
   // Render the fractal when the input changes
   $effect(() => {
     // Set the fractal info
@@ -51,6 +62,8 @@
     // Draw
     renderer.render();
   })
+
+  setInterval(() => renderer.render(), 0.1)
 
   // Recalculates the mouse movement
   function handleMouseMove(event: MouseEvent) {
