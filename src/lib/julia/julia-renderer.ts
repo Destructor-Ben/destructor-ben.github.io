@@ -138,9 +138,27 @@ export default class JuliaRenderer {
     this.updateUniforms(gl);
   }
 
-  // TODO: modify uniformLocations
   private updateUniforms(gl: WebGL2RenderingContext) {
+    if (!this.program)
+      return;
 
+    switch (this.fractal) {
+      case FractalType.Julia:
+        this.updateUniformsJulia(gl, this.program);
+        break;
+      default:
+        break;
+    }
+
+    // Update the transform uniform location
+    this.uniformLocations.transform = gl.getUniformLocation(this.program, "uTransform");
+  }
+
+  private updateUniformsJulia(gl: WebGL2RenderingContext, program: WebGLProgram) {
+    this.uniformLocations = {
+      real: gl.getUniformLocation(program, "uReal"),
+      imaginary: gl.getUniformLocation(program, "uImaginary"),
+    };
   }
   
   // TODO: finish
@@ -230,29 +248,8 @@ export default class JuliaRenderer {
     }
   }
 
-  // TODO
+  // TODO - Fix
   private updateTransform(gl: WebGL2RenderingContext) {
-
-  }
-
-  // TODO: clean up
-  private updateJulia(gl: WebGL2RenderingContext) {
-    if (!this.program)
-      return;
-
-    // Get uniform locations
-    // TODO: probably cache these, also null checks
-    // TODO: make the matricies not specific to julia 
-    const transformLocation = gl.getUniformLocation(
-      this.program,
-      "uTransform",
-    );
-    const realLocation = gl.getUniformLocation(this.program, "uReal");
-    const imaginaryLocation = gl.getUniformLocation(
-      this.program,
-      "uImaginary",
-    );
-
     // Create transform matrix
     const aspectRatio = this.config.width / this.config.height;
     const scale = 1;
@@ -269,10 +266,12 @@ export default class JuliaRenderer {
       -1,
       1,
     );
+    
+    gl.uniformMatrix4fv(this.uniformLocations.transform, false, transform);
+  }
 
-    // Set uniforms
-    gl.uniformMatrix4fv(transformLocation, false, transform);
-    gl.uniform1f(realLocation, this.config.real);
-    gl.uniform1f(imaginaryLocation, this.config.imaginary);
+  private updateJulia(gl: WebGL2RenderingContext) {
+    gl.uniform1f(this.uniformLocations.real, this.config.real);
+    gl.uniform1f(this.uniformLocations.imaginary, this.config.imaginary);
   }
 }
