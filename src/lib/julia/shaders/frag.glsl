@@ -38,7 +38,7 @@ void main() {
     // Calculate color
     float pixelValue = 1.0; // TODO: default non escaping value
 
-    // Only color parts of the set
+    // Only escaping values
     if (fractalValue >= 0.0)
         pixelValue = fractalValue / (fractalValue + 5.0); // TODO: use falloff strength
 

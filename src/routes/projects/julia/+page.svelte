@@ -44,7 +44,17 @@
       imaginary: imaginary,
       width: imageWidth,
       height: imageHeight,
-    });
+    }, 
+    // TODO: don't copy paste this
+        {
+          paramUniforms: `
+          uniform float uReal;
+          uniform float uImaginary;`,
+          paramFuncDef: "float cx, float cy",
+          paramFuncUsage: "uReal, uImaginary",
+          maxIterations: 100,
+          radius: 4,
+        },);
 
     // Draw
     renderer.render();
@@ -100,11 +110,13 @@
       
       <label>
         <input type="range" bind:value={imageWidth} min=100 max=1000 />
+        <input type="number" bind:value={imageWidth} />
         <span>Width</span>
       </label>
       
       <label>
         <input type="range" bind:value={imageHeight} min=100 max=1000 />
+        <input type="number" bind:value={imageHeight} />
         <span>height</span>
       </label>
     </div>
@@ -118,11 +130,13 @@
       </label>
 
       <label>
+        <input type="range" bind:value={real} min=-2 max=2 step=0.01 disabled={useMouseForCoords} />
         <input type="number" bind:value={real} disabled={useMouseForCoords} />
         <span>Real Component</span>
       </label>
       
       <label>
+        <input type="range" bind:value={imaginary} min=-2 max=2 step=0.01 disabled={useMouseForCoords} />
         <input type="number" bind:value={imaginary} disabled={useMouseForCoords} />
         <span>Imaginary Component</span>
       </label>
@@ -166,5 +180,10 @@
         width: 100%;
       }
     }
-  } 
+  }
+
+  /* Temporary */
+  input {
+    color: black;
+  }
 </style>

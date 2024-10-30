@@ -18,7 +18,8 @@ export default class JuliaRenderer {
 
   private fractals = new Map<FractalType, Fractal>();
   private fractal = FractalType.None;
-  private config: any = {};
+  private compileConfig: any = {};
+  private dynamicConfig: any = {};
 
   constructor(canvas: HTMLCanvasElement) {
     Logger.log("Initializing...");
@@ -181,10 +182,22 @@ export default class JuliaRenderer {
     Logger.log("Successfully destroyed");
   }
 
-  // TODO: allow setting compile config, and if do, then recompile shader
-  setFractal(fractal: FractalType, config: any) {
+  getCurrentFractal() {
+    if (this.fractal !== FractalType.None) {
+      return this.fractals.get(this.fractal);
+    }
+    else {
+      return null;
+    }
+  }
+
+  setFractal(fractal: FractalType, dynamicConfig: any, compileConfig: any) {
     this.fractal = fractal;
-    this.config = config;
+    this.dynamicConfig = dynamicConfig;
+    this.compileConfig = compileConfig;
+
+    // TODO: recompile only some of the time
+    this.getCurrentFractal()?.compileShader(this.compileConfig);
   }
 
   render() {
@@ -198,7 +211,7 @@ export default class JuliaRenderer {
 
     // Update the shader
     if (this.fractal !== FractalType.None) {
-      this.fractals.get(this.fractal)?.updateShader(this.config);
+      this.getCurrentFractal()?.updateShader(this.dynamicConfig);
     } else {
       gl.useProgram(null);
     }

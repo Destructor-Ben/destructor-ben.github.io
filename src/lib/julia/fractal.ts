@@ -6,6 +6,7 @@ import FragSource from "./shaders/frag.glsl?raw";
 
 // Annoyingly, these have to have 2 configs, one for uniforms,
 // another from parameters that are subbed into the source before compilation
+// TODO: what even is the point of this class if I can just modify the shader easily?
 export default class Fractal {
   gl: WebGL2RenderingContext;
   program: WebGLProgram | null = null;
