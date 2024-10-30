@@ -11,6 +11,12 @@
   let real = $state(0);
   let imaginary = $state(0);
 
+  // Camera
+  let translationX = $state(0);
+  let translationY = $state(0);
+  let rotation = $state(0);
+  let scale = $state(1);
+
   // TODO: maybe make a JuliaCanvas component
   let canvas: HTMLCanvasElement;
   let renderer: JuliaRenderer;
@@ -50,6 +56,10 @@
       height: imageHeight,
       maxIterations: 100,
       radius: 4,
+      translationX: translationX,
+      translationY: translationY,
+      rotation: rotation,
+      scale: scale,
     });
 
     // Draw
@@ -135,6 +145,34 @@
         <input type="range" bind:value={imaginary} min=-2 max=2 step=0.01 disabled={useMouseForCoords} />
         <input type="number" bind:value={imaginary} disabled={useMouseForCoords} />
         <span>Imaginary Component</span>
+      </label>
+    </div>
+
+    <div>
+      <h2>Camera</h2>
+
+      <label>
+        <input type="range" bind:value={translationX} min=-2 max=2 step=0.01 />
+        <input type="number" bind:value={translationX} />
+        <span>Translation X</span>
+      </label>
+
+      <label>
+        <input type="range" bind:value={translationY} min=-2 max=2 step=0.01 />
+        <input type="number" bind:value={translationY} />
+        <span>Translation Y</span>
+      </label>
+
+      <label>
+        <input type="range" bind:value={rotation} min={-Math.PI} max={Math.PI} step=0.01 />
+        <input type="number" bind:value={rotation} />
+        <span>Rotation</span>
+      </label>
+
+      <label>
+        <input type="range" bind:value={scale} min=0.001 max=10 step=0.01 />
+        <input type="number" bind:value={scale} />
+        <span>Scale</span>
       </label>
     </div>
   </div>

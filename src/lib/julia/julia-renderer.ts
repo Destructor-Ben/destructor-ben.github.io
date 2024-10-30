@@ -253,27 +253,26 @@ export default class JuliaRenderer {
   }
 
   private updateTransform(gl: WebGL2RenderingContext) {
-    // Accounts for aspect ratio
     const transform = mat4.create();
-    
-    // Rotation
-    const rotation = (Date.now() * 0.001);
-    mat4.rotate(transform, transform, rotation, [0, 0, 1]);
-    
+
     // Scale
-    const scale = 1 / 2; // TODO: put the config scale in here, we reciprocate because of some reason
+    const scale = 1 / this.config.scale; // TODO: put the config scale in here, we reciprocate because of some reason
     mat4.scale(transform, transform, [scale, scale, scale])
 
+    // Rotation
+    mat4.rotate(transform, transform, this.config.rotation, [0, 0, 1]);
+  
     // Translation
-    mat4.translate(transform, transform, [1, 1, 0]);
-
+    mat4.translate(transform, transform, [
+      this.config.translationX as number,
+      this.config.translationY as number,
+      0
+    ]);
+    
     // Aspect ratio
     const aspectRatio = this.config.width / this.config.height;
     mat4.scale(transform, transform, [aspectRatio, 1, 1]);
-
-    // TODO: scale, rotate, and translate
-
-    
+  
     gl.uniformMatrix4fv(this.uniformLocations.transform, false, transform);
   }
 
