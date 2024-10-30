@@ -236,11 +236,8 @@ export default class JuliaRenderer {
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
   }
 
-  resize() {
-    console.log("resizing canvas");
-    console.log(this.config.width);
-    console.log(this.config.height);
-    this.gl?.viewport(0, 0, this.config.width, this.config.height);
+  resize(width: number, height: number) {
+    this.gl?.viewport(0, 0, width, height);
   }
 
   private updateShader(gl: WebGL2RenderingContext) {

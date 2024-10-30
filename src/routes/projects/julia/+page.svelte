@@ -3,7 +3,6 @@
   import FractalType from "$lib/julia/fractal-type";
 
   // Image settings
-  // TODO: fix
   let imageWidth = $state(960);
   let imageHeight = $state(540);
 
@@ -37,14 +36,8 @@
   })
 
   // When the canvas is resized we need to change the viewport size
-  // TODO: be more accurate
   $effect(() => {
-    const resizeObserver = new ResizeObserver(() => renderer.resize());
-    resizeObserver.observe(canvas);
-
-    return () => {
-      resizeObserver.disconnect();
-    };
+    renderer.resize(imageWidth, imageHeight);
   })
 
   // Render the fractal when the input changes
@@ -62,8 +55,6 @@
     // Draw
     renderer.render();
   })
-
-  setInterval(() => renderer.render(), 0.1)
 
   // Recalculates the mouse movement
   function handleMouseMove(event: MouseEvent) {
