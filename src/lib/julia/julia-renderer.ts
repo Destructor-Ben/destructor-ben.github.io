@@ -1,8 +1,9 @@
 import Logger from "./julia-logger";
-import Fractal from "./fractal";
 import FractalType from "./fractal-type";
-
 import { mat4 } from "gl-matrix";
+import { createProgramFromSource } from "./shader-utils";
+import VertSource from "./shaders/vert.glsl?raw";
+import FragSource from "./shaders/frag.glsl?raw";
 
 // TODO: scaling, rotating, and translating
 // TODO: image size settings
@@ -11,15 +12,15 @@ import { mat4 } from "gl-matrix";
 // TODO: multilayering settings
 // TODO: escape radius and max iter settings
 // TODO: animation with keyframes and different interpolation types
+// TODO: mandelbrot
 // TODO: random helpful article - https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Adding_2D_content_to_a_WebGL_context#creating_the_square_plane
 export default class JuliaRenderer {
   private gl: WebGL2RenderingContext | null = null;
   private vertexBuffer: WebGLBuffer | null = null;
-
-  private fractals = new Map<FractalType, Fractal>();
+  private program: WebGLProgram | null = null;
+  private uniformLocations: any = {};
   private fractal = FractalType.None;
-  private compileConfig: any = {};
-  private dynamicConfig: any = {};
+  private config: any = {};
 
   constructor(canvas: HTMLCanvasElement) {
     Logger.log("Initializing...");
@@ -42,7 +43,7 @@ export default class JuliaRenderer {
     Logger.log("Successfully initialized");
   }
 
-  prepare() {
+  private prepare() {
     const gl = this.gl;
     if (!gl) {
       return;
@@ -108,96 +109,92 @@ export default class JuliaRenderer {
     gl.enableVertexAttribArray(0);
     gl.enableVertexAttribArray(1);
 
-    // Create fractals
-    this.prepareFractals(gl);
+    // Compile fractal shader
+    this.compileShader(gl);
   }
 
-  prepareFractals(gl: WebGL2RenderingContext) {
-    // Julia
-    this.fractals.set(
-      FractalType.Julia,
-      new Fractal(
-        gl,
-        {
-          paramUniforms: `
-          uniform float uReal;
-          uniform float uImaginary;`,
-          paramFuncDef: "float cx, float cy",
-          paramFuncUsage: "uReal, uImaginary",
-          maxIterations: 100,
-          radius: 4,
-        },
-        (gl, program, config) => {
-          // Get uniform locations
-          // TODO: probably cache these, also null checks
-          const transformLocation = gl.getUniformLocation(
-            program,
-            "uTransform",
-          );
-          const realLocation = gl.getUniformLocation(program, "uReal");
-          const imaginaryLocation = gl.getUniformLocation(
-            program,
-            "uImaginary",
-          );
+  private compileShader(gl: WebGL2RenderingContext) {
+    // Delete existing shader
+    if (this.program)
+      gl.deleteProgram(this.program);
 
-          // Create transform matrix
-          const aspectRatio = config.width / config.height;
-          const scale = 1;
-          const halfWidth = scale / 2;
-          const halfHeight = halfWidth * aspectRatio;
+    // Return if we don't have a fractal active
+    if (this.fractal === FractalType.None)
+      return;
 
-          const transform = mat4.create();
-          mat4.ortho(
-            transform,
-            -halfWidth,
-            halfWidth,
-            -halfHeight,
-            halfHeight,
-            -1,
-            1,
-          );
+    // Sub in values for frag source
+    const fragSource = this.createFragmentSource(FragSource);
 
-          // Set uniforms
-          gl.uniformMatrix4fv(transformLocation, false, transform);
-          gl.uniform1f(realLocation, config.real);
-          gl.uniform1f(imaginaryLocation, config.imaginary);
-        },
-      ),
-    );
+    // Create the program
+    const program = createProgramFromSource(gl, VertSource, fragSource);
+    if (!program) {
+      Logger.error("Unable to create fractal shader");
+      return;
+    }
 
-    // TODO: Mandelbrot
-    //this.fractals.set(FractalType.Mandelbrot, new Fractal());
+    this.program = program;
+
+    // Update uniforms
+    this.updateUniforms(gl);
+  }
+
+  // TODO: modify uniformLocations
+  private updateUniforms(gl: WebGL2RenderingContext) {
+
+  }
+  
+  // TODO: finish
+  private createFragmentSource(source: string) {
+    // TODO: This is temporary
+    const juliaConfig = {
+      paramUniforms: `
+      uniform float uReal;
+      uniform float uImaginary;`,
+      paramFuncDef: "float cx, float cy",
+      paramFuncUsage: "uReal, uImaginary",
+    }
+
+    const config = this.config;
+    // Add commas at the start of the parameters
+    let paramsDef = juliaConfig.paramFuncDef;
+    if (paramsDef.length > 0)
+      paramsDef = ", " + paramsDef;
+    
+    let paramsUsage = juliaConfig.paramFuncUsage;
+    if (paramsUsage.length > 0)
+      paramsUsage = ", " + paramsUsage;
+  
+    // Fractal type params
+    source = source.replace("{{params_uniforms}}", juliaConfig.paramUniforms);
+    source = source.replace("{{params_def}}", paramsDef);
+    source = source.replace("{{params_call}}", paramsUsage);
+
+    // Calculation params
+    source = source.replace("{{max_iterations}}", config.maxIterations);
+    source = source.replace("{{radius_squared}}", (config.radius * config.radius).toFixed(1));
+
+    console.log(source);
+
+    return source;
   }
 
   destroy() {
     Logger.log("Destroying...");
 
-    this.fractals.forEach((v, _k, _map) => {
-      v.destroy();
-    });
-
+    this.gl?.deleteProgram(this.program);
     this.gl?.deleteBuffer(this.vertexBuffer);
     this.gl = null;
 
     Logger.log("Successfully destroyed");
   }
 
-  getCurrentFractal() {
-    if (this.fractal !== FractalType.None) {
-      return this.fractals.get(this.fractal);
-    }
-    else {
-      return null;
-    }
-  }
-
-  setFractal(fractal: FractalType, dynamicConfig: any, compileConfig: any) {
+  setFractal(fractal: FractalType, config: any) {
     this.fractal = fractal;
-    this.dynamicConfig = dynamicConfig;
-    this.compileConfig = compileConfig;
+    this.config = config;
 
-    // TODO: recompile only some of the time
-    this.getCurrentFractal()?.compileShader(this.compileConfig);
+    // TODO: only recompile when certain config values are changed
+    if (this.gl)
+      this.compileShader(this.gl);
   }
 
   render() {
@@ -211,12 +208,71 @@ export default class JuliaRenderer {
 
     // Update the shader
     if (this.fractal !== FractalType.None) {
-      this.getCurrentFractal()?.updateShader(this.dynamicConfig);
+      gl.useProgram(this.program);
+      this.updateShader(gl);
     } else {
       gl.useProgram(null);
     }
 
     // Render
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+  }
+
+  private updateShader(gl: WebGL2RenderingContext) {
+    this.updateTransform(gl);
+  
+    switch (this.fractal) {
+      case FractalType.Julia:
+        this.updateJulia(gl);
+        break;
+      default:
+        break;
+    }
+  }
+
+  // TODO
+  private updateTransform(gl: WebGL2RenderingContext) {
+
+  }
+
+  // TODO: clean up
+  private updateJulia(gl: WebGL2RenderingContext) {
+    if (!this.program)
+      return;
+
+    // Get uniform locations
+    // TODO: probably cache these, also null checks
+    // TODO: make the matricies not specific to julia 
+    const transformLocation = gl.getUniformLocation(
+      this.program,
+      "uTransform",
+    );
+    const realLocation = gl.getUniformLocation(this.program, "uReal");
+    const imaginaryLocation = gl.getUniformLocation(
+      this.program,
+      "uImaginary",
+    );
+
+    // Create transform matrix
+    const aspectRatio = this.config.width / this.config.height;
+    const scale = 1;
+    const halfWidth = scale / 2;
+    const halfHeight = halfWidth * aspectRatio;
+
+    const transform = mat4.create();
+    mat4.ortho(
+      transform,
+      -halfWidth,
+      halfWidth,
+      -halfHeight,
+      halfHeight,
+      -1,
+      1,
+    );
+
+    // Set uniforms
+    gl.uniformMatrix4fv(transformLocation, false, transform);
+    gl.uniform1f(realLocation, this.config.real);
+    gl.uniform1f(imaginaryLocation, this.config.imaginary);
   }
 }

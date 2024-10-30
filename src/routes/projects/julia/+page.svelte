@@ -44,17 +44,9 @@
       imaginary: imaginary,
       width: imageWidth,
       height: imageHeight,
-    }, 
-    // TODO: don't copy paste this
-        {
-          paramUniforms: `
-          uniform float uReal;
-          uniform float uImaginary;`,
-          paramFuncDef: "float cx, float cy",
-          paramFuncUsage: "uReal, uImaginary",
-          maxIterations: 100,
-          radius: 4,
-        },);
+      maxIterations: 100,
+      radius: 4,
+    });
 
     // Draw
     renderer.render();
