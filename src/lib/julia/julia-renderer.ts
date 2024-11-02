@@ -191,8 +191,6 @@ export default class JuliaRenderer {
     source = source.replace("{{max_iterations}}", config.maxIterations);
     source = source.replace("{{radius_squared}}", (config.radius * config.radius).toFixed(1));
 
-    console.log(source);
-
     return source;
   }
 
