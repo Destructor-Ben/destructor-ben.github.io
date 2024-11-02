@@ -2,6 +2,8 @@
   import JuliaRenderer from "$lib/julia/julia-renderer";
   import FractalType from "$lib/julia/fractal-type";
 
+  // TODO: the canvas styles are broken by the homepage
+
   // Image settings
   let imageWidth = $state(960);
   let imageHeight = $state(540);
