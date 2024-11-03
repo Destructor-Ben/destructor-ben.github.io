@@ -136,12 +136,12 @@
 <!-- Inputs -->
 <div class="overlay">
   <div class="buttons">
-    <button class="settings" onclick={() => showSettings = !showSettings}>
+    <button class="settings button" onclick={() => showSettings = !showSettings}>
       <img src={SettingsImg} alt="Settings" width=30 height=30 class={showSettings ? "open" : ""} />
     </button>
 
-    <button onclick={SaveImage}>Save Image - Not Working</button>
-    <button onclick={SaveAnimation}>Save Animation - Not Working</button>
+    <button onclick={SaveImage} class="button">Save Image - Not Working</button>
+    <button onclick={SaveAnimation} class="button">Save Animation - Not Working</button>
   </div>
   
   {#if showSettings}

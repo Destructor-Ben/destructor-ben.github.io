@@ -48,35 +48,35 @@ hr {
   margin: 0.5em 0em;
 }
 
-a:not(.button):not(.no-style) {
+a.link {
   /* Ugly, but I can't make it work any other way :'( */
   cursor: pointer;
   transition-property: color;
 
-  color: var(--col4);
+  color: var(--col-rainbow-4);
 
   &:visited {
-    color: var(--col5);
+    color: var(--col-rainbow-5);
   }
 
   &:hover {
-    color: color-mix(in hsl, var(--col4), white 15%);
+    color: color-mix(in hsl, var(--col-rainbow-4), white 15%);
 
     &:visited {
-      color: color-mix(in hsl, var(--col5), white 15%);
+      color: color-mix(in hsl, var(--col-rainbow-5), white 15%);
     }
   }
 
   &:active {
-    color: color-mix(in hsl, var(--col4), white 30%);
+    color: color-mix(in hsl, var(--col-rainbow-4), white 30%);
 
     &:visited {
-      color: color-mix(in hsl, var(--col5), white 30%);
+      color: color-mix(in hsl, var(--col-rainbow-5), white 30%);
     }
   }
 }
 
-button:not(.no-style), a.button:not(.no-style) {
+button.button, a.button {
   background-color: var(--col-fg);
   padding: 0.6em 1em;
   border: var(--border);

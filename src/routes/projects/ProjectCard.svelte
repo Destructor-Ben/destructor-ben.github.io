@@ -2,7 +2,7 @@
   let { name, summary, previewImage, url }:  {name: string, summary: string, previewImage: string, url: string} = $props();
 </script>
 
-<a href={url} class="no-style">
+<a href={url}>
   <h2>{name}</h2>
   <img src={previewImage} alt={name} />
   <p>{summary}</p>

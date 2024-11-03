@@ -7,7 +7,7 @@
     <h1>An error occurred</h1>
     <h2>{$page.status} - {$page.error?.message}</h2>
   </div>
-  <p>Navigate back <a href="/">Home</a></p>
+  <p>Navigate back <a href="/" class="link">Home</a></p>
 </div>
 
 <style>
