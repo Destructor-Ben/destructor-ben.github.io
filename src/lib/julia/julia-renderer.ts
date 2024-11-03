@@ -168,6 +168,7 @@ export default class JuliaRenderer {
 
     // Calculation params
     source = source.replace("{{max_iterations}}", config.maxIterations);
+    // TODO: just make it a uniform and set the uniform to be squared when updating the shader?
     source = source.replace("{{radius_squared}}", (config.radius * config.radius).toFixed(1));
 
     return source;
