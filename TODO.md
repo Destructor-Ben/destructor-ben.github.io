@@ -6,6 +6,7 @@
 - Finish Julia
 - Improve the project cards
 - Improve home page
+  - Don't make the animation play every time
   - Add better fractal animation
   - Make fractal fade to pfp
   - Move pfp to side
@@ -13,3 +14,6 @@
   - Fade in extra buttons
   - Fractal splits into 2 decorations at the side of the page
   - More info svgs slide in
+
+- YouTube downloader
+- Movie downloader
