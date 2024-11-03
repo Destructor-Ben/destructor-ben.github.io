@@ -4,6 +4,8 @@
   import JuliaRenderer from "$lib/julia/julia-renderer";
   import FractalType from "$lib/julia/fractal-type";
 
+  import { fade } from "svelte/transition";
+
   // Whether settings are shown
   let showSettings = $state(false);
 
@@ -127,23 +129,23 @@
   <title>Julia - Destructor_Ben</title>
 </svelte:head>
 
-<!-- TODO: clean up this page and make it not scroll, have the settings on top of the fractal, and the fractal take up the main page -->
+<!-- TODO: sort out the sizes of the fractal and settings page properly -->
 
 <canvas width={config.width} height={config.height} bind:this={canvas}></canvas>
 
 <!-- Inputs -->
 <div class="overlay">
   <div class="buttons">
-    <button onclick={() => showSettings = !showSettings}>
+    <button class="settings" onclick={() => showSettings = !showSettings}>
       <img src={SettingsImg} alt="Settings" width=30 height=30 class={showSettings ? "open" : ""} />
     </button>
 
-    <button onclick={SaveImage}>Save Image</button>
+    <button onclick={SaveImage}>Save Image - Not Working</button>
     <button onclick={SaveAnimation}>Save Animation - Not Working</button>
   </div>
   
   {#if showSettings}
-    <div class="inputs">
+    <div class="inputs" transition:fade={{ duration: 300 }}>
       <div>
         <h2>Image</h2>
         
@@ -219,23 +221,32 @@
     left: 0;
     width: 100%;
     height: 100%;
+
+    border-radius: 1em;
+    border: var(--border);
   }
 
   .overlay {
     position: absolute;
     padding: 1em;
 
-    & > button {
-      padding: 10px;
+    .buttons {
       display: flex;
       align-items: center;
-      justify-content: center;
+      gap: 0.5em;
 
-      img {
-        transition-property: transform;
+      button.settings {
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
-        &.open {
-          transform: rotate(60deg);
+        img {
+          transition-property: transform;
+
+          &.open {
+            transform: rotate(60deg);
+          }
         }
       }
     }
@@ -245,6 +256,12 @@
       flex-direction: column;
       align-items: center;
       gap: 1em;
+      margin-top: 1em;
+
+      background-color: color-mix(in srgb, var(--col-mg) 50%, transparent);
+      padding: 1em;
+      border-radius: 1em;
+      border: var(--border);
 
       div {
         display: flex;
