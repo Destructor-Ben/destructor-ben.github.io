@@ -1,6 +1,6 @@
 <footer>
   <div>
-    <div>Copyright © 2024 Destructor_Ben. MIT License. All rights reserved.</div>
+    <div>Copyright © 2024 Destructor_Ben. Licensed under the MIT License.</div>
     <div>Made with love & SvelteKit in Aotearoa New Zealand</div>
   </div>
 </footer>
