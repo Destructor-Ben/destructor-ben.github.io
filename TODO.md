@@ -1,8 +1,9 @@
 # To Do List
 
 - Generate sitemap.xml automatically
-- Figure out what pages I want
 - Make the mobile version better
+- Make page transitions
+- Maybe add headers to the 
 - Improve home page
   - Add better fractal animation
   - Make fractal fade to pfp
