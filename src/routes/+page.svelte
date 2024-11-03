@@ -1,17 +1,21 @@
 <script lang="ts">
   import NZFlag from "$lib/img/nz-flag.png";
   import ProfilePicture from "$lib/img/pfp.png";
-  import JuliaCanvas from "$lib/components/JuliaCanvas.svelte";
+
   import JuliaRenderer from "$lib/julia/julia-renderer";
   import FractalType from "$lib/julia/fractal-type";
-  import { lerp, polyEaseOut } from "$lib/julia/math-utils";
+
+  import { lerp, polyEaseOut } from "$lib/julia/interpolation";
+
+  // Animation variables
+  let animationComplete = $state(false);
 
   const startCoords = [5, 5];
   const endCoords = [0.276, 0.483];
 
   const startScale = 1;
   // TODO: don't hardcode
-  const endScale = 0.8;// TODO: maybe not shape into pfp? 160 / 613; // Profile height / canvas height
+  const endScale = 0.6;// TODO: maybe not shape into pfp? 160 / 613; // Profile height / canvas height
 
   let width = $state(0);
   let height = $state(0);
@@ -20,13 +24,20 @@
   let imaginary = $state(startCoords[1]);
 
   let scale = $state(startScale);
+  
+  // Setup the renderer
+  let canvas: HTMLCanvasElement;
+  let renderer: JuliaRenderer;
 
-  let animationComplete = $state(false);
+  $effect(() => {
+    renderer = new JuliaRenderer(canvas);
 
-  let canvas: any;
+    return () => {
+      renderer.destroy();
+    }
+  })
 
-  // Resize the canvas
-  // TODO: maybe clean up
+  // Resize the canvas when the window size changes
   $effect(() => {
     window.addEventListener('resize', OnResize);
 
@@ -35,18 +46,19 @@
     }
   });
 
+  // Set initial size
   $effect(() => {
     OnResize()
   })
 
   function OnResize() {
     width = window.innerWidth;
-    height = window.innerHeight - 82;// TODO: don't hardcode
+    height = window.innerHeight;
+    renderer.resize(width, height);
   }
 
   // Render the fractal
   $effect(() => {
-    const renderer: JuliaRenderer = canvas.GetRenderer();
     renderer.setFractal(FractalType.Julia, {
       real: real,
       imaginary: imaginary,
@@ -103,7 +115,7 @@
 </svelte:head>
 
 <!-- Appears behind everything -->
-<JuliaCanvas width={width} height={height} class={animationComplete ? "anim-complete" : ""} bind:this={canvas} />
+<canvas width={width} height={height} class={animationComplete ? "anim-complete" : ""} bind:this={canvas}></canvas>
 
   <!-- Basic info about me -->
 <div id="intro" class={animationComplete ? "anim-complete" : ""}>
@@ -156,8 +168,9 @@
     height: 10em;
   }
 
-  :global(canvas) {
+  canvas {
     position: fixed;
+    top: 0;
     bottom: 0;
     left: 0;
     right: 0;
@@ -208,7 +221,7 @@
   }
 
   /* Animate the opacity */
-  #intro, #more-about-me, :global(canvas) {
+  #intro, #more-about-me, canvas {
     transition-duration: 2s;
     transition-property: opacity;
   }
@@ -223,7 +236,7 @@
     }
   }
 
-  :global(canvas) {
+  canvas {
     opacity: 1;
 
     &.anim-complete {
