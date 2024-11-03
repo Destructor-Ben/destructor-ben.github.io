@@ -258,7 +258,7 @@
       gap: 1em;
       margin-top: 1em;
 
-      background-color: color-mix(in srgb, var(--col-mg) 50%, transparent);
+      background-color: color-mix(in srgb, var(--col-mg) 75%, transparent);
       padding: 1em;
       border-radius: 1em;
       border: var(--border);
