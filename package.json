@@ -8,15 +8,17 @@
     "preview": "vite preview",
     "lint": "deno lint",
     "check": "deno fmt --unstable-component --check",
-    "format": "deno fmt --unstable-component"
+    "format": "deno fmt --unstable-component",
+    "postbuild": "deno run --node-modules-dir -A npm:svelte-sitemap --domain https://destructor-ben.github.io"
   },
   "devDependencies": {
     "@sveltejs/adapter-static": "^3.0.0",
     "@sveltejs/kit": "^2.0.0",
     "@sveltejs/vite-plugin-svelte": "^4.0.0",
+    "gl-matrix": "^3.4.3",
     "svelte": "^5.0.0",
     "typescript": "^5.0.0",
     "vite": "^5.0.3",
-    "gl-matrix": "^3.4.3"
+    "svelte-sitemap": "^2.6.0"
   }
 }

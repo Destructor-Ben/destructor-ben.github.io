@@ -1,6 +1,5 @@
 # To Do List
 
-- Generate sitemap.xml automatically
 - Make the mobile version better
 - Make page transitions
 - Maybe add headers to the 
