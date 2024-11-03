@@ -1,3 +1,9 @@
+<script lang="ts">
+  import type { Snippet } from "svelte";
+
+  let { children }: { children: Snippet } = $props();
+</script>
+
 <!--
   TODO: this isn't actually a good implementation and only really works for buttons
   Also, the child component has a different transition duration
@@ -7,7 +13,7 @@
   -->
 
 <div class="rainbow">
-  <slot />
+  {@render children()}
 </div>
 
 <style>

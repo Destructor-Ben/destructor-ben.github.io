@@ -1,16 +1,20 @@
-<script>
+<script lang="ts">
   import "$lib/style/variables.css";
   import "$lib/style/style.css";
 
   import Header from "./Header.svelte";
   import Footer from "./Footer.svelte";
+
+  import type { Snippet } from "svelte";
+
+  let { children }: { children: Snippet } = $props();
 </script>
 
 <div>
   <Header />
 
   <main>
-    <slot />
+    {@render children()}
   </main>
 
   <Footer />
