@@ -1,6 +1,11 @@
 <script lang="ts">
+  import SettingsImg from "$lib/img/settings.svg";
+
   import JuliaRenderer from "$lib/julia/julia-renderer";
   import FractalType from "$lib/julia/fractal-type";
+
+  // Whether settings are shown
+  let showSettings = $state(false);
 
   // #region Renderer Setup
 
@@ -89,128 +94,177 @@
   }
 
   // #endregion
+
+  // #region Saving
+
+  // TODO: save and load images + animations
+  function SaveImage() {
+    console.log("Saving image...");
+
+    const imgLink = canvas.toDataURL("image/png");
+
+    // Create a temporary link element and "click" it
+    let link = document.createElement("a");
+    link.href = imgLink;
+    link.download = "Julia.png";
+    link.click();
+
+    console.log("Image saved");
+  }
+
+  function SaveAnimation() {
+    console.log("Saving animation...");
+    
+    console.log("Animation saved");
+  }
+
+  // TODO: save and load configs
+
+  // #endregion
 </script>
 
 <svelte:head>
   <title>Julia - Destructor_Ben</title>
 </svelte:head>
 
-<div class="root">
-  <h1>Julia - Fractal Renderer</h1>
-  <hr />
+<!-- TODO: clean up this page and make it not scroll, have the settings on top of the fractal, and the fractal take up the main page -->
 
-  <canvas id="julia-canvas" width={config.width} height={config.height} bind:this={canvas}></canvas>
+<canvas width={config.width} height={config.height} bind:this={canvas}></canvas>
 
-  <!-- Inputs -->
-  <h1>Settings</h1>
-  <hr />
-  <div class="inputs">
-    <div>
-      <h2>Image</h2>
-      
-      <label>
-        <input type="range" bind:value={config.width} min=100 max=1000 />
-        <input type="number" bind:value={config.width} />
-        <span>Width</span>
-      </label>
-      
-      <label>
-        <input type="range" bind:value={config.height} min=100 max=1000 />
-        <input type="number" bind:value={config.height} />
-        <span>Height</span>
-      </label>
-    </div>
+<!-- Inputs -->
+<div class="overlay">
+  <div class="buttons">
+    <button onclick={() => showSettings = !showSettings}>
+      <img src={SettingsImg} alt="Settings" width=30 height=30 class={showSettings ? "open" : ""} />
+    </button>
 
-    <div>
-      <h2>Coordinates</h2>
-
-      <label>
-        <input type="checkbox" bind:checked={useMouseForCoords} />
-        <span>Use mouse for coordinates - Press m to toggle</span>
-      </label>
-
-      <label>
-        <input type="range" bind:value={config.real} min=-2 max=2 step=0.01 disabled={useMouseForCoords} />
-        <input type="number" bind:value={config.real} disabled={useMouseForCoords} />
-        <span>Real Component</span>
-      </label>
-      
-      <label>
-        <input type="range" bind:value={config.imaginary} min=-2 max=2 step=0.01 disabled={useMouseForCoords} />
-        <input type="number" bind:value={config.imaginary} disabled={useMouseForCoords} />
-        <span>Imaginary Component</span>
-      </label>
-    </div>
-
-    <div>
-      <h2>Camera</h2>
-
-      <label>
-        <input type="range" bind:value={config.translationX} min=-2 max=2 step=0.01 />
-        <input type="number" bind:value={config.translationX} />
-        <span>Translation X</span>
-      </label>
-
-      <label>
-        <input type="range" bind:value={config.translationY} min=-2 max=2 step=0.01 />
-        <input type="number" bind:value={config.translationY} />
-        <span>Translation Y</span>
-      </label>
-
-      <label>
-        <input type="range" bind:value={config.rotation} min={-Math.PI} max={Math.PI} step=0.01 />
-        <input type="number" bind:value={config.rotation} />
-        <span>Rotation</span>
-      </label>
-
-      <label>
-        <input type="range" bind:value={config.scale} min=0.001 max=10 step=0.01 />
-        <input type="number" bind:value={config.scale} />
-        <span>Scale</span>
-      </label>
-    </div>
+    <button onclick={SaveImage}>Save Image</button>
+    <button onclick={SaveAnimation}>Save Animation - Not Working</button>
   </div>
+  
+  {#if showSettings}
+    <div class="inputs">
+      <div>
+        <h2>Image</h2>
+        
+        <label>
+          <input type="range" bind:value={config.width} min=100 max=1000 />
+          <input type="number" bind:value={config.width} />
+          <span>Width</span>
+        </label>
+        
+        <label>
+          <input type="range" bind:value={config.height} min=100 max=1000 />
+          <input type="number" bind:value={config.height} />
+          <span>Height</span>
+        </label>
+      </div>
+
+      <div>
+        <h2>Coordinates</h2>
+
+        <label>
+          <input type="checkbox" bind:checked={useMouseForCoords} />
+          <span>Use mouse for coordinates - Press m to toggle</span>
+        </label>
+
+        <label>
+          <input type="range" bind:value={config.real} min=-2 max=2 step=0.01 disabled={useMouseForCoords} />
+          <input type="number" bind:value={config.real} disabled={useMouseForCoords} />
+          <span>Real Component</span>
+        </label>
+        
+        <label>
+          <input type="range" bind:value={config.imaginary} min=-2 max=2 step=0.01 disabled={useMouseForCoords} />
+          <input type="number" bind:value={config.imaginary} disabled={useMouseForCoords} />
+          <span>Imaginary Component</span>
+        </label>
+      </div>
+
+      <div>
+        <h2>Camera</h2>
+
+        <label>
+          <input type="range" bind:value={config.translationX} min=-2 max=2 step=0.01 />
+          <input type="number" bind:value={config.translationX} />
+          <span>Translation X</span>
+        </label>
+
+        <label>
+          <input type="range" bind:value={config.translationY} min=-2 max=2 step=0.01 />
+          <input type="number" bind:value={config.translationY} />
+          <span>Translation Y</span>
+        </label>
+
+        <label>
+          <input type="range" bind:value={config.rotation} min={-Math.PI} max={Math.PI} step=0.01 />
+          <input type="number" bind:value={config.rotation} />
+          <span>Rotation</span>
+        </label>
+
+        <label>
+          <input type="range" bind:value={config.scale} min=0.001 max=10 step=0.01 />
+          <input type="number" bind:value={config.scale} />
+          <span>Scale</span>
+        </label>
+      </div>
+    </div>
+  {/if}
 </div>
 
 <style>
-  .root {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5em;
-
-    canvas {
-      border: var(--border);
-      border-radius: 1em;
-      margin: 0.5em;
-      height: 540px;
-    }
+  canvas {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
   }
 
-  .inputs {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1em;
+  .overlay {
+    position: absolute;
+    padding: 1em;
 
-    div {
+    & > button {
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      img {
+        transition-property: transform;
+
+        &.open {
+          transform: rotate(60deg);
+        }
+      }
+    }
+    
+    .inputs {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: space-between;
-      gap: 0.5em;
+      gap: 1em;
 
-      label {
+      div {
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: space-between;
-        gap: 1em;
-        width: 100%;
+        gap: 0.5em;
+
+        label {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 1em;
+          width: 100%;
+        }
       }
     }
   }
 
-  /* Temporary */
+  /* TODO: Temporary */
   input {
     color: black;
   }
