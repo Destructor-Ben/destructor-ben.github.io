@@ -7,28 +7,52 @@
 
   import { lerp, polyEaseOut } from "$lib/julia/interpolation";
 
-  // Animation variables
-  let animationComplete = $state(false);
+  // #region Animation
+  // TODO: clean up the animation itself
+  // Either just make a cool animation or make it shape into my pfp
 
   const startCoords = [5, 5];
   const endCoords = [0.276, 0.483];
 
   const startScale = 1;
-  // TODO: don't hardcode
-  const endScale = 0.6;// TODO: maybe not shape into pfp? 160 / 613; // Profile height / canvas height
-
-  let width = $state(0);
-  let height = $state(0);
-
-  let real = $state(startCoords[0]);
-  let imaginary = $state(startCoords[1]);
-
-  let scale = $state(startScale);
+  const endScale = 0.6;
   
-  // Setup the renderer
+  const fps = 60;
+  const animationSeconds = 4;
+  const maxIterations = fps * animationSeconds;
+  const millisecondsPerFrame = 1 / fps * 1000;
+
+  let animationComplete = $state(false);
+  let config = $state({
+    real: startCoords[0],
+    imaginary: startCoords[1],
+    width: 0,
+    height: 0,
+    maxIterations: 100,
+    radius: 4,
+    translationX: 0,
+    translationY: 0,
+    rotation: 0,
+    scale: startScale,
+  });
+
+  function UpdateFractal(t: number) {
+    const t3 = polyEaseOut(t, 3);
+    const t2 = polyEaseOut(t, 2);
+
+    config.real = lerp(startCoords[0], endCoords[0], t3);
+    config.imaginary = lerp(startCoords[1], endCoords[1], t3);
+    config.scale = lerp(startScale, endScale, t2);
+  }
+
+  // #endregion
+  
+  // #region Renderer
+
   let canvas: HTMLCanvasElement;
   let renderer: JuliaRenderer;
 
+  // Create the renderer
   $effect(() => {
     renderer = new JuliaRenderer(canvas);
 
@@ -48,45 +72,30 @@
 
   // Set initial size
   $effect(() => {
-    OnResize()
+    OnResize();
   })
 
   function OnResize() {
-    width = window.innerWidth;
-    height = window.innerHeight;
-    renderer.resize(width, height);
+    config.width = window.innerWidth;
+    config.height = window.innerHeight;
+    renderer.resize(config.width, config.height);
   }
 
   // Render the fractal
   $effect(() => {
-    renderer.setFractal(FractalType.Julia, {
-      real: real,
-      imaginary: imaginary,
-      width: width,
-      height: height,
-      maxIterations: 100,
-      radius: 4,
-      translationX: 0,
-      translationY: 0,
-      rotation: 0,
-      scale: scale,
-    });
-
+    renderer.setFractal(FractalType.Julia, config);
     renderer.render();
   });
 
-  // Animate the fractal
+  // Setup animation
   $effect(() => {
     console.log("Starting animation...")
 
     let iterations = 0;
-    const fps = 60;
-    const animationSeconds = 4;
-    const maxIterations = fps * animationSeconds;
-    const millisecondsPerFrame = 1 / fps * 1000;
 
     // Start animation
     const intervalID = setInterval(() => {
+      // Update fractal
       const t = iterations / maxIterations;
       UpdateFractal(t);
       iterations++;
@@ -100,14 +109,7 @@
     }, millisecondsPerFrame);
   })
 
-  function UpdateFractal(t: number) {
-    const t3 = polyEaseOut(t, 3);
-    const t2 = polyEaseOut(t, 2);
-
-    real = lerp(startCoords[0], endCoords[0], t3);
-    imaginary = lerp(startCoords[1], endCoords[1], t3);
-    scale = lerp(startScale, endScale, t2);
-  }
+  // #endregion
 </script>
 
 <svelte:head>
@@ -115,7 +117,7 @@
 </svelte:head>
 
 <!-- Appears behind everything -->
-<canvas width={width} height={height} class={animationComplete ? "anim-complete" : ""} bind:this={canvas}></canvas>
+<canvas width={config.width} height={config.height} class={animationComplete ? "anim-complete" : ""} bind:this={canvas}></canvas>
 
   <!-- Basic info about me -->
 <div id="intro" class={animationComplete ? "anim-complete" : ""}>
