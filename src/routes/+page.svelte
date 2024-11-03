@@ -5,7 +5,7 @@
   import JuliaRenderer from "$lib/julia/julia-renderer";
   import FractalType from "$lib/julia/fractal-type";
 
-  import { lerp, polyEaseOut } from "$lib/julia/interpolation";
+  import { lerp, easeOutSine, easeOutExpo, easeOutPoly } from "$lib/julia/interpolation";
 
   // #region Animation
   // TODO: clean up the animation itself
@@ -37,12 +37,11 @@
   });
 
   function UpdateFractal(t: number) {
-    const t3 = polyEaseOut(t, 3);
-    const t2 = polyEaseOut(t, 2);
+    t = easeOutPoly(t, 4);
 
-    config.real = lerp(startCoords[0], endCoords[0], t3);
-    config.imaginary = lerp(startCoords[1], endCoords[1], t3);
-    config.scale = lerp(startScale, endScale, t2);
+    config.real = lerp(startCoords[0], endCoords[0], t);
+    config.imaginary = lerp(startCoords[1], endCoords[1], t);
+    config.scale = lerp(startScale, endScale, t);
   }
 
   // #endregion
