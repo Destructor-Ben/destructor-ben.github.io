@@ -1,6 +1,15 @@
+<script>
+  import RainbowBorder from "$lib/components/RainbowBorder.svelte";
+</script>
+
 <header>
-  <a href="/" class="button">Home</a>
-  <a href="/projects" class="button">Projects</a>
+  <RainbowBorder>
+    <a href="/" class="button">Home</a>
+  </RainbowBorder>
+  
+  <RainbowBorder>
+    <a href="/projects" class="button">Projects</a>
+  </RainbowBorder>
 </header>
 
 <style>
@@ -13,8 +22,8 @@
     display: flex;
     align-items: center;
     justify-content: start;
-    gap: 1em;
-    padding: 1em;
+    gap: 0.5em;
+    padding: 0.75em;
 
     background-color: var(--col-mg);
     border-bottom: var(--border);

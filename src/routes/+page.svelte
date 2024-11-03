@@ -1,6 +1,8 @@
 <script lang="ts">
   import NZFlag from "$lib/img/nz-flag.png";
   import ProfilePicture from "$lib/img/pfp.png";
+  
+  import RainbowBorder from "$lib/components/RainbowBorder.svelte";
 
   import JuliaRenderer from "$lib/julia/julia-renderer";
   import FractalType from "$lib/julia/fractal-type";
@@ -134,13 +136,13 @@
   </div>
 
   <div>
-    <div class="rainbow">
+    <RainbowBorder>
       <a class="button" href="#more-about-me">See More</a>
-    </div>
+    </RainbowBorder>
     
-    <div class="rainbow">
+    <RainbowBorder>
       <a class="button" href="/projects">Projects</a>
-    </div>
+    </RainbowBorder>
   </div>
 </div>
 
@@ -248,60 +250,5 @@
     &.anim-complete {
       opacity: 0;
     }
-  }
-
-  /* TODO: it would probably pay to abstract this, at least move the reusable styles into styles.css */
-  .rainbow {
-    overflow: hidden;
-    position: relative;
-    display: flex;
-    padding: 4px;
-    border-radius: 1000rem;
-    --fade-duration: 500ms;
-
-    /* Rainbow border - spinning div cropped to the parent */
-    &::before {
-      content: "";
-      display: block;
-      position: absolute;
-      border-radius: 100%;
-
-      --size: -60px;
-      z-index: -1;
-      top: var(--size);
-      left: var(--size);
-      right: var(--size);
-      bottom: var(--size);
-
-      transition-property: opacity;
-      transition-duration: var(--fade-duration);
-      opacity: 0;
-
-      animation: border-animation 3s linear infinite;
-      background: conic-gradient(
-        var(--col-rainbow-1),
-        var(--col-rainbow-2),
-        var(--col-rainbow-3),
-        var(--col-rainbow-4),
-        var(--col-rainbow-5),
-        var(--col-rainbow-1)
-      );
-    }
-
-    a.button {
-      transition-property: border-color;
-      transition-duration: var(--fade-duration);
-    }
-
-    &:hover {
-      &::before {
-        opacity: 1;
-      }
-      
-      a.button {
-        border-color: transparent;
-      }
-    }
-
   }
 </style>
