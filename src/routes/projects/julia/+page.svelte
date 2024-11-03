@@ -233,7 +233,7 @@
     .buttons {
       display: flex;
       align-items: center;
-      gap: 0.5em;
+      gap: 1em;
 
       button.settings {
         padding: 10px;
