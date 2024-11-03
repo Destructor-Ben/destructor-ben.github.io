@@ -36,12 +36,12 @@
       bottom: var(--size);
       animation: border-animation 10s linear infinite;
       background: conic-gradient(
-        var(--col1),
-        var(--col2),
-        var(--col3),
-        var(--col4),
-        var(--col5),
-        var(--col1)
+        var(--col-rainbow-1),
+        var(--col-rainbow-2),
+        var(--col-rainbow-3),
+        var(--col-rainbow-4),
+        var(--col-rainbow-5),
+        var(--col-rainbow-1)
       );
     }
   }

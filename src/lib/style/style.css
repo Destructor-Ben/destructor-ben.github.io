@@ -79,7 +79,7 @@ a:not(.button):not(.no-style) {
 button:not(.no-style), a.button:not(.no-style) {
   background-color: var(--col-fg);
   padding: 0.6em 1em;
-  border: 2px solid var(--col-highlight);
+  border: var(--border);
   border-radius: 1000rem;
   box-shadow: var(--shadow-lg);
 
@@ -114,5 +114,5 @@ body, html, :root {
   background-color: var(--col-bg);
   z-index: -999;
   position: relative;
-  scroll-padding: var(--header-height);
+  scroll-padding: 100px;
 }
