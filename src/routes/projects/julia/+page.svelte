@@ -4,6 +4,9 @@
   import JuliaRenderer from "$lib/julia/julia-renderer";
   import FractalType from "$lib/julia/fractal-type";
 
+  import NumberInput from "$lib/components/NumberInput.svelte";
+  import ToggleInput from "$lib/components/ToggleInput.svelte";
+
   import { fade } from "svelte/transition";
 
   // Whether settings are shown
@@ -128,7 +131,7 @@
 <div class="overlay">
   <div class="buttons">
     <button class="settings button" onclick={() => showSettings = !showSettings}>
-      <img src={SettingsImg} alt="Settings" width=30 height=30 class={showSettings ? "open" : ""} />
+      <img src={SettingsImg} alt="Settings" width=30 height=30 class:open={showSettings} />
     </button>
 
     <button onclick={SaveImage} class="button">Save Image - Not Working</button>
@@ -137,70 +140,47 @@
   
   {#if showSettings}
     <div class="inputs" transition:fade={{ duration: 300 }}>
-      <div>
-        <h2>Image</h2>
-        
-        <label>
-          <input type="range" bind:value={config.width} min=100 max=1000 />
-          <input type="number" bind:value={config.width} />
-          <span>Width</span>
-        </label>
-        
-        <label>
-          <input type="range" bind:value={config.height} min=100 max=1000 />
-          <input type="number" bind:value={config.height} />
-          <span>Height</span>
-        </label>
-      </div>
+      <h2>Image</h2>
 
-      <div>
-        <h2>Coordinates</h2>
+      <NumberInput bind:value={config.width} min={1} max={3840} forceMinMaxNumber={true}>
+        Width
+      </NumberInput>
+      
+      <NumberInput bind:value={config.height} min={1} max={3840} forceMinMaxNumber={true}>
+        Height
+      </NumberInput>
 
-        <label>
-          <input type="checkbox" bind:checked={useMouseForCoords} />
-          <span>Use mouse for coordinates - Press m to toggle</span>
-        </label>
+      <h2>Coordinates</h2>
 
-        <label>
-          <input type="range" bind:value={config.real} min=-2 max=2 step=0.01 disabled={useMouseForCoords} />
-          <input type="number" bind:value={config.real} disabled={useMouseForCoords} />
-          <span>Real Component</span>
-        </label>
-        
-        <label>
-          <input type="range" bind:value={config.imaginary} min=-2 max=2 step=0.01 disabled={useMouseForCoords} />
-          <input type="number" bind:value={config.imaginary} disabled={useMouseForCoords} />
-          <span>Imaginary Component</span>
-        </label>
-      </div>
+      <ToggleInput bind:value={useMouseForCoords}>
+        Use mouse for coordinates - Press M to toggle
+      </ToggleInput>
 
-      <div>
-        <h2>Camera</h2>
+      <NumberInput bind:value={config.real} min={-3} max={3} step={0.01} disabled={useMouseForCoords}>
+        Real Component
+      </NumberInput>
+      
+      <NumberInput bind:value={config.imaginary} min={-3} max={3} step={0.01} disabled={useMouseForCoords}>
+        Imaginary Component
+      </NumberInput>
 
-        <label>
-          <input type="range" bind:value={config.translationX} min=-2 max=2 step=0.01 />
-          <input type="number" bind:value={config.translationX} />
-          <span>Translation X</span>
-        </label>
+      <h2>Transformation</h2>
 
-        <label>
-          <input type="range" bind:value={config.translationY} min=-2 max=2 step=0.01 />
-          <input type="number" bind:value={config.translationY} />
-          <span>Translation Y</span>
-        </label>
-
-        <label>
-          <input type="range" bind:value={config.rotation} min={-Math.PI} max={Math.PI} step=0.01 />
-          <input type="number" bind:value={config.rotation} />
-          <span>Rotation</span>
-        </label>
-
-        <label>
-          <input type="range" bind:value={config.scale} min=0.001 max=10 step=0.01 />
-          <input type="number" bind:value={config.scale} />
-          <span>Scale</span>
-        </label>
-      </div>
+      <NumberInput bind:value={config.translationX} min={-3} max={3} step={0.01}>
+        Translation X
+      </NumberInput>
+      
+      <NumberInput bind:value={config.translationY} min={-3} max={3} step={0.01}>
+        Translation Y
+      </NumberInput>
+      
+      <NumberInput bind:value={config.rotation} min={0} max={Math.PI * 2} step={0.01}>
+        Rotation
+      </NumberInput>
+      
+      <NumberInput bind:value={config.scale} min={0.01} max={15} step={0.01}>
+        Scale
+      </NumberInput>
     </div>
   {/if}
 </div>
@@ -246,34 +226,14 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 1em;
-      margin-top: 1em;
 
       background-color: color-mix(in srgb, var(--col-mg) 75%, transparent);
-      padding: 1em;
-      border-radius: 1em;
       border: var(--border);
 
-      div {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: space-between;
-        gap: 0.5em;
-
-        label {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 1em;
-          width: 100%;
-        }
-      }
+      gap: 0.5em;
+      margin-top: 1em;
+      padding: 1em;
+      border-radius: 1em;
     }
-  }
-
-  /* TODO: Temporary */
-  input {
-    color: black;
   }
 </style>
