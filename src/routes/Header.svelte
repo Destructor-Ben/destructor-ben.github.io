@@ -25,8 +25,10 @@
     gap: 0.5em;
     padding: 0.75em;
 
-    background-color: var(--col-mg);
     border-bottom: var(--border);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    background: color-mix(in srgb, var(--col-mg) 80%, #0000);
     
     z-index: 1;
   }
