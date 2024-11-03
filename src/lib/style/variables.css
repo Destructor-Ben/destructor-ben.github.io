@@ -10,8 +10,8 @@
   --col-heading: white;
   --col-bg: #0a0a16;
   --col-fg: #0f1931;
-  --col-mg: color-mix(in srgb, var(--col-fg) 35%, var(--col-bg));
-  --col-highlight: color-mix(in srgb, var(--col-fg) 80%, #fff);
+  --col-mg: color-mix(in srgb, var(--col-fg) 30%, var(--col-bg));
+  --col-highlight: color-mix(in srgb, var(--col-fg) 90%, #fff);
   --col-rainbow-1: #df406f;
   --col-rainbow-2: #fbda34;
   --col-rainbow-3: #86f9b8;

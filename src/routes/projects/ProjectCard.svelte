@@ -12,10 +12,9 @@
   a {
     position: relative;
     text-decoration: none;
-    background-color: var(--col-fg);
+    background-color: var(--col-mg);
     border-radius: 2em;
     border: var(--border);
-    box-sizing: var(--shadow-xl);
 
     display: flex;
     flex-direction: column;
