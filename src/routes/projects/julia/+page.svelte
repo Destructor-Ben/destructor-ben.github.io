@@ -53,20 +53,9 @@
   // #region Mouse and Keybind Control
 
   let useMouseForCoords = $state(false);
-
-  // Setup hooks
-  $effect(() => {
-    canvas.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("keypress", handleKeyPress)
-
-    return () => {
-      canvas.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("keypress", handleKeyPress)
-    }
-  })
   
   // Recalculates the mouse movement
-  function handleMouseMove(event: MouseEvent) {
+  function HandleMouseMove(event: MouseEvent) {
     if (!useMouseForCoords)
       return;
 
@@ -87,7 +76,7 @@
   }
 
   // Toggle whether mouse movement is used
-  function handleKeyPress(event: KeyboardEvent)
+  function HandleKeyPress(event: KeyboardEvent)
   {
     if (event.code === "KeyM")
     {
@@ -129,9 +118,11 @@
   <title>Julia - Destructor_Ben</title>
 </svelte:head>
 
+<svelte:window onkeypress={HandleKeyPress} />
+
 <!-- TODO: sort out the sizes of the fractal and settings page properly -->
 
-<canvas width={config.width} height={config.height} bind:this={canvas}></canvas>
+<canvas width={config.width} height={config.height} bind:this={canvas} onmousemove={HandleMouseMove}></canvas>
 
 <!-- Inputs -->
 <div class="overlay">

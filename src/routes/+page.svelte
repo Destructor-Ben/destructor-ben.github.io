@@ -62,20 +62,12 @@
     }
   })
 
-  // Resize the canvas when the window size changes
-  $effect(() => {
-    window.addEventListener('resize', OnResize);
-
-    return () => {
-      window.removeEventListener('resize', OnResize);
-    }
-  });
-
   // Set initial size
   $effect(() => {
     OnResize();
   })
 
+  // Resize the canvas when the window size changes
   function OnResize() {
     config.width = window.innerWidth;
     config.height = window.innerHeight;
@@ -116,6 +108,8 @@
 <svelte:head>
   <title>Destructor_Ben</title>
 </svelte:head>
+
+<svelte:window onresize={OnResize}/>
 
 <!-- Appears behind everything -->
 <canvas width={config.width} height={config.height} class:anim-complete={animationComplete} bind:this={canvas}></canvas>
