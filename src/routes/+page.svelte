@@ -123,8 +123,7 @@
   <h1>About Me - Destructor_Ben</h1>
   <hr />
   <div>
-    <!-- svelte-ignore a11y_img_redundant_alt -->
-    <img class="pfp" src={ProfilePicture} alt="Profile Picture" />
+    <img class="pfp" src={ProfilePicture} alt="PFP" />
     <p>
       I'm a 16 year old guy from New Zealand <img
         class="nz-flag"
@@ -135,8 +134,13 @@
   </div>
 
   <div>
-    <a class="button" href="#more-about-me">See More</a>
-    <a class="button" href="/projects">Projects</a>
+    <div class="rainbow">
+      <a class="button" href="#more-about-me">See More</a>
+    </div>
+    
+    <div class="rainbow">
+      <a class="button" href="/projects">Projects</a>
+    </div>
   </div>
 </div>
 
@@ -195,6 +199,40 @@
       
       & > p {
         width: 50%;
+      }
+
+      .rainbow {
+        overflow: hidden;
+        position: relative;
+        display: flex;
+        padding: 4px;
+        border-radius: 1000rem;
+
+        &::before {
+          content: "";
+          display: block;
+          position: absolute;
+          border-radius: 100%;
+          --size: -60px;
+          z-index: -1;
+          top: var(--size);
+          left: var(--size);
+          right: var(--size);
+          bottom: var(--size);
+          animation: border-animation 10s linear infinite;
+          background: conic-gradient(
+            var(--col-rainbow-1),
+            var(--col-rainbow-2),
+            var(--col-rainbow-3),
+            var(--col-rainbow-4),
+            var(--col-rainbow-5),
+            var(--col-rainbow-1)
+          );
+        }
+
+        a.button {
+          border: none;
+        }
       }
     }
   }

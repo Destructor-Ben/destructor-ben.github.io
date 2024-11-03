@@ -116,3 +116,13 @@ body, html, :root {
   position: relative;
   scroll-padding: 100px;
 }
+
+/* Rainbow border code */
+@keyframes border-animation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
