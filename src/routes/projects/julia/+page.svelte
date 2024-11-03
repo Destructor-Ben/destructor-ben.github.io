@@ -2,28 +2,26 @@
   import JuliaRenderer from "$lib/julia/julia-renderer";
   import FractalType from "$lib/julia/fractal-type";
 
-  // TODO: the canvas styles are broken by the homepage
+  // #region Renderer Setup
 
-  // Image settings
-  let imageWidth = $state(960);
-  let imageHeight = $state(540);
-
-  // Coordinates
-  let useMouseForCoords = $state(false);
-  let real = $state(0);
-  let imaginary = $state(0);
-
-  // Camera
-  let translationX = $state(0);
-  let translationY = $state(0);
-  let rotation = $state(0);
-  let scale = $state(1);
-
-  // TODO: maybe make a JuliaCanvas component
+  // Default settings
+  let config = $state({
+    real: 0,
+    imaginary: 0,
+    width: 960,
+    height: 540,
+    maxIterations: 100,
+    radius: 4,
+    translationX: 0,
+    translationY: 0,
+    rotation: 0,
+    scale: 1,
+  });
+  
+  // Create the renderer
   let canvas: HTMLCanvasElement;
   let renderer: JuliaRenderer;
 
-  // Setup the renderer
   $effect(() => {
     renderer = new JuliaRenderer(canvas);
 
@@ -32,7 +30,24 @@
     }
   })
 
-  // Mouse and keybind control
+  // Resize viewport when canvas size changed
+  $effect(() => {
+    renderer.resize(config.width, config.height);
+  })
+
+  // Render the fractal
+  $effect(() => {
+    renderer.setFractal(FractalType.Julia, config);
+    renderer.render();
+  });
+
+  // #endregion
+
+  // #region Mouse and Keybind Control
+
+  let useMouseForCoords = $state(false);
+
+  // Setup hooks
   $effect(() => {
     canvas.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("keypress", handleKeyPress)
@@ -42,32 +57,7 @@
       document.removeEventListener("keypress", handleKeyPress)
     }
   })
-
-  // When the canvas is resized we need to change the viewport size
-  $effect(() => {
-    renderer.resize(imageWidth, imageHeight);
-  })
-
-  // Render the fractal when the input changes
-  $effect(() => {
-    // Set the fractal info
-    renderer.setFractal(FractalType.Julia, {
-      real: real,
-      imaginary: imaginary,
-      width: imageWidth,
-      height: imageHeight,
-      maxIterations: 100,
-      radius: 4,
-      translationX: translationX,
-      translationY: translationY,
-      rotation: rotation,
-      scale: scale,
-    });
-
-    // Draw
-    renderer.render();
-  })
-
+  
   // Recalculates the mouse movement
   function handleMouseMove(event: MouseEvent) {
     if (!useMouseForCoords)
@@ -85,8 +75,8 @@
     const mouseReal = (x - width / 2) / width * 2;
     const mouseImaginary = (y - height / 2) / height * 2;
 
-    real = mouseReal;
-    imaginary = mouseImaginary;
+    config.real = mouseReal;
+    config.imaginary = mouseImaginary;
   }
 
   // Toggle whether mouse movement is used
@@ -97,6 +87,8 @@
       useMouseForCoords = !useMouseForCoords;
     }
   }
+
+  // #endregion
 </script>
 
 <svelte:head>
@@ -107,7 +99,7 @@
   <h1>Julia - Fractal Renderer</h1>
   <hr />
 
-  <canvas id="julia-canvas" width={imageWidth} height={imageHeight} bind:this={canvas}></canvas>
+  <canvas id="julia-canvas" width={config.width} height={config.height} bind:this={canvas}></canvas>
 
   <!-- Inputs -->
   <h1>Settings</h1>
@@ -117,15 +109,15 @@
       <h2>Image</h2>
       
       <label>
-        <input type="range" bind:value={imageWidth} min=100 max=1000 />
-        <input type="number" bind:value={imageWidth} />
+        <input type="range" bind:value={config.width} min=100 max=1000 />
+        <input type="number" bind:value={config.width} />
         <span>Width</span>
       </label>
       
       <label>
-        <input type="range" bind:value={imageHeight} min=100 max=1000 />
-        <input type="number" bind:value={imageHeight} />
-        <span>height</span>
+        <input type="range" bind:value={config.height} min=100 max=1000 />
+        <input type="number" bind:value={config.height} />
+        <span>Height</span>
       </label>
     </div>
 
@@ -138,14 +130,14 @@
       </label>
 
       <label>
-        <input type="range" bind:value={real} min=-2 max=2 step=0.01 disabled={useMouseForCoords} />
-        <input type="number" bind:value={real} disabled={useMouseForCoords} />
+        <input type="range" bind:value={config.real} min=-2 max=2 step=0.01 disabled={useMouseForCoords} />
+        <input type="number" bind:value={config.real} disabled={useMouseForCoords} />
         <span>Real Component</span>
       </label>
       
       <label>
-        <input type="range" bind:value={imaginary} min=-2 max=2 step=0.01 disabled={useMouseForCoords} />
-        <input type="number" bind:value={imaginary} disabled={useMouseForCoords} />
+        <input type="range" bind:value={config.imaginary} min=-2 max=2 step=0.01 disabled={useMouseForCoords} />
+        <input type="number" bind:value={config.imaginary} disabled={useMouseForCoords} />
         <span>Imaginary Component</span>
       </label>
     </div>
@@ -154,26 +146,26 @@
       <h2>Camera</h2>
 
       <label>
-        <input type="range" bind:value={translationX} min=-2 max=2 step=0.01 />
-        <input type="number" bind:value={translationX} />
+        <input type="range" bind:value={config.translationX} min=-2 max=2 step=0.01 />
+        <input type="number" bind:value={config.translationX} />
         <span>Translation X</span>
       </label>
 
       <label>
-        <input type="range" bind:value={translationY} min=-2 max=2 step=0.01 />
-        <input type="number" bind:value={translationY} />
+        <input type="range" bind:value={config.translationY} min=-2 max=2 step=0.01 />
+        <input type="number" bind:value={config.translationY} />
         <span>Translation Y</span>
       </label>
 
       <label>
-        <input type="range" bind:value={rotation} min={-Math.PI} max={Math.PI} step=0.01 />
-        <input type="number" bind:value={rotation} />
+        <input type="range" bind:value={config.rotation} min={-Math.PI} max={Math.PI} step=0.01 />
+        <input type="number" bind:value={config.rotation} />
         <span>Rotation</span>
       </label>
 
       <label>
-        <input type="range" bind:value={scale} min=0.001 max=10 step=0.01 />
-        <input type="number" bind:value={scale} />
+        <input type="range" bind:value={config.scale} min=0.001 max=10 step=0.01 />
+        <input type="number" bind:value={config.scale} />
         <span>Scale</span>
       </label>
     </div>
