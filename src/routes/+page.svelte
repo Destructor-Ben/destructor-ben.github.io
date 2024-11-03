@@ -116,10 +116,10 @@
 </svelte:head>
 
 <!-- Appears behind everything -->
-<canvas width={config.width} height={config.height} class={animationComplete ? "anim-complete" : ""} bind:this={canvas}></canvas>
+<canvas width={config.width} height={config.height} class:anim-complete={animationComplete} bind:this={canvas}></canvas>
 
   <!-- Basic info about me -->
-<div id="intro" class={animationComplete ? "anim-complete" : ""}>
+<div id="intro" class:anim-complete={animationComplete}>
   <h1>About Me - Destructor_Ben</h1>
   <hr />
   <div>
@@ -141,7 +141,7 @@
 </div>
 
 <!-- SVGs used in my GitHub profile -->
-<div id="more-about-me" class={animationComplete ? "anim-complete" : ""}>
+<div id="more-about-me" class:anim-complete={animationComplete}>
   <h1>More About Me</h1>
   <div>
     <img
@@ -184,6 +184,7 @@
     align-items: center;
     gap: 1em;
     height: 100vh;
+    margin-top: 1em;
 
     & > div {
       display: flex;
