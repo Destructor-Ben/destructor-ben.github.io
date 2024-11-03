@@ -57,17 +57,9 @@ export default class JuliaRenderer {
     const bufferData = [
       1.0,
       1.0,
-      1.0,
-      1.0,
-      -1.0,
-      1.0,
       -1.0,
       1.0,
       1.0,
-      -1.0,
-      1.0,
-      -1.0,
-      -1.0,
       -1.0,
       -1.0,
       -1.0,
@@ -82,11 +74,8 @@ export default class JuliaRenderer {
     );
 
     // Setup the vertex attribute array
-    // LLTT - Each character is one float, L is location, T is texcoord
     const floatSize = 32 / 8;
-    const locationSize = floatSize * 2;
-    const texCoordSize = floatSize * 2;
-    const vertexSize = locationSize + texCoordSize;
+    const vertexSize = floatSize * 2;
 
     gl.vertexAttribPointer(
       0, // Location - constant
@@ -97,17 +86,7 @@ export default class JuliaRenderer {
       0, // Offset - How many bytes from the start of the vertex
     );
 
-    gl.vertexAttribPointer(
-      1, // Location - constant
-      2, // Pull out 2 values
-      gl.FLOAT, // Type is 32 bit float
-      false, // Don't normalize
-      vertexSize, // Stride - Size of one vertex
-      locationSize, // Offset - How many bytes from the start of the vertex
-    );
-
     gl.enableVertexAttribArray(0);
-    gl.enableVertexAttribArray(1);
 
     // Compile fractal shader
     this.compileShader(gl);
