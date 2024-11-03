@@ -81,7 +81,6 @@ button:not(.no-style), a.button:not(.no-style) {
   padding: 0.6em 1em;
   border: var(--border);
   border-radius: 1000rem;
-  box-shadow: var(--shadow-lg);
 
   font-family: var(--font-heading);
   font-size: 1.2rem;

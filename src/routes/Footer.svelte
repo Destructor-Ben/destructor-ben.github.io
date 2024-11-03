@@ -16,7 +16,6 @@
 
     background-color: var(--col-mg);
     border-top: var(--border);
-    box-shadow: var(--shadow-lg);
 
     z-index: 1;
 

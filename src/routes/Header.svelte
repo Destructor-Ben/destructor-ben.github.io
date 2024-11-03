@@ -27,7 +27,6 @@
 
     background-color: var(--col-mg);
     border-bottom: var(--border);
-    box-shadow: var(--shadow-lg);
     
     z-index: 1;
   }
