@@ -137,6 +137,7 @@ export default class JuliaRenderer {
     this.uniformLocations = {
       real: gl.getUniformLocation(program, "uReal"),
       imaginary: gl.getUniformLocation(program, "uImaginary"),
+      radiusSquared: gl.getUniformLocation(program, "uRadiusSquared"),
     };
   }
   
@@ -146,7 +147,8 @@ export default class JuliaRenderer {
     const juliaConfig = {
       paramUniforms: `
       uniform float uReal;
-      uniform float uImaginary;`,
+      uniform float uImaginary;
+      uniform float uRadiusSquared;`,
       paramFuncDef: "float cx, float cy",
       paramFuncUsage: "uReal, uImaginary",
     }
@@ -168,8 +170,6 @@ export default class JuliaRenderer {
 
     // Calculation params
     source = source.replace("{{max_iterations}}", config.maxIterations);
-    // TODO: just make it a uniform and set the uniform to be squared when updating the shader?
-    source = source.replace("{{radius_squared}}", (config.radius * config.radius).toFixed(1));
 
     return source;
   }
@@ -185,12 +185,18 @@ export default class JuliaRenderer {
   }
 
   setFractal(fractal: FractalType, config: any) {
+    const oldConfig = this.config;
+
     this.fractal = fractal;
     this.config = config;
 
     // TODO: only recompile when certain config values are changed
-    if (this.gl)
+    if (this.gl && this.needsRecompile(oldConfig, this.config))
       this.compileShader(this.gl);
+  }
+ 
+  needsRecompile(config: any, newConfig: any) {
+    return true;
   }
 
   render() {
@@ -230,6 +236,7 @@ export default class JuliaRenderer {
     }
   }
 
+  // TODO: this is fucking dodgy
   private updateTransform(gl: WebGL2RenderingContext) {
     const transform = mat4.create();
 
@@ -257,5 +264,6 @@ export default class JuliaRenderer {
   private updateJulia(gl: WebGL2RenderingContext) {
     gl.uniform1f(this.uniformLocations.real, this.config.real);
     gl.uniform1f(this.uniformLocations.imaginary, this.config.imaginary);
+    gl.uniform1f(this.uniformLocations.radiusSquared, this.config.radius * this.config.radius);
   }
 }

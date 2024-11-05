@@ -11,7 +11,7 @@ float Fractal(float x, float y {{params_def}})
     for (int iteration = 0; iteration < {{max_iterations}}; iteration++)
     { 
         // The point escaped
-        if (x * x + y * y >= {{radius_squared}})
+        if (x * x + y * y >= uRadiusSquared)
         {
             // TODO: customizable smoothing formula
             // Smoothing formula
