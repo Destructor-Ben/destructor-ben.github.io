@@ -1,11 +1,11 @@
 import Logger from "./julia-logger";
 import FractalType from "./fractal-type";
+import { type Config, defaultConfig } from "./julia-config";
 import { mat4 } from "gl-matrix";
 import { createProgramFromSource } from "./shader-utils";
 import VertSource from "./shaders/vert.glsl?raw";
 import FragSource from "./shaders/frag.glsl?raw";
 
-// TODO: make a type for the config
 // TODO: move the stuff in switch statements for the fractal types out
 // TODO: colour, falloff, and background settings
 // TODO: non escaping point colour settings
@@ -18,7 +18,7 @@ export default class JuliaRenderer {
   private vertexBuffer: WebGLBuffer | null = null;
   private program: WebGLProgram | null = null;
   private uniformLocations: any = {};
-  private config: any = {};
+  private config: Config = defaultConfig;
 
   constructor(canvas: HTMLCanvasElement) {
     Logger.log("Initializing...");
@@ -164,7 +164,7 @@ export default class JuliaRenderer {
     source = source.replace("{{params_call}}", paramsUsage);
 
     // Calculation params
-    source = source.replace("{{max_iterations}}", config.maxIterations);
+    source = source.replace("{{max_iterations}}", config.maxIterations.toString());
 
     return source;
   }
@@ -179,23 +179,24 @@ export default class JuliaRenderer {
     Logger.log("Successfully destroyed");
   }
 
-  setFractal(config: any) {
-    const needsRecompile = this.needsRecompile(config);
+  setFractal(config: Partial<Config>) {
+    // Allow default values for the config
+    const strictConfig = { ...defaultConfig, ...config };
 
-    // TODO: temporary
-    console.log(config);
-    console.log(this.config);
-    console.log(needsRecompile);
+    // Calculate now so we don't have to store the old config
+    const needsRecompile = this.needsRecompile(strictConfig);
 
-    this.config = config;
+    // Set the new config
+    this.config = strictConfig;
 
     // Only recompile when certain config values are changed
     if (this.gl && needsRecompile)
       this.compileShader(this.gl);
   }
  
-  needsRecompile(config: any) {
-    const checkValue = (name: string) => {
+  needsRecompile(config: Config) {
+    // Check if the values are different
+    const checkValue = <T extends keyof Config>(name: T) => {
       return this.config[name] !== config[name];
     }
 

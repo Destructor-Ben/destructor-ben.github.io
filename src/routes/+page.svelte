@@ -31,11 +31,6 @@
     imaginary: startCoords[1],
     width: 0,
     height: 0,
-    maxIterations: 100,
-    radius: 4,
-    translationX: 0,
-    translationY: 0,
-    rotation: 0,
     scale: startScale,
   });
 
