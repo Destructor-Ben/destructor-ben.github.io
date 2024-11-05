@@ -5,12 +5,11 @@ import { createProgramFromSource } from "./shader-utils";
 import VertSource from "./shaders/vert.glsl?raw";
 import FragSource from "./shaders/frag.glsl?raw";
 
-// TODO: scaling, rotating, and translating
-// TODO: image size settings
+// TODO: make a type for the config
+// TODO: move the stuff in switch statements for the fractal types out
 // TODO: colour, falloff, and background settings
 // TODO: non escaping point colour settings
 // TODO: multilayering settings
-// TODO: escape radius and max iter settings
 // TODO: animation with keyframes and different interpolation types
 // TODO: mandelbrot
 // TODO: random helpful article - https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Adding_2D_content_to_a_WebGL_context#creating_the_square_plane
@@ -19,7 +18,6 @@ export default class JuliaRenderer {
   private vertexBuffer: WebGLBuffer | null = null;
   private program: WebGLProgram | null = null;
   private uniformLocations: any = {};
-  private fractal = FractalType.None;
   private config: any = {};
 
   constructor(canvas: HTMLCanvasElement) {
@@ -87,9 +85,6 @@ export default class JuliaRenderer {
     );
 
     gl.enableVertexAttribArray(0);
-
-    // Compile fractal shader
-    this.compileShader(gl);
   }
 
   private compileShader(gl: WebGL2RenderingContext) {
@@ -98,7 +93,7 @@ export default class JuliaRenderer {
       gl.deleteProgram(this.program);
 
     // Return if we don't have a fractal active
-    if (this.fractal === FractalType.None)
+    if (this.config.fractal === FractalType.None)
       return;
 
     // Sub in values for frag source
@@ -121,7 +116,7 @@ export default class JuliaRenderer {
     if (!this.program)
       return;
 
-    switch (this.fractal) {
+    switch (this.config.fractal) {
       case FractalType.Julia:
         this.updateUniformsJulia(gl, this.program);
         break;
@@ -184,19 +179,28 @@ export default class JuliaRenderer {
     Logger.log("Successfully destroyed");
   }
 
-  setFractal(fractal: FractalType, config: any) {
-    const oldConfig = this.config;
+  setFractal(config: any) {
+    const needsRecompile = this.needsRecompile(config);
 
-    this.fractal = fractal;
+    // TODO: temporary
+    console.log(config);
+    console.log(this.config);
+    console.log(needsRecompile);
+
     this.config = config;
 
-    // TODO: only recompile when certain config values are changed
-    if (this.gl && this.needsRecompile(oldConfig, this.config))
+    // Only recompile when certain config values are changed
+    if (this.gl && needsRecompile)
       this.compileShader(this.gl);
   }
  
-  needsRecompile(config: any, newConfig: any) {
-    return true;
+  needsRecompile(config: any) {
+    const checkValue = (name: string) => {
+      return this.config[name] !== config[name];
+    }
+
+    return checkValue("maxIterations")
+        || checkValue("fractal");
   }
 
   render() {
@@ -209,7 +213,7 @@ export default class JuliaRenderer {
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     // Update the shader
-    if (this.fractal !== FractalType.None) {
+    if (this.config.fractal !== FractalType.None) {
       gl.useProgram(this.program);
       this.updateShader(gl);
     } else {
@@ -227,7 +231,7 @@ export default class JuliaRenderer {
   private updateShader(gl: WebGL2RenderingContext) {
     this.updateTransform(gl);
   
-    switch (this.fractal) {
+    switch (this.config.fractal) {
       case FractalType.Julia:
         this.updateJulia(gl);
         break;

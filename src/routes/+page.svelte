@@ -26,6 +26,7 @@
 
   let animationComplete = $state(false);
   let config = $state({
+    fractal: FractalType.Julia,
     real: startCoords[0],
     imaginary: startCoords[1],
     width: 0,
@@ -76,7 +77,7 @@
 
   // Render the fractal
   $effect(() => {
-    renderer.setFractal(FractalType.Julia, config);
+    renderer.setFractal(config);
     renderer.render();
   });
 

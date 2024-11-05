@@ -16,6 +16,7 @@
 
   // Default settings
   let config = $state({
+    fractal: FractalType.Julia,
     real: 0,
     imaginary: 0,
     width: 960,
@@ -47,7 +48,7 @@
 
   // Render the fractal
   $effect(() => {
-    renderer.setFractal(FractalType.Julia, config);
+    renderer.setFractal(config);
     renderer.render();
   });
 
