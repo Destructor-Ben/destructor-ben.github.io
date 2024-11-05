@@ -199,6 +199,7 @@ export default class JuliaRenderer {
       return this.config[name] !== config[name];
     }
 
+    // TODO: make specific to each fractal
     return checkValue("maxIterations")
         || checkValue("fractal");
   }
