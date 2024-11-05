@@ -59,7 +59,7 @@
   let useMouseForCoords = $state(false);
   
   // Recalculates the mouse movement
-  function HandleMouseMove(event: MouseEvent) {
+  function handleMouseMove(event: MouseEvent) {
     if (!useMouseForCoords)
       return;
 
@@ -80,7 +80,7 @@
   }
 
   // Toggle whether mouse movement is used
-  function HandleKeyPress(event: KeyboardEvent)
+  function handleKeyPress(event: KeyboardEvent)
   {
     if (event.code === "KeyM")
     {
@@ -93,7 +93,7 @@
   // #region Saving
 
   // TODO: save and load images + animations
-  function SaveImage() {
+  function saveImage() {
     console.log("Saving image...");
 
     const imgLink = canvas.toDataURL("image/png");
@@ -107,7 +107,7 @@
     console.log("Image saved");
   }
 
-  function SaveAnimation() {
+  function saveAnimation() {
     console.log("Saving animation...");
     
     console.log("Animation saved");
@@ -122,11 +122,11 @@
   <title>Julia - Destructor_Ben</title>
 </svelte:head>
 
-<svelte:window onkeypress={HandleKeyPress} />
+<svelte:window onkeypress={handleKeyPress} />
 
 <!-- TODO: sort out the sizes of the fractal and settings page properly -->
 
-<canvas width={config.width} height={config.height} bind:this={canvas} onmousemove={HandleMouseMove}></canvas>
+<canvas width={config.width} height={config.height} bind:this={canvas} onmousemove={handleMouseMove}></canvas>
 
 <!-- Inputs -->
 <div class="overlay">
@@ -135,8 +135,8 @@
       <img src={SettingsImg} alt="Settings" width=30 height=30 class:open={showSettings} />
     </button>
 
-    <button onclick={SaveImage} class="button">Save Image - Not Working</button>
-    <button onclick={SaveAnimation} class="button">Save Animation - Not Working</button>
+    <button onclick={saveImage} class="button">Save Image - Not Working</button>
+    <button onclick={saveAnimation} class="button">Save Animation - Not Working</button>
   </div>
   
   {#if showSettings}

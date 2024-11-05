@@ -39,7 +39,7 @@
     scale: startScale,
   });
 
-  function UpdateFractal(t: number) {
+  function updateFractal(t: number) {
     t = easeOutPoly(t, 4);
 
     config.real = lerp(startCoords[0], endCoords[0], t);
@@ -65,11 +65,11 @@
 
   // Set initial size
   $effect(() => {
-    OnResize();
+    onResize();
   })
 
   // Resize the canvas when the window size changes
-  function OnResize() {
+  function onResize() {
     config.width = window.innerWidth;
     config.height = window.innerHeight;
     renderer.resize(config.width, config.height);
@@ -91,7 +91,7 @@
     const intervalID = setInterval(() => {
       // Update fractal
       const t = iterations / maxIterations;
-      UpdateFractal(t);
+      updateFractal(t);
       iterations++;
 
       // Stop animation
@@ -110,7 +110,7 @@
   <title>Destructor_Ben</title>
 </svelte:head>
 
-<svelte:window onresize={OnResize}/>
+<svelte:window onresize={onResize}/>
 
 <!-- Appears behind everything -->
 <canvas width={config.width} height={config.height} class:anim-complete={animationComplete} bind:this={canvas}></canvas>
