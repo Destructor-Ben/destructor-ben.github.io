@@ -1,12 +1,15 @@
-import Logger from "./julia-logger";
-import FractalType from "./fractal-type";
-import { type Config, defaultConfig } from "./julia-config";
-import { mat4 } from "gl-matrix";
-import { createProgramFromSource } from "./shader-utils";
-import VertSource from "./shaders/vert.glsl?raw";
-import FragSource from "./shaders/frag.glsl?raw";
+import Logger from "$lib/julia/julia-logger";
+import FractalType from "$lib/julia/fractal-type";
+import { type Config, defaultConfig } from "$lib/julia/julia-config";
 
-// TODO: move the stuff in switch statements for the fractal types out
+import { mat4 } from "gl-matrix";
+import { createProgramFromSource } from "$lib/julia/shader-utils";
+
+import VertSource from "$lib/julia/shaders/vert.glsl?raw";
+import FragSource from "$lib/julia/shaders/frag.glsl?raw";
+
+import * as JuliaFractal from "$lib/julia/fractals/julia";
+
 // TODO: colour, falloff, and background settings
 // TODO: non escaping point colour settings
 // TODO: multilayering settings
@@ -112,13 +115,22 @@ export default class JuliaRenderer {
     this.updateUniforms(gl);
   }
 
+  private createFragmentSource(source: string) {
+    switch (this.config.fractal) {
+      case FractalType.Julia:
+        return JuliaFractal.createFragmentSource(source, this.config);
+      default:
+        return FragSource;
+    }
+  }
+
   private updateUniforms(gl: WebGL2RenderingContext) {
     if (!this.program)
       return;
 
     switch (this.config.fractal) {
       case FractalType.Julia:
-        this.updateUniformsJulia(gl, this.program);
+        this.uniformLocations = JuliaFractal.updateUniforms(gl, this.program);
         break;
       default:
         break;
@@ -126,47 +138,6 @@ export default class JuliaRenderer {
 
     // Update the transform uniform location
     this.uniformLocations.transform = gl.getUniformLocation(this.program, "uTransform");
-  }
-
-  private updateUniformsJulia(gl: WebGL2RenderingContext, program: WebGLProgram) {
-    this.uniformLocations = {
-      real: gl.getUniformLocation(program, "uReal"),
-      imaginary: gl.getUniformLocation(program, "uImaginary"),
-      radiusSquared: gl.getUniformLocation(program, "uRadiusSquared"),
-    };
-  }
-  
-  // TODO: finish
-  private createFragmentSource(source: string) {
-    // TODO: This is temporary
-    const juliaConfig = {
-      paramUniforms: `
-      uniform float uReal;
-      uniform float uImaginary;
-      uniform float uRadiusSquared;`,
-      paramFuncDef: "float cx, float cy",
-      paramFuncUsage: "uReal, uImaginary",
-    }
-
-    const config = this.config;
-    // Add commas at the start of the parameters
-    let paramsDef = juliaConfig.paramFuncDef;
-    if (paramsDef.length > 0)
-      paramsDef = ", " + paramsDef;
-    
-    let paramsUsage = juliaConfig.paramFuncUsage;
-    if (paramsUsage.length > 0)
-      paramsUsage = ", " + paramsUsage;
-  
-    // Fractal type params
-    source = source.replace("{{params_uniforms}}", juliaConfig.paramUniforms);
-    source = source.replace("{{params_def}}", paramsDef);
-    source = source.replace("{{params_call}}", paramsUsage);
-
-    // Calculation params
-    source = source.replace("{{max_iterations}}", config.maxIterations.toString());
-
-    return source;
   }
 
   destroy() {
@@ -194,15 +165,33 @@ export default class JuliaRenderer {
       this.compileShader(this.gl);
   }
  
-  needsRecompile(config: Config) {
-    // Check if the values are different
-    const checkValue = <T extends keyof Config>(name: T) => {
+  private needsRecompile(config: Config) {
+    // Checks if the values are different on both configs
+    const hasValueChanged = <T extends keyof Config>(name: T) => {
       return this.config[name] !== config[name];
     }
 
-    // TODO: make specific to each fractal
-    return checkValue("maxIterations")
-        || checkValue("fractal");
+    // Check if the fractal type changed
+    if (hasValueChanged("fractal"))
+      return true;
+    
+    // Get the fields to check
+    let fields: string[] = [];
+    switch (this.config.fractal) {
+      case FractalType.Julia:
+        fields = JuliaFractal.recompileProperties;
+        break;
+      default:
+        break;
+    }
+
+    // Check if any field requires a recompile
+    for (const field of fields) {
+      if (hasValueChanged(field as keyof Config))
+        return true;
+    }
+
+    return false;
   }
 
   render() {
@@ -235,7 +224,7 @@ export default class JuliaRenderer {
   
     switch (this.config.fractal) {
       case FractalType.Julia:
-        this.updateJulia(gl);
+        JuliaFractal.updateShader(gl, this.uniformLocations, this.config);
         break;
       default:
         break;
@@ -265,11 +254,5 @@ export default class JuliaRenderer {
     mat4.scale(transform, transform, [aspectRatio, 1, 1]);
   
     gl.uniformMatrix4fv(this.uniformLocations.transform, false, transform);
-  }
-
-  private updateJulia(gl: WebGL2RenderingContext) {
-    gl.uniform1f(this.uniformLocations.real, this.config.real);
-    gl.uniform1f(this.uniformLocations.imaginary, this.config.imaginary);
-    gl.uniform1f(this.uniformLocations.radiusSquared, this.config.radius * this.config.radius);
   }
 }
