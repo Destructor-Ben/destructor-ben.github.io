@@ -1,7 +1,7 @@
 import FractalType from "$lib/julia/fractal-type";
 
 export const defaultConfig: Config = {
-  fractal: FractalType.None,
+  fractal: FractalType.Julia,
   width: 960,
   height: 540,
 

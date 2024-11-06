@@ -3,6 +3,7 @@
 
   import JuliaRenderer from "$lib/julia/julia-renderer";
   import FractalType from "$lib/julia/fractal-type";
+  import { defaultConfig } from "$lib/julia/julia-config";
 
   import NumberInput from "$lib/components/NumberInput.svelte";
   import ToggleInput from "$lib/components/ToggleInput.svelte";
@@ -14,22 +15,8 @@
 
   // #region Renderer Setup
 
-  // Default settings
-  let config = $state({
-    fractal: FractalType.Julia,
-    real: 0,
-    imaginary: 0,
-    width: 960,
-    height: 540,
-    maxIterations: 100,
-    radius: 4,
-    translationX: 0,
-    translationY: 0,
-    rotation: 0,
-    scale: 1,
-  });
-  
   // Create the renderer
+  let config = $state(defaultConfig);
   let canvas: HTMLCanvasElement;
   let renderer: JuliaRenderer;
 
@@ -188,9 +175,6 @@
 
 <style>
   canvas {
-    position: relative;
-    top: 0;
-    left: 0;
     width: 100%;
     height: 100%;
 

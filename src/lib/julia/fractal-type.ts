@@ -1,5 +1,4 @@
 enum FractalType {
-  None,
   Julia,
   Mandelbrot,
 }

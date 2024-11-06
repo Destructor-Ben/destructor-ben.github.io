@@ -88,16 +88,16 @@ export default class JuliaRenderer {
     );
 
     gl.enableVertexAttribArray(0);
+
+    // Compile shaders
+    // If we don't now, then setting config to the default doesn't cause the shader to compile at all
+    this.compileShader(gl);
   }
 
   private compileShader(gl: WebGL2RenderingContext) {
     // Delete existing shader
     if (this.program)
       gl.deleteProgram(this.program);
-
-    // Return if we don't have a fractal active
-    if (this.config.fractal === FractalType.None)
-      return;
 
     // Sub in values for frag source
     const fragSource = this.createFragmentSource(FragSource);
@@ -204,10 +204,11 @@ export default class JuliaRenderer {
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     // Update the shader
-    if (this.config.fractal !== FractalType.None) {
+    if (this.program) {
       gl.useProgram(this.program);
       this.updateShader(gl);
     } else {
+      Logger.warn("No program is set")
       gl.useProgram(null);
     }
 
