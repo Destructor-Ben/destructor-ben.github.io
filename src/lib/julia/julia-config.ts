@@ -1,4 +1,4 @@
-import FractalType from "$lib/julia/fractal-type";
+import FractalType from "./fractal-type";
 
 export const defaultConfig: Config = {
   fractal: FractalType.Julia,
@@ -17,30 +17,30 @@ export const defaultConfig: Config = {
   imaginary: -0.2595344618589833,
 
   exponent: 2,
-}
+};
 
 export interface Config {
   // === Common & Required === \\
-  fractal: FractalType,
-  width: number,
-  height: number,
+  fractal: FractalType;
+  width: number;
+  height: number;
 
   // === Common & Optional === \\
   // Transformation
-  translationX: number,
-  translationY: number,
-  rotation: number,
-  scale: number,
+  translationX: number;
+  translationY: number;
+  rotation: number;
+  scale: number;
 
   // Calculations
-  maxIterations: number,
-  radius: number,
-  
+  maxIterations: number;
+  radius: number;
+
   // === Fractal Specific === \\
   // Julia
-  real: number,
-  imaginary: number,
+  real: number;
+  imaginary: number;
 
   // Mandelbrot
-  exponent: number,
+  exponent: number;
 }

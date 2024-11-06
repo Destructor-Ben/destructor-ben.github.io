@@ -1,14 +1,14 @@
-import Logger from "$lib/julia/julia-logger";
-import FractalType from "$lib/julia/fractal-type";
-import { type Config, defaultConfig } from "$lib/julia/julia-config";
+import Logger from "./julia-logger";
+import FractalType from "./fractal-type";
+import { type Config, defaultConfig } from "./julia-config";
 
 import { mat4 } from "gl-matrix";
-import { createProgramFromSource } from "$lib/julia/shader-utils";
+import { createProgramFromSource } from "./shader-utils";
 
-import VertSource from "$lib/julia/shaders/vert.glsl?raw";
-import FragSource from "$lib/julia/shaders/frag.glsl?raw";
+import VertSource from "./shaders/vert.glsl?raw";
+import FragSource from "./shaders/frag.glsl?raw";
 
-import * as JuliaFractal from "$lib/julia/fractals/julia";
+import * as JuliaFractal from "./fractals/julia";
 
 // TODO: colour, falloff, and background settings
 // TODO: non escaping point colour settings
@@ -97,8 +97,9 @@ export default class JuliaRenderer {
 
   private compileShader(gl: WebGL2RenderingContext) {
     // Delete existing shader
-    if (this.program)
+    if (this.program) {
       gl.deleteProgram(this.program);
+    }
 
     // Sub in values for frag source
     const fragSource = this.createFragmentSource(FragSource);
@@ -126,8 +127,9 @@ export default class JuliaRenderer {
   }
 
   private updateUniforms(gl: WebGL2RenderingContext) {
-    if (!this.program)
+    if (!this.program) {
       return;
+    }
 
     switch (this.config.fractal) {
       case FractalType.Julia:
@@ -138,7 +140,10 @@ export default class JuliaRenderer {
     }
 
     // Update the transform uniform location
-    this.uniformLocations.transform = gl.getUniformLocation(this.program, "uTransform");
+    this.uniformLocations.transform = gl.getUniformLocation(
+      this.program,
+      "uTransform",
+    );
   }
 
   destroy() {
@@ -162,20 +167,22 @@ export default class JuliaRenderer {
     this.config = strictConfig;
 
     // Only recompile when certain config values are changed
-    if (this.gl && needsRecompile)
+    if (this.gl && needsRecompile) {
       this.compileShader(this.gl);
+    }
   }
- 
+
   private needsRecompile(config: Config) {
     // Checks if the values are different on both configs
     const hasValueChanged = <T extends keyof Config>(name: T) => {
       return this.config[name] !== config[name];
-    }
+    };
 
     // Check if the fractal type changed
-    if (hasValueChanged("fractal"))
+    if (hasValueChanged("fractal")) {
       return true;
-    
+    }
+
     // Get the fields to check
     let fields: string[] = [];
     switch (this.config.fractal) {
@@ -188,8 +195,9 @@ export default class JuliaRenderer {
 
     // Check if any field requires a recompile
     for (const field of fields) {
-      if (hasValueChanged(field as keyof Config))
+      if (hasValueChanged(field as keyof Config)) {
         return true;
+      }
     }
 
     return false;
@@ -209,7 +217,7 @@ export default class JuliaRenderer {
       gl.useProgram(this.program);
       this.updateShader(gl);
     } else {
-      Logger.warn("No program is set")
+      Logger.warn("No program is set");
       gl.useProgram(null);
     }
 
@@ -223,7 +231,7 @@ export default class JuliaRenderer {
 
   private updateShader(gl: WebGL2RenderingContext) {
     this.updateTransform(gl);
-  
+
     switch (this.config.fractal) {
       case FractalType.Julia:
         JuliaFractal.updateShader(gl, this.uniformLocations, this.config);
@@ -239,22 +247,22 @@ export default class JuliaRenderer {
 
     // Scale
     const scale = 1 / this.config.scale; // TODO: put the config scale in here, we reciprocate because of some reason
-    mat4.scale(transform, transform, [scale, scale, scale])
+    mat4.scale(transform, transform, [scale, scale, scale]);
 
     // Rotation
     mat4.rotate(transform, transform, this.config.rotation, [0, 0, 1]);
-  
+
     // Translation
     mat4.translate(transform, transform, [
       this.config.translationX as number,
       this.config.translationY as number,
-      0
+      0,
     ]);
-    
+
     // Aspect ratio
     const aspectRatio = this.config.width / this.config.height;
     mat4.scale(transform, transform, [aspectRatio, 1, 1]);
-  
+
     gl.uniformMatrix4fv(this.uniformLocations.transform, false, transform);
   }
 }
