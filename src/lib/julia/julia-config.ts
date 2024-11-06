@@ -13,8 +13,8 @@ export const defaultConfig: Config = {
   maxIterations: 100,
   radius: 4,
 
-  real: 0,
-  imaginary: 0,
+  real: -0.8727786784188099,
+  imaginary: -0.2595344618589833,
 
   exponent: 2,
 }
