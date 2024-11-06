@@ -5,6 +5,8 @@ export function createShader(
   type: GLenum,
   source: string,
 ) {
+  Logger.log("Creating shader...");
+
   const shader = gl?.createShader(type);
   if (!shader) {
     Logger.error(`Failed to create shader (shader type ${type})`);
@@ -24,6 +26,7 @@ export function createShader(
     return null;
   }
 
+  Logger.log("Successfully created shader");
   return shader;
 }
 
@@ -32,6 +35,7 @@ export function createProgram(
   vert: WebGLShader,
   frag: WebGLShader,
 ) {
+  Logger.log("Creating program...");
   const program = gl.createProgram();
   if (!program) {
     Logger.error("Failed to create shader program");
@@ -51,6 +55,7 @@ export function createProgram(
     return null;
   }
 
+  Logger.log("Successfully created program");
   return program;
 }
 
