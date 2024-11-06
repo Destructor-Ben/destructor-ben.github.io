@@ -5,7 +5,7 @@ export const recompileProperties = [
 ];
 
 export function createFragmentSource(source: string, config: Config) {
-  // TODO: This is temporary
+  // TODO: This is temporary - maybe just make this file export this config and do all the fucking around with the source text done in the compile function
   const juliaConfig = {
     paramUniforms: `
     uniform float uReal;

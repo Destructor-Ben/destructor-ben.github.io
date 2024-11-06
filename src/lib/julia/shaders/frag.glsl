@@ -8,23 +8,28 @@ out vec4 FragColor;
 
 float Fractal(float x, float y {{params_def}})
 {
+    // TODO: mandelbrot only does this differently
+    //cx = x;
+    //cy = y;
+
     for (int iteration = 0; iteration < {{max_iterations}}; iteration++)
     { 
+        float sqrDst = x * x + y * y;
+
         // The point escaped
-        if (x * x + y * y >= uRadiusSquared)
+        if (sqrDst >= uRadiusSquared)
         {
             // TODO: customizable smoothing formula
             // Smoothing formula
-            float z = x * x + y * y;
-            float ret = float(iteration) + 1.0 - log(log(z)) / log(2.0);
+            float ret = float(iteration) + 1.0 - log(log(sqrDst)) / log(2.0);
             return ret < 0.0 ? 0.0 : ret;
         }
 
         // Update position
-        // TODO: customizable equation
-        float tempX = x * x - y * y;
+        // TODO: customizable equation - for mandelbrot this stays the same
+        float tempX = x * x - y * y + cx;
         y = 2.0 * x * y + cy;
-        x = tempX + cx;
+        x = tempX;
     }
 
     // If the point never escaped
