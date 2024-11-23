@@ -20,27 +20,27 @@ export const defaultConfig: Config = {
 };
 
 export interface Config {
-  // === Common & Required === \\
+  // Fractal
   fractal: FractalType;
-  width: number;
-  height: number;
-
-  // === Common & Optional === \\
-  // Transformation
-  translationX: number;
-  translationY: number;
-  rotation: number;
-  scale: number;
-
-  // Calculations
-  maxIterations: number;
-  radius: number;
-
-  // === Fractal Specific === \\
+  
   // Julia
   real: number;
   imaginary: number;
 
   // Mandelbrot
   exponent: number;
+
+  // Calculation
+  maxIterations: number;
+  radius: number;
+
+  // Image
+  width: number;
+  height: number;
+
+  // Transformation
+  translationX: number;
+  translationY: number;
+  rotation: number;
+  scale: number;
 }
