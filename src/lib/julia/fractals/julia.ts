@@ -1,45 +1,45 @@
 import type { Config } from "../julia-config";
 
+// TODO: remove this and make it done automaticall with getFunctionParameters
 export const recompileProperties = [
   "maxIterations",
 ];
 
-export function createFragmentSource(source: string, config: Config) {
-  // TODO: This is temporary - maybe just make this file export this config and do all the fucking around with the source text done in the compile function
-  // TODO: probably separate this into 2 passes, one for the implementation of the fractal function
-  //       And another for it's parameters
-  const juliaConfig = {
-    paramUniforms: `
-    uniform float uReal;
-    uniform float uImaginary;
-    uniform float uRadiusSquared;`,
-    paramFuncDef: "float cx, float cy",
-    paramFuncUsage: "uReal, uImaginary",
-  };
+export const functionDetails = {
+  paramUniforms: `
+  uniform float uReal;
+  uniform float uImaginary;
+  uniform float uRadiusSquared;`,
+  paramFuncDef: "float cx, float cy",
+  paramFuncUsage: "uReal, uImaginary",
+  funcImpl: `
+  for (int iteration = 0; iteration < {{max_iterations}}; iteration++)
+  { 
+    float sqrDst = x * x + y * y;
 
-  // Add commas at the start of the parameters
-  let paramsDef = juliaConfig.paramFuncDef;
-  if (paramsDef.length > 0) {
-    paramsDef = ", " + paramsDef;
+    // The point escaped
+    if (sqrDst >= uRadiusSquared)
+    {
+      // Smoothing formula
+      float ret = float(iteration) + 1.0 - log(log(sqrDst)) / log(2.0);
+      return ret < 0.0 ? 0.0 : ret;
+    }
+
+    // Update position
+    float tempX = x * x - y * y + cx;
+    y = 2.0 * x * y + cy;
+    x = tempX;
   }
 
-  let paramsUsage = juliaConfig.paramFuncUsage;
-  if (paramsUsage.length > 0) {
-    paramsUsage = ", " + paramsUsage;
+  // If the point never escaped
+  return -1.0;
+  `
+}
+
+export function getFunctionParameters(config: Config) {
+  return {
+    max_iterations: config.maxIterations.toString(),
   }
-
-  // Fractal type params
-  source = source.replace("{{params_uniforms}}", juliaConfig.paramUniforms);
-  source = source.replace("{{params_def}}", paramsDef);
-  source = source.replace("{{params_call}}", paramsUsage);
-
-  // Calculation params
-  source = source.replace(
-    "{{max_iterations}}",
-    config.maxIterations.toString(),
-  );
-
-  return source;
 }
 
 export function updateUniforms(

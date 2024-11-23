@@ -118,11 +118,48 @@ export default class JuliaRenderer {
   }
 
   private createFragmentSource(source: string) {
+    // Get the function details
+    const details = this.getFractalFunctionDetails();
+    if (details === null)
+      return source;
+    
+    const { funcDetails, funcParams } = details;
+
+    // Add commas at the start of the parameters
+    let paramsDef = funcDetails.paramFuncDef;
+    if (paramsDef.length > 0) {
+      paramsDef = ", " + paramsDef;
+    }
+
+    let paramsUsage = funcDetails.paramFuncUsage;
+    if (paramsUsage.length > 0) {
+      paramsUsage = ", " + paramsUsage;
+    }
+
+    // Substitute in the function implementation
+    source = source.replace("{{func_impl}}", funcDetails.funcImpl);
+    source = source.replace("{{params_uniforms}}", funcDetails.paramUniforms);
+    source = source.replace("{{params_def}}", paramsDef);
+    source = source.replace("{{params_call}}", paramsUsage);
+
+    // Substitute in the function parameters
+    for (const [name, value] of Object.entries(funcParams(this.config))) {
+      source = source.replace(`{{${name}}}`, value);
+    }
+
+    return source;
+  }
+
+  private getFractalFunctionDetails()
+  {
     switch (this.config.fractal) {
       case FractalType.Julia:
-        return JuliaFractal.createFragmentSource(source, this.config);
+        return {
+          funcDetails: JuliaFractal.functionDetails,
+          funcParams: JuliaFractal.getFunctionParameters,
+        };
       default:
-        return FragSource;
+        return null;
     }
   }
 
