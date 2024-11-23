@@ -100,7 +100,7 @@
 
   // #endregion
 
-  // #region Other Animations
+  // #region Svg Scroll Animation
 
   let playingSvgSlideInAnimation = $state(false);
   let moreAboutMe: HTMLElement;
