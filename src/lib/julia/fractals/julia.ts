@@ -1,6 +1,5 @@
 import type { Config } from "../julia-config";
 
-// TODO: remove this and make it done automaticall with getFunctionParameters
 export const recompileProperties = [
   "maxIterations",
 ];
