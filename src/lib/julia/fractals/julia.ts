@@ -6,6 +6,8 @@ export const recompileProperties = [
 
 export function createFragmentSource(source: string, config: Config) {
   // TODO: This is temporary - maybe just make this file export this config and do all the fucking around with the source text done in the compile function
+  // TODO: probably separate this into 2 passes, one for the implementation of the fractal function
+  //       And another for it's parameters
   const juliaConfig = {
     paramUniforms: `
     uniform float uReal;

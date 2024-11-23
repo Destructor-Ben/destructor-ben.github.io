@@ -12,6 +12,14 @@
   // #region Fractal Animation
   // TODO: clean up the animation itself
   // Either just make a cool animation or make it shape into my pfp
+  // Use these colours
+  /*
+  --col-rainbow-1: #df406f;
+  --col-rainbow-2: #fbda34;
+  --col-rainbow-3: #86f9b8;
+  --col-rainbow-4: #4f79f0;
+  --col-rainbow-5: #8539f3;
+  */
 
   const startCoords = [5, 5];
   const endCoords = [0.276, 0.483];

@@ -39,7 +39,7 @@ float Fractal(float x, float y {{params_def}})
 void main() {
     float fractalValue = Fractal(TexCoord.x, TexCoord.y {{params_call}});
 
-// TODO: make the colour calculation customizable
+    // TODO: make the colour calculation customizable
     // Calculate color
     float pixelValue = 1.0; // TODO: default non escaping value
 

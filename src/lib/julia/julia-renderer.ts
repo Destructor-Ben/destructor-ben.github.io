@@ -241,16 +241,9 @@ export default class JuliaRenderer {
     }
   }
 
-  // TODO: this is fucking dodgy
   private updateTransform(gl: WebGL2RenderingContext) {
+    // Order of transformation matters a lot here, do not touch!
     const transform = mat4.create();
-
-    // Scale
-    const scale = 1 / this.config.scale; // TODO: put the config scale in here, we reciprocate because of some reason
-    mat4.scale(transform, transform, [scale, scale, scale]);
-
-    // Rotation
-    mat4.rotate(transform, transform, this.config.rotation, [0, 0, 1]);
 
     // Translation
     mat4.translate(transform, transform, [
@@ -258,6 +251,13 @@ export default class JuliaRenderer {
       this.config.translationY as number,
       0,
     ]);
+
+    // Rotation
+    mat4.rotate(transform, transform, this.config.rotation, [0, 0, 1]);
+
+    // Scale - Reciprocate, idk why
+    const scale = 1 / this.config.scale;
+    mat4.scale(transform, transform, [scale, scale, scale]);
 
     // Aspect ratio
     const aspectRatio = this.config.width / this.config.height;
