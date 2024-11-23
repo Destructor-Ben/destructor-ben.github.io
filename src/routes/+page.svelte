@@ -190,6 +190,8 @@
 </div>
 
 <style>
+  /* #region Styles */
+
   .nz-flag {
     height: 1em;
   }
@@ -254,6 +256,10 @@
       }
     }
   }
+  
+  /* #endregion */
+
+  /* #region Intro Animation */
 
   /* Animate the opacity */
   #intro, #more-about-me, canvas {
@@ -278,6 +284,10 @@
       opacity: 0;
     }
   }
+  
+  /* #endregion */
+
+  /* #region Svg Slide Animation */
 
   /* Animate the about me svgs sliding in */
   @keyframes slide-in-left {
@@ -340,4 +350,6 @@
       animation-play-state: running;
     }
   }
+  
+  /* #endregion */
 </style>
