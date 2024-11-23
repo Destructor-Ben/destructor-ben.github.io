@@ -9,7 +9,7 @@
 
   import { lerp, easeOutSine, easeOutExpo, easeOutPoly } from "$lib/julia/interpolation";
 
-  // #region Animation
+  // #region Fractal Animation
   // TODO: clean up the animation itself
   // Either just make a cool animation or make it shape into my pfp
 
@@ -24,7 +24,7 @@
   const maxIterations = fps * animationSeconds;
   const millisecondsPerFrame = 1 / fps * 1000;
 
-  let animationComplete = $state(false);
+  let fractalAnimationComplete = $state(false);
   let config = $state({
     fractal: FractalType.Julia,
     real: startCoords[0],
@@ -78,7 +78,7 @@
 
   // Setup animation
   $effect(() => {
-    console.log("Starting animation...")
+    console.log("Starting fractal animation...")
 
     let iterations = 0;
 
@@ -91,12 +91,34 @@
 
       // Stop animation
       if (iterations >= maxIterations) {
-        console.log("Animation complete")
+        console.log("Fractal animation complete")
         clearInterval(intervalID);
-        animationComplete = true;
+        fractalAnimationComplete = true;
       }
     }, millisecondsPerFrame);
   })
+
+  // #endregion
+
+  // #region Other Animations
+
+  let playingSvgSlideInAnimation = $state(false);
+  let moreAboutMe: HTMLElement;
+
+  function handleOnScroll() {
+    // Don't turn the animation off if it has already played or if the other one is playing
+    if (playingSvgSlideInAnimation || !fractalAnimationComplete)
+      return;
+
+    // Get the top of the element (minus the scroll amount)
+    const elementTop = moreAboutMe.getBoundingClientRect().top;
+
+    // Turn the animation on - the amount is the scroll padding
+    if (elementTop <= 150) {
+      playingSvgSlideInAnimation = true;
+      console.log("Starting svg scroll animation...")
+    }
+  }
 
   // #endregion
 </script>
@@ -105,13 +127,15 @@
   <title>Destructor_Ben</title>
 </svelte:head>
 
-<svelte:window onresize={onResize}/>
+<svelte:window onresize={onResize} />
+
+<svelte:document onscroll={handleOnScroll} />
 
 <!-- Appears behind everything -->
-<canvas width={config.width} height={config.height} class:anim-complete={animationComplete} bind:this={canvas}></canvas>
+<canvas width={config.width} height={config.height} class:fractal-anim-complete={fractalAnimationComplete} bind:this={canvas}></canvas>
 
   <!-- Basic info about me -->
-<div id="intro" class:anim-complete={animationComplete}>
+<div id="intro" class:fractal-anim-complete={fractalAnimationComplete}>
   <h1>About Me - Destructor_Ben</h1>
   <hr />
   <div>
@@ -137,20 +161,29 @@
 </div>
 
 <!-- SVGs used in my GitHub profile -->
-<div id="more-about-me" class:anim-complete={animationComplete}>
+<div id="more-about-me" bind:this={moreAboutMe} class:fractal-anim-complete={fractalAnimationComplete}>
   <h1>More About Me</h1>
   <div>
     <img
+      id="about-me-svg-1"
+      class="about-me-svg"
+      class:animation-playing={playingSvgSlideInAnimation}
       alt="Interests"
       src="https://raw.githubusercontent.com/Destructor-Ben/Destructor-Ben/refs/heads/main/interests.svg"
     />
     <img
+      id="about-me-svg-2"
+      class="about-me-svg"
+      class:animation-playing={playingSvgSlideInAnimation}
       alt="Future Projects"
       src="https://raw.githubusercontent.com/Destructor-Ben/Destructor-Ben/refs/heads/main/future-projects.svg"
     />
   </div>
 
   <img
+    id="about-me-svg-3"
+    class="about-me-svg"
+    class:animation-playing={playingSvgSlideInAnimation}
     alt="Tools"
     src="https://raw.githubusercontent.com/Destructor-Ben/Destructor-Ben/refs/heads/main/tools.svg"
   />
@@ -200,7 +233,11 @@
     flex-direction: column;
     align-items: center;
     gap: 46px;
-    padding: 1em;
+    padding: 2em;
+
+    /* Fix overflowing */
+    overflow: hidden;
+    margin: -1em;
 
     & > img {
       width: 846px;
@@ -228,7 +265,7 @@
     opacity: 0;
     z-index: -99999;
 
-    &.anim-complete {
+    &.fractal-anim-complete {
       opacity: 1;
       z-index: 0;
     }
@@ -237,8 +274,70 @@
   canvas {
     opacity: 1;
 
-    &.anim-complete {
+    &.fractal-anim-complete {
       opacity: 0;
+    }
+  }
+
+  /* Animate the about me svgs sliding in */
+  @keyframes slide-in-left {
+    from {
+      transform: translateX(-20vw);
+    }
+
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slide-in-right {
+    from {
+      transform: translateX(20vw);
+    }
+
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slide-in-bottom {
+    from {
+      transform: translateY(20vw);
+    }
+
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  #about-me-svg-1 {
+    animation-name: slide-in-left;
+  }
+  
+  #about-me-svg-2 {
+    animation-name: slide-in-right;
+  }
+  
+  #about-me-svg-3 {
+    animation-name: slide-in-bottom;
+  }
+
+  .about-me-svg {
+    opacity: 0;
+    transition-property: opacity;
+
+    /* Stop these from overflowing the page */
+    overflow: hidden;
+
+    /* I find this written out fully is more understandable */
+    transition-duration: 2s;
+    animation-duration: 2s;
+    animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+    animation-play-state: paused;
+
+    &.animation-playing {
+      opacity: 1;
+      animation-play-state: running;
     }
   }
 </style>
