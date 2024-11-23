@@ -300,61 +300,66 @@
   /* Animate the about me svgs sliding in */
   @keyframes slide-in-left {
     from {
+      opacity: 0;
       transform: translateX(-20vw);
     }
 
     to {
+      opacity: 1;
       transform: translateX(0);
     }
   }
 
   @keyframes slide-in-right {
     from {
+      opacity: 0;
       transform: translateX(20vw);
     }
 
     to {
+      opacity: 1;
       transform: translateX(0);
     }
   }
 
   @keyframes slide-in-bottom {
     from {
+      opacity: 0;
       transform: translateY(20vw);
     }
 
     to {
+      opacity: 1;
       transform: translateY(0);
     }
   }
 
   #about-me-svg-1 {
     animation-name: slide-in-left;
+    animation-delay: 0s;
   }
   
   #about-me-svg-2 {
     animation-name: slide-in-right;
+    animation-delay: 0.1s;
   }
   
   #about-me-svg-3 {
     animation-name: slide-in-bottom;
+    animation-delay: 0.2s;
   }
 
   .about-me-svg {
-    opacity: 0;
-    transition-property: opacity;
-
     /* Stop these from overflowing the page */
     overflow: hidden;
 
     /* I find this written out fully is more understandable */
-    transition-duration: 2s;
-    animation-duration: 2s;
+    animation-duration: 1.5s;
     animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
     animation-play-state: paused;
+    animation-fill-mode: both;
 
     &.animation-playing {
-      opacity: 1;
       animation-play-state: running;
     }
   }
