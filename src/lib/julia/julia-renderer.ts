@@ -9,6 +9,7 @@ import VertSource from "./shaders/vert.glsl?raw";
 import FragSource from "./shaders/frag.glsl?raw";
 
 import * as JuliaFractal from "./fractals/julia";
+import * as MandelbrotFractal from "./fractals/mandlebrot";
 
 // TODO: colour, falloff, and background settings
 // TODO: non escaping point colour settings
@@ -158,6 +159,11 @@ export default class JuliaRenderer {
           funcDetails: JuliaFractal.functionDetails,
           funcParams: JuliaFractal.getFunctionParameters,
         };
+      case FractalType.Mandelbrot:
+        return {
+          funcDetails: MandelbrotFractal.functionDetails,
+          funcParams: MandelbrotFractal.getFunctionParameters,
+        };
       default:
         return null;
     }
@@ -171,6 +177,9 @@ export default class JuliaRenderer {
     switch (this.config.fractal) {
       case FractalType.Julia:
         this.uniformLocations = JuliaFractal.updateUniforms(gl, this.program);
+        break;
+      case FractalType.Mandelbrot:
+        this.uniformLocations = MandelbrotFractal.updateUniforms(gl, this.program);
         break;
       default:
         break;
@@ -226,6 +235,9 @@ export default class JuliaRenderer {
       case FractalType.Julia:
         fields = JuliaFractal.recompileProperties;
         break;
+      case FractalType.Mandelbrot:
+        fields = MandelbrotFractal.recompileProperties;
+        break;
       default:
         break;
     }
@@ -272,6 +284,9 @@ export default class JuliaRenderer {
     switch (this.config.fractal) {
       case FractalType.Julia:
         JuliaFractal.updateShader(gl, this.uniformLocations, this.config);
+        break;
+      case FractalType.Julia:
+        MandelbrotFractal.updateShader(gl, this.uniformLocations, this.config);
         break;
       default:
         break;
