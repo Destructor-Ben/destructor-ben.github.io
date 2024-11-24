@@ -3,6 +3,16 @@ precision highp float;
 
 {{uniforms}}
 
+uniform vec4 uFractalColor;
+uniform vec4 uBackgroundColor;
+
+uniform vec4 uSetColor;
+uniform float uSetValue;
+uniform bool uUseSetColorOverValue;
+
+uniform int uFalloffType;
+uniform float uFalloffStrength;
+
 in vec2 TexCoord;
 out vec4 FragColor;
 
@@ -11,18 +21,36 @@ float Fractal(float x, float y)
     {{function}}
 }
 
+float CalculateFalloff(float x)
+{
+    // Sigmoid
+    if (uFalloffType == 0)
+        return x / (x + uFalloffStrength);
+
+    // Power
+    if (uFalloffType == 1)
+        return pow(x, uFalloffStrength);
+
+    return x;
+}
+
 void main() {
     float fractalValue = Fractal(TexCoord.x, TexCoord.y);
 
-    // TODO: make the colour calculation customizable
-    // Calculate color
-    float pixelValue = 1.0; // TODO: default non escaping value
+    // Use set value by default
+    float pixelValue = uSetValue;
 
-    // Only escaping values
+    // If not part of the set, then calculate falloff
     if (fractalValue >= 0.0)
-        pixelValue = fractalValue / (fractalValue + 5.0); // TODO: use falloff strength
+        pixelValue = CalculateFalloff(fractalValue);
+    
+    // If part of the set && we want color instead of pixelValue
+    if (uUseSetColorOverValue)
+    {
+        FragColor = uSetColor;
+        return;
+    }
 
-    // Banding (can be sin, cos, or tan (tan is best)), also multiply by 100
-
-    FragColor = vec4(pixelValue, pixelValue * pixelValue, pixelValue, pixelValue);
+    // Calculate final color
+    FragColor = mix(uBackgroundColor, uFractalColor, vec4(pixelValue));
 }

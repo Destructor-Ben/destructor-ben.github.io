@@ -11,9 +11,8 @@ import FragSource from "./shaders/frag.glsl?raw";
 import * as JuliaFractal from "./fractals/julia";
 import * as MandelbrotFractal from "./fractals/mandlebrot";
 
-// TODO: colour, falloff, and background settings
-// TODO: non escaping point colour settings
 // TODO: multilayering settings
+// TODO: Banding (can be sin, cos, or tan (tan is best)), also multiply by 100
 // TODO: animation with keyframes and different interpolation types
 export default class JuliaRenderer {
   private gl: WebGL2RenderingContext | null = null;
@@ -161,6 +160,42 @@ export default class JuliaRenderer {
       this.program,
       "uTransform",
     );
+
+    // Color
+    this.uniformLocations.fractalColor = gl.getUniformLocation(
+      this.program,
+      "uFractalColor",
+    );
+
+    this.uniformLocations.backgroundColor = gl.getUniformLocation(
+      this.program,
+      "uBackgroundColor",
+    );
+    
+    this.uniformLocations.setColor = gl.getUniformLocation(
+      this.program,
+      "uSetColor",
+    );
+    
+    this.uniformLocations.setValue = gl.getUniformLocation(
+      this.program,
+      "uSetValue",
+    );
+    
+    this.uniformLocations.useSetColorOverValue = gl.getUniformLocation(
+      this.program,
+      "uUseSetColorOverValue",
+    );
+    
+    this.uniformLocations.falloffType = gl.getUniformLocation(
+      this.program,
+      "uFalloffType",
+    );
+    
+    this.uniformLocations.falloffStrength = gl.getUniformLocation(
+      this.program,
+      "uFalloffStrength",
+    );
   }
 
   destroy() {
@@ -226,14 +261,30 @@ export default class JuliaRenderer {
   }
 
   private updateShader(gl: WebGL2RenderingContext) {
+    const uniforms = this.uniformLocations;
+    const config = this.config;
+
+    // Update color settings
+    gl.uniform4f(uniforms.fractalColor, config.fractalColorR, config.fractalColorG, config.fractalColorB, config.fractalColorA);
+    gl.uniform4f(uniforms.backgroundColor, config.backgroundColorR, config.backgroundColorG, config.backgroundColorB, config.backgroundColorA);
+    
+    gl.uniform4f(uniforms.setColor, config.setColorR, config.setColorG, config.setColorB, config.setColorA);
+    gl.uniform1f(uniforms.setValue, config.setValue);
+    gl.uniform1i(uniforms.useSetColorOverValue, config.useSetColorOverValue ? 1 : 0);
+
+    gl.uniform1i(uniforms.falloffType, config.falloffType);
+    gl.uniform1f(uniforms.falloffStrength, config.falloffStrength);
+
+    // Transform
     this.updateTransform(gl);
 
+    // Fractal specific
     switch (this.config.fractal) {
       case FractalType.Julia:
-        JuliaFractal.updateShader(gl, this.uniformLocations, this.config);
+        JuliaFractal.updateShader(gl, uniforms, config);
         break;
       case FractalType.Mandelbrot:
-        MandelbrotFractal.updateShader(gl, this.uniformLocations, this.config);
+        MandelbrotFractal.updateShader(gl, uniforms, config);
         break;
       default:
         break;
