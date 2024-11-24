@@ -10,6 +10,7 @@
   import { lerp, easeOutSine, easeOutExpo, easeOutPoly } from "$lib/julia/interpolation";
 
   // #region Fractal Animation
+
   // TODO: clean up the animation itself
   // Either just make a cool animation or make it shape into my pfp
   // Use these colours
@@ -24,8 +25,8 @@
   const startCoords = [-5, -10];
   const endCoords = [-0.8727786784188099, -0.2595344618589833];
 
-  const startScale = 1;
-  const endScale = 0.6;
+  const startScale = 0.1;
+  const endScale = 0.8;
 
   const animationTimeMs = 4000;
 
