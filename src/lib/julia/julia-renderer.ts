@@ -121,32 +121,12 @@ export default class JuliaRenderer {
   private createFragmentSource(source: string) {
     // Get the function details
     const details = this.getFractalFunctionDetails();
-    if (details === null)
+    if (!details)
       return source;
-    
-    const { funcDetails, funcParams } = details;
-
-    // Add commas at the start of the parameters
-    let paramsDef = funcDetails.paramFuncDef;
-    if (paramsDef.length > 0) {
-      paramsDef = ", " + paramsDef;
-    }
-
-    let paramsUsage = funcDetails.paramFuncUsage;
-    if (paramsUsage.length > 0) {
-      paramsUsage = ", " + paramsUsage;
-    }
 
     // Substitute in the function implementation
-    source = source.replace("{{func_impl}}", funcDetails.funcImpl);
-    source = source.replace("{{params_uniforms}}", funcDetails.paramUniforms);
-    source = source.replace("{{params_def}}", paramsDef);
-    source = source.replace("{{params_call}}", paramsUsage);
-
-    // Substitute in the function parameters
-    for (const [name, value] of Object.entries(funcParams(this.config))) {
-      source = source.replace(`{{${name}}}`, value);
-    }
+    source = source.replace("{{function}}", details.function);
+    source = source.replace("{{uniforms}}", details.uniforms);
 
     return source;
   }
@@ -155,15 +135,9 @@ export default class JuliaRenderer {
   {
     switch (this.config.fractal) {
       case FractalType.Julia:
-        return {
-          funcDetails: JuliaFractal.functionDetails,
-          funcParams: JuliaFractal.getFunctionParameters,
-        };
+        return JuliaFractal.functionDetails;
       case FractalType.Mandelbrot:
-        return {
-          funcDetails: MandelbrotFractal.functionDetails,
-          funcParams: MandelbrotFractal.getFunctionParameters,
-        };
+        return MandelbrotFractal.functionDetails;
       default:
         return null;
     }
@@ -225,31 +199,7 @@ export default class JuliaRenderer {
     };
 
     // Check if the fractal type changed
-    if (hasValueChanged("fractal")) {
-      return true;
-    }
-
-    // Get the fields to check
-    let fields: string[] = [];
-    switch (this.config.fractal) {
-      case FractalType.Julia:
-        fields = JuliaFractal.recompileProperties;
-        break;
-      case FractalType.Mandelbrot:
-        fields = MandelbrotFractal.recompileProperties;
-        break;
-      default:
-        break;
-    }
-
-    // Check if any field requires a recompile
-    for (const field of fields) {
-      if (hasValueChanged(field as keyof Config)) {
-        return true;
-      }
-    }
-
-    return false;
+    return hasValueChanged("fractal");
   }
 
   render() {

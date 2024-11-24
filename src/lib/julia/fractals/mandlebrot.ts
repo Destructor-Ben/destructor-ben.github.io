@@ -1,19 +1,19 @@
 import type { Config } from "../julia-config";
 
-export const recompileProperties = [
-  "maxIterations",
-];
-
 export const functionDetails = {
-  paramUniforms: "uniform float uRadiusSquared;",
-  paramFuncDef: "",
-  paramFuncUsage: "",
-  funcImpl: `
+  uniforms: `
+  uniform float uExponent
+  uniform float uRadiusSquared;
+  uniform int uMaxIterations;`,
+  function: `
   float cx = x;
   float cy = y;
   
-  for (int iteration = 0; iteration < {{max_iterations}}; iteration++)
-  { 
+  for (int iteration = 0; iteration < 1000; iteration++)
+  {
+    if (iteration >= uMaxIterations)
+      break;
+
     float sqrDst = x * x + y * y;
 
     // The point escaped
@@ -35,18 +35,13 @@ export const functionDetails = {
   `
 }
 
-export function getFunctionParameters(config: Config) {
-  return {
-    max_iterations: config.maxIterations.toString(),
-  }
-}
-
 export function updateUniforms(
   gl: WebGL2RenderingContext,
   program: WebGLProgram,
 ) {
   return {
     radiusSquared: gl.getUniformLocation(program, "uRadiusSquared"),
+    maxIterations: gl.getUniformLocation(program, "uMaxIterations"),
   };
 }
 
@@ -56,4 +51,5 @@ export function updateShader(
   config: Config,
 ) {
   gl.uniform1f(uniformLocations.radiusSquared, config.radius * config.radius);
+  gl.uniform1i(uniformLocations.maxIterations, config.maxIterations);
 }

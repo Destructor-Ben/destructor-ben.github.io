@@ -1,18 +1,18 @@
 #version 300 es
 precision highp float;
 
-{{params_uniforms}}
+{{uniforms}}
 
 in vec2 TexCoord;
 out vec4 FragColor;
 
-float Fractal(float x, float y {{params_def}})
+float Fractal(float x, float y)
 {
-    {{func_impl}}
+    {{function}}
 }
 
 void main() {
-    float fractalValue = Fractal(TexCoord.x, TexCoord.y {{params_call}});
+    float fractalValue = Fractal(TexCoord.x, TexCoord.y);
 
     // TODO: make the colour calculation customizable
     // Calculate color
