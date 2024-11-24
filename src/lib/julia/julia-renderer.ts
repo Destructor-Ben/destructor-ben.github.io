@@ -285,7 +285,7 @@ export default class JuliaRenderer {
       case FractalType.Julia:
         JuliaFractal.updateShader(gl, this.uniformLocations, this.config);
         break;
-      case FractalType.Julia:
+      case FractalType.Mandelbrot:
         MandelbrotFractal.updateShader(gl, this.uniformLocations, this.config);
         break;
       default:
