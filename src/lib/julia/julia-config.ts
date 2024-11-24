@@ -27,7 +27,7 @@ export const defaultConfig: Config = {
   setColorG: 0,
   setColorB: 0,
   setColorA: 1,
-  setValue: 0,
+  setValue: 1,
   useSetColorOverValue: false,
   
   falloffType: FalloffType.Sigmoid,

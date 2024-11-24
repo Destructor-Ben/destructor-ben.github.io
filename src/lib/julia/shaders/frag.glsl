@@ -45,7 +45,7 @@ void main() {
         pixelValue = CalculateFalloff(fractalValue);
     
     // If part of the set && we want color instead of pixelValue
-    if (uUseSetColorOverValue)
+    if (fractalValue < 0.0 && uUseSetColorOverValue)
     {
         FragColor = uSetColor;
         return;
