@@ -26,11 +26,8 @@
 
   const startScale = 1;
   const endScale = 0.6;
-  
-  // TODO: this is wrong
-  const fps = 60;
-  const animationSeconds = 4;
-  const maxIterations = fps * animationSeconds;
+
+  const animationTimeMs = 4000;
 
   let fractalAnimationComplete = $state(false);
   let config = $state({
@@ -85,18 +82,21 @@
   });
 
   // Setup animation
-  let fractalIterations = 0;
+  let startTime: number | null = null;
 
-  function renderFractal() {
+  function renderFractal(time: number) {
       // Update fractal
-      const t = fractalIterations / maxIterations;
-      updateFractal(t);
+      if (!startTime)
+        startTime = time;
 
-      fractalIterations++;
+      const progress = (time - startTime) / animationTimeMs;
+      updateFractal(progress);
+
+      // Update animation
       const handle = requestAnimationFrame(renderFractal);
 
       // Stop animation
-      if (fractalIterations >= maxIterations) {
+      if (progress >= 1) {
         console.log("Fractal animation complete");
         cancelAnimationFrame(handle);
         fractalAnimationComplete = true;
