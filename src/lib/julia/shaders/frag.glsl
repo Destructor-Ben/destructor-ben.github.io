@@ -27,9 +27,9 @@ float CalculateFalloff(float x)
     if (uFalloffType == 0)
         return x / (x + uFalloffStrength);
 
-    // Power
+    // Power - I made this myself
     if (uFalloffType == 1)
-        return pow(x, uFalloffStrength);
+        return 1.0 - pow(x + 1.0, -1.0 / uFalloffStrength);
 
     return x;
 }
