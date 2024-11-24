@@ -25,8 +25,11 @@ export const functionDetails = {
     }
 
     // Update position
-    float tempX = x * x - y * y + cx;
-    y = 2.0 * x * y + cy;
+    // TODO: innefficient
+    //float tempX = x * x - y * y + cx;
+    //y = 2.0 * x * y + cy;
+    float tempX = pow((x * x + y * y), uExponent / 2.0) * cos(uExponent * atan(y, x)) + cx;
+    y =           pow((x * x + y * y), uExponent / 2.0) * sin(uExponent * atan(y, x)) + cy;
     x = tempX;
   }
 
@@ -40,6 +43,7 @@ export function updateUniforms(
   program: WebGLProgram,
 ) {
   return {
+    exponent: gl.getUniformLocation(program, "uExponent"),
     radiusSquared: gl.getUniformLocation(program, "uRadiusSquared"),
     maxIterations: gl.getUniformLocation(program, "uMaxIterations"),
   };
@@ -50,6 +54,7 @@ export function updateShader(
   uniformLocations: any,
   config: Config,
 ) {
+  gl.uniform1f(uniformLocations.exponent, config.exponent);
   gl.uniform1f(uniformLocations.radiusSquared, config.radius * config.radius);
   gl.uniform1i(uniformLocations.maxIterations, config.maxIterations);
 }

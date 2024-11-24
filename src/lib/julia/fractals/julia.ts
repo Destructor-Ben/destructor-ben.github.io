@@ -1,5 +1,6 @@
 import type { Config } from "../julia-config";
 
+// TODO: make this copy other fractal types, because this is the julia set of the mandelbrot
 export const functionDetails = {
   uniforms: `
   uniform float uReal;

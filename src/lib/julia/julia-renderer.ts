@@ -15,9 +15,6 @@ import * as MandelbrotFractal from "./fractals/mandlebrot";
 // TODO: non escaping point colour settings
 // TODO: multilayering settings
 // TODO: animation with keyframes and different interpolation types
-// TODO: radius and maxiterations config
-// TODO: mandelbrot + exponent config
-// TODO: random helpful article - https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Adding_2D_content_to_a_WebGL_context#creating_the_square_plane
 export default class JuliaRenderer {
   private gl: WebGL2RenderingContext | null = null;
   private vertexBuffer: WebGLBuffer | null = null;
