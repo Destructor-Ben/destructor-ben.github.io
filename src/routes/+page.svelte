@@ -85,26 +85,28 @@
   });
 
   // Setup animation
-  $effect(() => {
-    console.log("Starting fractal animation...")
+  let fractalIterations = 0;
 
-    let iterations = 0;
-
-    // Start animation
-    const intervalID = setInterval(() => {
+  function renderFractal() {
       // Update fractal
-      const t = iterations / maxIterations;
+      const t = fractalIterations / maxIterations;
       updateFractal(t);
-      iterations++;
+
+      fractalIterations++;
+      const handle = requestAnimationFrame(renderFractal);
 
       // Stop animation
-      if (iterations >= maxIterations) {
-        console.log("Fractal animation complete")
-        clearInterval(intervalID);
+      if (fractalIterations >= maxIterations) {
+        console.log("Fractal animation complete");
+        cancelAnimationFrame(handle);
         fractalAnimationComplete = true;
       }
-    }, millisecondsPerFrame);
-  })
+  }
+
+  $effect(() => {
+    console.log("Starting fractal animation...");
+    requestAnimationFrame(renderFractal);
+  });
 
   // #endregion
 
