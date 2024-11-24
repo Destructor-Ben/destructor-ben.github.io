@@ -21,8 +21,8 @@
   --col-rainbow-5: #8539f3;
   */
 
-  const startCoords = [5, 5];
-  const endCoords = [0.276, 0.483];
+  const startCoords = [-5, -10];
+  const endCoords = [-0.8727786784188099, -0.2595344618589833];
 
   const startScale = 1;
   const endScale = 0.6;
