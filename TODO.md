@@ -4,9 +4,6 @@
 - Make page transitions
 - Maybe add page title to the header
 - Finish Julia
-  - Maybe make the specific colour calculations customizable, e.g.
-    - x / (x + strength)
-    - pow(x, strength)
 - Improve the project cards
 - Improve home page
   - Don't make the animation play every time
