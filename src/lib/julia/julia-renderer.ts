@@ -309,9 +309,9 @@ export default class JuliaRenderer {
     const scale = 1 / this.config.scale;
     mat4.scale(transform, transform, [scale, scale, scale]);
 
-    // Aspect ratio
+    // Aspect ratio - We need to flip y axis because we change from postive y being down to up
     const aspectRatio = this.config.width / this.config.height;
-    mat4.scale(transform, transform, [aspectRatio, 1, 1]);
+    mat4.scale(transform, transform, [aspectRatio, -1, 1]);
 
     gl.uniformMatrix4fv(this.uniformLocations.transform, false, transform);
   }
