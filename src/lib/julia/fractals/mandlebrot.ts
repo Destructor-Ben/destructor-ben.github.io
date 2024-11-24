@@ -2,7 +2,7 @@ import type { Config } from "../julia-config";
 
 export const functionDetails = {
   uniforms: `
-  uniform float uExponent
+  uniform float uExponent;
   uniform float uRadiusSquared;
   uniform int uMaxIterations;`,
   function: `

@@ -27,10 +27,10 @@
   const startScale = 1;
   const endScale = 0.6;
   
+  // TODO: this is wrong
   const fps = 60;
   const animationSeconds = 4;
   const maxIterations = fps * animationSeconds;
-  const millisecondsPerFrame = 1 / fps * 1000;
 
   let fractalAnimationComplete = $state(false);
   let config = $state({
