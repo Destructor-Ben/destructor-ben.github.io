@@ -21,7 +21,7 @@ export const defaultConfig: Config = {
   backgroundColorR: 0,
   backgroundColorG: 0,
   backgroundColorB: 0,
-  backgroundColorA: 1,
+  backgroundColorA: 0,
 
   setColorR: 0,
   setColorG: 0,
