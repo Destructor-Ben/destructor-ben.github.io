@@ -4,14 +4,6 @@
   let { children }: { children: Snippet } = $props();
 </script>
 
-<!--
-  TODO: this isn't actually a good implementation and only really works for buttons
-  Also, the child component has a different transition duration
-  The border might want to be removed on the child too
-  The size of the spining div needs to be automatically calculated
-  The border radius also needs to be automatically calculated
-  -->
-
 <div class="rainbow">
   {@render children()}
 </div>
@@ -30,8 +22,8 @@
     overflow: hidden;
     position: relative;
     display: flex;
-    padding: 4px;
-    border-radius: 1000rem;
+    padding: var(--padding, 4px);
+    border-radius: var(--border-radius, 1000rem);
 
     /* Rainbow border - spinning div cropped to the parent */
     &::before {
@@ -40,19 +32,19 @@
       position: absolute;
       border-radius: 100%;
 
-      /* TODO: auto calculate */
-      --size: -100px;
+      /* TODO: use JS to do this calculation */
+      --final-scale: calc(-100% * var(--scale, 1));
       z-index: -1;
-      top: var(--size);
-      left: var(--size);
-      right: var(--size);
-      bottom: var(--size);
+      top: var(--final-scale);
+      left: var(--final-scale);
+      right: var(--final-scale);
+      bottom: var(--final-scale);
 
       transition-property: opacity;
-      transition-duration: 500ms;
-      opacity: 0;
+      transition-duration: var(--rainbow-fade-speed, 500ms);
+      opacity: var(--opacity, 1);
 
-      animation: border-animation 3s linear infinite;
+      animation: border-animation var(--rainbow-speed, 3s) linear infinite;
       background: conic-gradient(
         var(--col-rainbow-1),
         var(--col-rainbow-2),
@@ -61,12 +53,6 @@
         var(--col-rainbow-5),
         var(--col-rainbow-1)
       );
-    }
-
-    &:hover {
-      &::before {
-        opacity: 1;
-      }
     }
   }
 </style>

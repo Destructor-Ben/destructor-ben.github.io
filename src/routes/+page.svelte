@@ -2,7 +2,7 @@
   import NZFlag from "$lib/img/nz-flag.png";
   import ProfilePicture from "$lib/img/pfp.png";
   
-  import RainbowBorder from "$lib/components/RainbowBorder.svelte";
+  import RainbowLink from "$lib/components/RainbowLink.svelte";
 
   import JuliaRenderer from "$lib/julia/julia-renderer";
   import FractalType from "$lib/julia/fractal-type";
@@ -161,13 +161,9 @@
   </div>
 
   <div id="intro-buttons">
-    <RainbowBorder>
-      <a class="button" href="#more-about-me">See More</a>
-    </RainbowBorder>
-    
-    <RainbowBorder>
-      <a class="button" href="/projects">Projects</a>
-    </RainbowBorder>
+    <RainbowLink href="#more-about-me">See More</RainbowLink>
+    <RainbowLink href="/projects">Projects</RainbowLink>
+
   </div>
 </div>
 

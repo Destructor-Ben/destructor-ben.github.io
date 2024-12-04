@@ -1,23 +1,12 @@
 <script>
-  import RainbowBorder from "$lib/components/RainbowBorder.svelte";
+  import RainbowLink from "$lib/components/RainbowLink.svelte";
 </script>
 
 <header>
-  <RainbowBorder>
-    <a href="/" class="button">Home</a>
-  </RainbowBorder>
-  
-  <RainbowBorder>
-    <a href="/projects" class="button">Projects</a>
-  </RainbowBorder>
-  
-  <RainbowBorder>
-    <a href="https://github.com/Destructor-Ben" class="button">GitHub</a>
-  </RainbowBorder>
-  
-  <RainbowBorder>
-    <a href="https://discord.gg/uQzTRx2V8Y" class="button">Discord Server</a>
-  </RainbowBorder>
+  <RainbowLink href="/">Home</RainbowLink>
+  <RainbowLink href="/projects">Projects</RainbowLink>
+  <RainbowLink href="https://github.com/Destructor-Ben">GitHub</RainbowLink>
+  <RainbowLink href="https://discord.gg/uQzTRx2V8Y">Discord Server</RainbowLink>
 </header>
 
 <style>

@@ -82,10 +82,12 @@ button.button, a.button {
   border: var(--border);
   border-radius: 1000rem;
 
-  font-family: var(--font-heading);
-  font-size: 1.2rem;
-  font-weight: bold;
-  text-decoration: none;
+  &, * {
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-decoration: none;
+  }
 
   transition-property: background-color;
   cursor: pointer;
