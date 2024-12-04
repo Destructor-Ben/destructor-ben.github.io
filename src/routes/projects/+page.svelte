@@ -2,9 +2,12 @@
   import ProjectCard from "./ProjectCard.svelte";
 
   import JuliaThumbnail from "$lib/img/thumbnails/julia.png";
-  import PlaceholderThumbnail from "$lib/img/pfp.png";
+  import tMLThumbnail from "$lib/img/thumbnails/tml.png";
+  import TerrariaThumbnail from "$lib/img/thumbnails/terraria.png";
+  import MinecraftThumbnail from "$lib/img/thumbnails/minecraft.png";
+  import HOI4Thumbnail from "$lib/img/thumbnails/hoi4.png";
+  import MDBThumbnail from "$lib/img/thumbnails/mdb.png";
 
-  // TODO: fill this out
   const projects = [
     {
       name: "Julia",
@@ -13,10 +16,40 @@
       url: "/projects/julia",
     },
     {
-      name: "Placeholder",
-      summary: "More to be added to this list",
-      previewImage: PlaceholderThumbnail,
-      url: "/projects",
+      name: "Minecraft Remake",
+      summary: "A Minecraft-like game in C++",
+      previewImage: MinecraftThumbnail,
+      url: "https://github.com/Destructor-Ben/Minecraft-Remake",
+    },
+    {
+      name: "tModLoader",
+      summary: "My contributions to tML",
+      previewImage: tMLThumbnail,
+      url: "https://github.com/tModLoader/tModLoader/commits/1.4.4/?author=Destructor-Ben"
+    },
+    {
+      name: "Terraria Mods",
+      summary: "My mods for Terraria",
+      previewImage: TerrariaThumbnail,
+      url: "https://github.com/stars/Destructor-Ben/lists/terraria-mods",
+    },
+    {
+      name: "Minecraft Mods",
+      summary: "My mods for Minecraft",
+      previewImage: MinecraftThumbnail,
+      url: "https://github.com/stars/Destructor-Ben/lists/minecraft-mods",
+    },
+    {
+      name: "Hearts of Iron Mods",
+      summary: "My mods for HOI4",
+      previewImage: HOI4Thumbnail,
+      url: "https://github.com/stars/Destructor-Ben/lists/hearts-of-iron-iv-mods",
+    },
+    {
+      name: "Movie Database",
+      summary: "CLI movie database for school assignment",
+      previewImage: MDBThumbnail,
+      url: "https://github.com/Destructor-Ben/L2COSC-Movie-Database"
     },
   ];
 </script>

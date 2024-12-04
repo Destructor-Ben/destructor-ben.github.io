@@ -1,5 +1,9 @@
 <script lang="ts">
-  let { name, summary, previewImage, url }:  {name: string, summary: string, previewImage: string, url: string} = $props();
+  import RainbowBorder from "$lib/components/RainbowBorder.svelte";
+
+  // TODO: add rainbow border
+
+  let { name, summary, previewImage, url }: { name: string, summary: string, previewImage: string, url: string } = $props();
 </script>
 
 <div>
@@ -12,7 +16,7 @@
 
 <style>
   div {
-    &, a{
+    &, a {
       border-radius: 2em;
     }
     
