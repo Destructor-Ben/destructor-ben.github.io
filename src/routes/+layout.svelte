@@ -6,7 +6,9 @@
   import Footer from "./Footer.svelte";
 
   import type { Snippet } from "svelte";
+  import { fade, fly } from "svelte/transition";
 
+  // TODO: page animations let { children, data }: { children: Snippet, data: any } = $props();
   let { children }: { children: Snippet } = $props();
 </script>
 
@@ -18,6 +20,16 @@
   </main>
 
   <Footer />
+
+  <!--
+  TODO: page animations
+  {#key data.pathname}
+    <main in:fade={{ duration: 200, delay: 300 }} out:fade={{ duration: 200 }}>
+      {@render children()}
+    </main>
+    <Footer />
+  {/key}
+  -->
 </div>
 
 <style>
