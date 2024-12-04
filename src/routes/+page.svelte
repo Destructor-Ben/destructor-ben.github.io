@@ -150,8 +150,8 @@
   <h1>About Me - Destructor_Ben</h1>
   <hr />
   <div>
-    <img class="pfp" src={ProfilePicture} alt="PFP" />
-    <p>
+    <img class="pfp" src={ProfilePicture} alt="PFP" id="intro-pfp" />
+    <p id="intro-info">
       I'm a 16 year old guy from New Zealand <img
         class="nz-flag"
         src={NZFlag}
@@ -160,7 +160,7 @@
     </p>
   </div>
 
-  <div>
+  <div id="intro-buttons">
     <RainbowBorder>
       <a class="button" href="#more-about-me">See More</a>
     </RainbowBorder>
@@ -293,6 +293,73 @@
 
     &.fractal-anim-complete {
       opacity: 0;
+    }
+  }
+
+  /* Profile picture animation */
+  @keyframes pfp-anim {
+    0% {
+      opacity: 0;
+      transform: translateX(100px);
+    }
+
+    50% {
+      opacity: 1;
+      transform: translateX(100px);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateX(0px);
+    }
+  }
+
+  /* Animate the contents of the intro fading in */
+  #intro {
+    /* Common values */
+    h1, hr, #intro-info, #intro-buttons {
+      transition-property: opacity;
+      transition-duration: 1s;
+      opacity: 0;
+      z-index: -999999;
+    }
+
+    h1 {
+      transition-delay: 3.5s;
+    }
+
+    hr {
+      transition-delay: 4.25s;
+    }
+
+    #intro-info {
+      transition-delay: 5s;
+    }
+
+    #intro-buttons {
+      /* Slightly longer to give time to read */
+      transition-delay: 6s;
+    }
+
+    /* Custom animation */
+    #intro-pfp {
+      animation-name: pfp-anim;
+      animation-duration: 2.5s;
+      animation-delay: 1s;
+      animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+      animation-play-state: paused;
+      animation-fill-mode: both;
+    }
+
+    &.fractal-anim-complete {
+      #intro-pfp {
+        animation-play-state: running;
+      }
+
+      h1, hr, #intro-info, #intro-buttons {
+        opacity: 1;
+        z-index: 0;
+      }
     }
   }
   
