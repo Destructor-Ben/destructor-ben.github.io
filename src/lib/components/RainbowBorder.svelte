@@ -41,7 +41,7 @@
       border-radius: 100%;
 
       /* TODO: auto calculate */
-      --size: -60px;
+      --size: -100px;
       z-index: -1;
       top: var(--size);
       left: var(--size);

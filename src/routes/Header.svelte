@@ -10,6 +10,14 @@
   <RainbowBorder>
     <a href="/projects" class="button">Projects</a>
   </RainbowBorder>
+  
+  <RainbowBorder>
+    <a href="https://github.com/Destructor-Ben" class="button">GitHub</a>
+  </RainbowBorder>
+  
+  <RainbowBorder>
+    <a href="https://discord.gg/uQzTRx2V8Y" class="button">Discord Server</a>
+  </RainbowBorder>
 </header>
 
 <style>
