@@ -5,7 +5,7 @@
 
   let rainbow: HTMLElement;
 
-  let rainbowSize = $state(1000);
+  let rainbowSize = $state(0);
 
   function getRainbowSize()
   {

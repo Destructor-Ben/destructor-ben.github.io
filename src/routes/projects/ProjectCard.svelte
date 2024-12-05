@@ -3,6 +3,7 @@
 
   let { name, summary, previewImage, url }: { name: string, summary: string, previewImage: string, url: string } = $props();
 
+  let container: HTMLElement;
   let isHovered = $state(false);
 
   function handleOnMouseEnter()
@@ -14,10 +15,14 @@
   {
     isHovered = false;
   }
+
+  $effect(() => {
+    isHovered = container.matches(':hover');
+  })
 </script>
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
-<div class="container" onmouseenter={handleOnMouseEnter} onmouseleave={handleOnMouseExit}>
+<div class="container" onmouseenter={handleOnMouseEnter} onmouseleave={handleOnMouseExit} bind:this={container}>
   <div class="card">
     <RainbowBorder --border-radius="calc(2em + 4px)" --opacity={isHovered ? "1" : "0"} --height=100%>
       <a href={url}>

@@ -6,6 +6,7 @@
 
   let { children, href }: { children: Snippet, href: string } = $props();
 
+  let element: HTMLElement;
   let isHovered = $state(false);
 
   function handleOnMouseEnter()
@@ -17,10 +18,14 @@
   {
     isHovered = false;
   }
+
+  $effect(() => {
+    isHovered = element.matches(':hover');
+  })
 </script>
 
 <RainbowBorder --opacity={isHovered ? "1" : "0"}>
-  <a class="button" href={href} onmouseenter={handleOnMouseEnter} onmouseleave={handleOnMouseExit}>
+  <a class="button" href={href} onmouseenter={handleOnMouseEnter} onmouseleave={handleOnMouseExit} bind:this={element}>
     {@render children()}
   </a>
 </RainbowBorder>
