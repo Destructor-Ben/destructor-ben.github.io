@@ -10,6 +10,8 @@
 
   import { fade } from "svelte/transition";
 
+  // TODO: add link to src
+
   // Whether settings are shown
   let showSettings = $state(false);
 

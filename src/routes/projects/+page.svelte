@@ -3,6 +3,7 @@
 
   import JuliaThumbnail from "$lib/img/thumbnails/julia.png";
   import tMLThumbnail from "$lib/img/thumbnails/tml.png";
+  import PFPThumbnail from "$lib/img/pfp.png";
   import TerrariaThumbnail from "$lib/img/thumbnails/terraria.png";
   import MinecraftThumbnail from "$lib/img/thumbnails/minecraft.png";
   import HOI4Thumbnail from "$lib/img/thumbnails/hoi4.png";
@@ -26,6 +27,12 @@
       summary: "My contributions to tML",
       previewImage: tMLThumbnail,
       url: "https://github.com/tModLoader/tModLoader/commits/1.4.4/?author=Destructor-Ben"
+    },
+    {
+      name: "This Website",
+      summary: "My personal website",
+      previewImage: PFPThumbnail,
+      url: "https://github.com/Destructor-Ben/destructor-ben.github.io"
     },
     {
       name: "Terraria Mods",
