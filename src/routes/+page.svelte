@@ -163,7 +163,6 @@
   <div id="intro-buttons">
     <RainbowLink href="#more-about-me">See More</RainbowLink>
     <RainbowLink href="/projects">Projects</RainbowLink>
-
   </div>
 </div>
 
@@ -292,69 +291,68 @@
     }
   }
 
-  /* Profile picture animation */
-  @keyframes pfp-anim {
-    0% {
+  /* Fade in animation */
+  @keyframes fade-anim {
+    from {
       opacity: 0;
-      transform: translateX(100px);
+      z-index: -999999;
+      pointer-events: none;
+      filter: blur(2px);
     }
 
-    50% {
+    to {
       opacity: 1;
-      transform: translateX(100px);
-    }
-
-    100% {
-      opacity: 1;
-      transform: translateX(0px);
+      z-index: 0;
+      pointer-events: auto;
+      filter: none;
     }
   }
 
   /* Animate the contents of the intro fading in */
   #intro {
-    /* Common values */
-    h1, hr, #intro-info, #intro-buttons {
-      transition-property: opacity;
-      transition-duration: 1s;
-      opacity: 0;
-      z-index: -999999;
-    }
-
-    h1 {
-      transition-delay: 3.5s;
-    }
-
-    hr {
-      transition-delay: 4.25s;
-    }
-
-    #intro-info {
-      transition-delay: 5s;
-    }
-
-    #intro-buttons {
-      /* Slightly longer to give time to read */
-      transition-delay: 6s;
-    }
-
-    /* Custom animation */
+    /* TODO: Profile picture animation *
     #intro-pfp {
-      animation-name: pfp-anim;
-      animation-duration: 2.5s;
+      animation-name: fade-anim;
+      animation-duration: 1s;
       animation-delay: 1s;
+      animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+      animation-play-state: paused;
+      animation-fill-mode: both;
+    }*/
+  
+    /* Info animation */
+    h1, hr, #intro-pfp, #intro-info, #intro-buttons {
+      animation-name: fade-anim;
+      animation-duration: 1s;
+      animation-delay: 0s;
       animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
       animation-play-state: paused;
       animation-fill-mode: both;
     }
 
-    &.fractal-anim-complete {
-      #intro-pfp {
-        animation-play-state: running;
-      }
+    h1 {
+      animation-delay: 1.5s;
+    }
 
-      h1, hr, #intro-info, #intro-buttons {
-        opacity: 1;
-        z-index: 0;
+    hr {
+      animation-delay: 2.5s;
+    }
+
+    #intro-pfp, #intro-info {
+      animation-delay: 3.5s;
+    }
+
+    #intro-buttons {
+      animation-delay: 4.5s;
+    }
+
+    &.fractal-anim-complete {
+      /* TODO: #intro-pfp {
+        animation-play-state: running;
+      }*/
+
+      h1, hr, #intro-pfp, #intro-info, #intro-buttons {
+        animation-play-state: running;
       }
     }
   }
@@ -407,12 +405,12 @@
   
   #about-me-svg-2 {
     animation-name: slide-in-right;
-    animation-delay: 0.1s;
+    animation-delay: 0.2s;
   }
   
   #about-me-svg-3 {
     animation-name: slide-in-bottom;
-    animation-delay: 0.2s;
+    animation-delay: 0.4s;
   }
 
   .about-me-svg {
