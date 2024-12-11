@@ -5,6 +5,7 @@
 - Move the bezier curve used in animations to a variable
 - Finish Julia
 - Improve home page
+  - Fix height issue when the page is in different sizes - if its taller, e.g. fullscreen, it looks off
   - Don't make the animation play every time
     - Or make it speed up if the user scrolls?
     - Also block scrolling while it plays?

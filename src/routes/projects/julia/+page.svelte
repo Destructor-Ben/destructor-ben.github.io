@@ -124,8 +124,10 @@
       <img src={SettingsImg} alt="Settings" width=30 height=30 class:open={showSettings} />
     </button>
 
+    <!-- TODO
     <button onclick={saveImage} class="button">Save Image - Not Working</button>
     <button onclick={saveAnimation} class="button">Save Animation - Not Working</button>
+    -->
   </div>
   
   {#if showSettings}
