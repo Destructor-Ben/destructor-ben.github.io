@@ -16,10 +16,36 @@
   // TODO: make sure that keyboard input will be fine when held
   // TODO: make pressing escape with fillscreen also disabled isFullscreen
   // TODO: disable selecting elements with TAB when fullscreened
-  // TODO: make the canvas be the size of #window minus the remaining space
   
   let isFullscreen = $state(false);
   let showSettings = $state(false);
+
+  let navbar: HTMLElement;
+
+  // Resize the canvas if we entered fullscreen
+  function handleResize() {
+    if (!isFullscreen) {
+      return;
+    }
+
+    config.width = window.innerWidth;
+    config.height = window.innerHeight - navbar.clientHeight;
+  }
+
+  function toggleFullscreen() {
+    isFullscreen = !isFullscreen;
+
+    if (isFullscreen) {
+      document.documentElement.requestFullscreen();
+    }
+    else {
+      document.exitFullscreen();
+
+      // Reset canvas size
+      config.width = defaultConfig.width;
+      config.height = defaultConfig.height;
+    }
+  }
 
   // #region Renderer Setup
 
@@ -113,9 +139,10 @@
   <title>Julia - Fractal Renderer</title>
 </svelte:head>
 
+<svelte:window onresize={handleResize} />
 
 <div id="window" class:fullscreen={isFullscreen}>
-  <nav>
+  <nav bind:this={navbar}>
     <div class="left">
       <button
         class="settings-toggle button"
@@ -139,16 +166,7 @@
     <div class="right">
       <button
         class="fullscreen-toggle button"
-        onclick={() => {
-          isFullscreen = !isFullscreen;
-
-          if (isFullscreen) {
-            document.documentElement.requestFullscreen();
-          }
-          else {
-            document.exitFullscreen();
-          }
-        }}
+        onclick={toggleFullscreen}
         title="Toggle Fullscreen"
       >
         <img src={!isFullscreen ? FullscreenOpenImg : FullscreenCloseImg} alt="Toggle Fullscreen" width=30 height=30 />
