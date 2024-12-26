@@ -16,6 +16,8 @@
   // TODO: make sure that keyboard input will be fine when held
   // TODO: make pressing escape with fillscreen also disabled isFullscreen
   // TODO: disable selecting elements with TAB when fullscreened
+  // TODO: add better controls for changing transform
+  // TODO: possibly disable the resolution controls, they are only needed for rendering to a specific resolution
 
   let isFullscreen = $state(false);
   let showSettings = $state(false);
@@ -87,12 +89,12 @@
     const canvasSize = canvas.getBoundingClientRect();
 
     const x = event.clientX - canvasSize.x;
-    const y = event.clientY- canvasSize.y;
+    const y = event.clientY - canvasSize.y;
 
     const width = canvasSize.width;
     const height = canvasSize.height;
 
-    // Normalize to coordinate space for fractal
+    // Normalize to [-1 - 1] coordinate space for fractal
     config.real = (x - width / 2) / width * 2;
     config.imaginary = (y - height / 2) / height * 2;
   }
