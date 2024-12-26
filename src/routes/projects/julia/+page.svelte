@@ -115,113 +115,118 @@
 
 
 <div id="window" class:fullscreen={isFullscreen}>
-  <canvas
-    width={config.width}
-    height={config.height}
-    bind:this={canvas}
-    onmousemove={handleMouseMove}
-    onkeypress={handleKeyPress}
-  ></canvas>
+  <nav>
+    <div class="left">
+      <button
+        class="settings-toggle button"
+        title="Open Settings"
+        onclick={() => showSettings = !showSettings}
+      >
+        <img src={SettingsImg} alt="Open Settings" width=30 height=30 class:open={showSettings} />
+      </button>
 
-  <div class="overlay">
-    <!-- Nav bar -->
-    <nav>
-      <div class="left">
-        <button
-          class="settings-toggle button"
-          title="Open Settings"
-          onclick={() => showSettings = !showSettings}
-        >
-          <img src={SettingsImg} alt="Open Settings" width=30 height=30 class:open={showSettings} />
-        </button>
+      <!-- TODO: saving fractal image
+      <button onclick={saveImage} class="button">Save Image - Not Working</button>
+      <button onclick={saveAnimation} class="button">Save Animation - Not Working</button>
+      -->
+    </div>
+    
+    <div class="centre">
+      <h1>Julia - Fractal Renderer</h1>
+      <a class="link" href="https://github.com/Destructor-Ben/destructor-ben.github.io/tree/main/src/lib/julia">Source Code</a>
+    </div>
+    
+    <div class="right">
+      <button
+        class="fullscreen-toggle button"
+        onclick={() => {
+          isFullscreen = !isFullscreen;
 
-        <!-- TODO: saving fractal image
-        <button onclick={saveImage} class="button">Save Image - Not Working</button>
-        <button onclick={saveAnimation} class="button">Save Animation - Not Working</button>
-        -->
-      </div>
-      
-      <div class="centre">
-        <h1>Julia - Fractal Renderer</h1>
-        <a class="link" href="https://github.com/Destructor-Ben/destructor-ben.github.io/tree/main/src/lib/julia">Source Code</a>
-      </div>
-      
-      <div class="right">
-        <button
-          class="fullscreen-toggle button"
-          onclick={() => {
-            isFullscreen = !isFullscreen;
+          if (isFullscreen) {
+            document.documentElement.requestFullscreen();
+          }
+          else {
+            document.exitFullscreen();
+          }
+        }}
+        title="Toggle Fullscreen"
+      >
+        <img src={!isFullscreen ? FullscreenOpenImg : FullscreenCloseImg} alt="Toggle Fullscreen" width=30 height=30 />
+      </button>
+    </div>
+  </nav>
 
-            if (isFullscreen) {
-              document.documentElement.requestFullscreen();
-            }
-            else {
-              document.exitFullscreen();
-            }
-          }}
-          title="Toggle Fullscreen"
-        >
-          <img src={!isFullscreen ? FullscreenOpenImg : FullscreenCloseImg} alt="Toggle Fullscreen" width=30 height=30 />
-        </button>
-      </div>
-    </nav>
-
-    <!-- Settings -->
-    {#if showSettings}
-    <!-- TODO: redo -->
-      <div class="settings-window" transition:fly={{ x: '-100%', duration: 300 }}>
-        <h2>Image</h2>
+  <div class="content" style={`width: ${config.width}px; height: ${config.height}px;`}>
+    <canvas
+      width={config.width}
+      height={config.height}
+      bind:this={canvas}
+      onmousemove={handleMouseMove}
+      onkeypress={handleKeyPress}
+    ></canvas>
   
-        <NumberInput bind:value={config.width} min={1} max={3840} forceMinMaxNumber={true}>
-          Width
-        </NumberInput>
-        
-        <NumberInput bind:value={config.height} min={1} max={3840} forceMinMaxNumber={true}>
-          Height
-        </NumberInput>
-  
-        <h2>Coordinates</h2>
-  
-        <ToggleInput bind:value={useMouseForCoords}>
-          Use mouse for coordinates - Press M to toggle
-        </ToggleInput>
-  
-        <NumberInput bind:value={config.real} min={-3} max={3} step={0.01} disabled={useMouseForCoords}>
-          Real Component
-        </NumberInput>
-        
-        <NumberInput bind:value={config.imaginary} min={-3} max={3} step={0.01} disabled={useMouseForCoords}>
-          Imaginary Component
-        </NumberInput>
-  
-        <h2>Transformation</h2>
-  
-        <NumberInput bind:value={config.translationX} min={-3} max={3} step={0.01}>
-          Translation X
-        </NumberInput>
-        
-        <NumberInput bind:value={config.translationY} min={-3} max={3} step={0.01}>
-          Translation Y
-        </NumberInput>
-        
-        <NumberInput bind:value={config.rotation} min={0} max={Math.PI * 2} step={0.01}>
-          Rotation
-        </NumberInput>
-        
-        <NumberInput bind:value={config.scale} min={0.01} max={15} step={0.01}>
-          Scale
-        </NumberInput>
-      </div>
-    {/if}
+    <div class="overlay">
+      <!-- Settings -->
+      {#if showSettings}
+      <!-- TODO: redo -->
+        <div class="settings-window" transition:fly={{ x: '-100%', duration: 300 }}>
+          <h2>Image</h2>
+    
+          <NumberInput bind:value={config.width} min={1} max={3840} forceMinMaxNumber={true}>
+            Width
+          </NumberInput>
+          
+          <NumberInput bind:value={config.height} min={1} max={3840} forceMinMaxNumber={true}>
+            Height
+          </NumberInput>
+    
+          <h2>Coordinates</h2>
+    
+          <ToggleInput bind:value={useMouseForCoords}>
+            Use mouse for coordinates - Press M to toggle
+          </ToggleInput>
+    
+          <NumberInput bind:value={config.real} min={-3} max={3} step={0.01} disabled={useMouseForCoords}>
+            Real Component
+          </NumberInput>
+          
+          <NumberInput bind:value={config.imaginary} min={-3} max={3} step={0.01} disabled={useMouseForCoords}>
+            Imaginary Component
+          </NumberInput>
+    
+          <h2>Transformation</h2>
+    
+          <NumberInput bind:value={config.translationX} min={-3} max={3} step={0.01}>
+            Translation X
+          </NumberInput>
+          
+          <NumberInput bind:value={config.translationY} min={-3} max={3} step={0.01}>
+            Translation Y
+          </NumberInput>
+          
+          <NumberInput bind:value={config.rotation} min={0} max={Math.PI * 2} step={0.01}>
+            Rotation
+          </NumberInput>
+          
+          <NumberInput bind:value={config.scale} min={0.01} max={15} step={0.01}>
+            Scale
+          </NumberInput>
+        </div>
+      {/if}
+    </div>
   </div>
-
 </div>
 
 <style>
+  :global(main) {
+    align-items: center;
+  }
+
   #window {
     background-color: var(--col-bg);
     overflow: hidden;
-    position: relative;
+    display: inline-block;
+    width: fit-content;
 
     &:not(.fullscreen) {
       border-radius: 1em;
@@ -236,14 +241,6 @@
       left: 0;
       z-index: 999;
     }
-  }
-
-  .overlay {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
   }
 
   nav {
@@ -280,18 +277,32 @@
     }
   }
 
-  /* TODO: properly style */
-  .settings-window {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  .content {
+    position: relative;
+    overflow: hidden;
 
-    background-color: color-mix(in srgb, var(--col-mg) 75%, transparent);
-    border: var(--border);
+    canvas, .overlay {
+      width: 100%;
+      height: 100%;
+    }
 
-    gap: 0.5em;
-    margin-top: 1em;
-    padding: 1em;
-    border-radius: 1em;
+    .overlay {
+      position: absolute;
+      top: 0;
+    }
+    
+    /* TODO: properly style */
+    .settings-window {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      background-color: color-mix(in srgb, var(--col-mg) 75%, transparent);
+      border: var(--border);
+
+      gap: 0.5em;
+      padding: 1em;
+      border-radius: 1em;
+    }
   }
 </style>
