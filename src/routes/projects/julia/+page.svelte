@@ -12,15 +12,13 @@
 
   import { fly } from "svelte/transition";
 
-  // TODO: add link to src
-  // TODO: add fullscreen button
-  // TODO: redo all the UI to be more like desmos
   // TODO: add option for axes overlay
+  // TODO: make sure that keyboard input will be fine when held
+  // TODO: make pressing escape with fillscreen also disabled isFullscreen
+  // TODO: disable selecting elements with TAB when fullscreened
+  // TODO: make the canvas be the size of #window minus the remaining space
   
-  // Whether the window is in fullscreen mode
   let isFullscreen = $state(false);
-
-  // Whether settings are shown
   let showSettings = $state(false);
 
   // #region Renderer Setup
@@ -170,6 +168,7 @@
 
     <!-- Settings -->
     {#if showSettings}
+    <!-- TODO: redo -->
       <div class="settings-window" transition:fly={{ x: '-100%', duration: 300 }}>
         <h2>Image</h2>
   
@@ -281,33 +280,18 @@
     }
   }
 
+  /* TODO: properly style */
   .settings-window {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
-  }
+    background-color: color-mix(in srgb, var(--col-mg) 75%, transparent);
+    border: var(--border);
 
-  /*
-  .overlay {
-    position: absolute;
+    gap: 0.5em;
+    margin-top: 1em;
     padding: 1em;
-
-    .buttons {
-      display: flex;
-      align-items: center;
-      gap: 1em;
-    }
-    
-    .inputs {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-
-      background-color: color-mix(in srgb, var(--col-mg) 75%, transparent);
-      border: var(--border);
-
-      gap: 0.5em;
-      margin-top: 1em;
-      padding: 1em;
-      border-radius: 1em;
-    }
-  }*/
+    border-radius: 1em;
+  }
 </style>
