@@ -16,7 +16,7 @@
   // TODO: make sure that keyboard input will be fine when held
   // TODO: make pressing escape with fillscreen also disabled isFullscreen
   // TODO: disable selecting elements with TAB when fullscreened
-  
+
   let isFullscreen = $state(false);
   let showSettings = $state(false);
 
