@@ -139,7 +139,11 @@
   <title>Julia - Fractal Renderer</title>
 </svelte:head>
 
-<svelte:window onresize={handleResize} />
+<svelte:window
+  onresize={handleResize}
+  onmousemove={handleMouseMove}
+  onkeypress={handleKeyPress}
+/>
 
 <div id="window" class:fullscreen={isFullscreen}>
   <nav bind:this={navbar}>
@@ -179,8 +183,6 @@
       width={config.width}
       height={config.height}
       bind:this={canvas}
-      onmousemove={handleMouseMove}
-      onkeypress={handleKeyPress}
     ></canvas>
   
     <div class="overlay">
