@@ -128,7 +128,7 @@
     <nav>
       <div class="left">
         <button
-          class="settings button"
+          class="settings-toggle button"
           title="Open Settings"
           onclick={() => showSettings = !showSettings}
         >
@@ -263,14 +263,14 @@
       gap: 0;
     }
 
-    button.settings, button.fullscreen-toggle {
-      padding: 10px;
+    button.settings-toggle, button.fullscreen-toggle {
+      padding: 0.5em;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
-    button.settings img {
+    button.settings-toggle img {
       transition-property: transform;
       transform: rotate(0.00001deg);
 
