@@ -1,5 +1,7 @@
 <script lang="ts">
   import SettingsImg from "$lib/img/settings.svg";
+  import FullscreenOpenImg from "$lib/img/fullscreen-open.svg";
+  import FullscreenCloseImg from "$lib/img/fullscreen-close.svg";
 
   import JuliaRenderer from "$lib/julia/julia-renderer";
   import FractalType from "$lib/julia/fractal-type";
@@ -8,9 +10,15 @@
   import NumberInput from "$lib/components/NumberInput.svelte";
   import ToggleInput from "$lib/components/ToggleInput.svelte";
 
-  import { fade } from "svelte/transition";
+  import { fly } from "svelte/transition";
 
   // TODO: add link to src
+  // TODO: add fullscreen button
+  // TODO: redo all the UI to be more like desmos
+  // TODO: add option for axes overlay
+  
+  // Whether the window is in fullscreen mode
+  let isFullscreen = $state(false);
 
   // Whether settings are shown
   let showSettings = $state(false);
@@ -61,18 +69,14 @@
     const height = canvasSize.height;
 
     // Normalize to coordinate space for fractal
-    const mouseReal = (x - width / 2) / width * 2;
-    const mouseImaginary = (y - height / 2) / height * 2;
-
-    config.real = mouseReal;
-    config.imaginary = mouseImaginary;
+    config.real = (x - width / 2) / width * 2;
+    config.imaginary = (y - height / 2) / height * 2;
   }
 
   // Toggle whether mouse movement is used
   function handleKeyPress(event: KeyboardEvent)
   {
-    if (event.code === "KeyM")
-    {
+    if (event.code === "KeyM") {
       useMouseForCoords = !useMouseForCoords;
     }
   }
@@ -108,84 +112,180 @@
 </script>
 
 <svelte:head>
-  <title>Julia - Destructor_Ben</title>
+  <title>Julia - Fractal Renderer</title>
 </svelte:head>
 
-<svelte:window onkeypress={handleKeyPress} />
 
-<!-- TODO: sort out the sizes of the fractal and settings page properly -->
+<div id="window" class:fullscreen={isFullscreen}>
+  <canvas
+    width={config.width}
+    height={config.height}
+    bind:this={canvas}
+    onmousemove={handleMouseMove}
+    onkeypress={handleKeyPress}
+  ></canvas>
 
-<canvas width={config.width} height={config.height} bind:this={canvas} onmousemove={handleMouseMove}></canvas>
+  <div class="overlay">
+    <!-- Nav bar -->
+    <nav>
+      <div class="left">
+        <button
+          class="settings button"
+          title="Open Settings"
+          onclick={() => showSettings = !showSettings}
+        >
+          <img src={SettingsImg} alt="Open Settings" width=30 height=30 class:open={showSettings} />
+        </button>
 
-<!-- Inputs -->
-<div class="overlay">
-  <div class="buttons">
-    <button class="settings button" onclick={() => showSettings = !showSettings}>
-      <img src={SettingsImg} alt="Settings" width=30 height=30 class:open={showSettings} />
-    </button>
+        <!-- TODO: saving fractal image
+        <button onclick={saveImage} class="button">Save Image - Not Working</button>
+        <button onclick={saveAnimation} class="button">Save Animation - Not Working</button>
+        -->
+      </div>
+      
+      <div class="centre">
+        <h1>Julia - Fractal Renderer</h1>
+        <a class="link" href="https://github.com/Destructor-Ben/destructor-ben.github.io/tree/main/src/lib/julia">Source Code</a>
+      </div>
+      
+      <div class="right">
+        <button
+          class="fullscreen-toggle button"
+          onclick={() => {
+            isFullscreen = !isFullscreen;
 
-    <!-- TODO
-    <button onclick={saveImage} class="button">Save Image - Not Working</button>
-    <button onclick={saveAnimation} class="button">Save Animation - Not Working</button>
-    -->
-  </div>
+            if (isFullscreen) {
+              document.documentElement.requestFullscreen();
+            }
+            else {
+              document.exitFullscreen();
+            }
+          }}
+          title="Toggle Fullscreen"
+        >
+          <img src={!isFullscreen ? FullscreenOpenImg : FullscreenCloseImg} alt="Toggle Fullscreen" width=30 height=30 />
+        </button>
+      </div>
+    </nav>
+
+    <!-- Settings -->
+    {#if showSettings}
+      <div class="settings-window" transition:fly={{ x: '-100%', duration: 300 }}>
+        <h2>Image</h2>
   
-  {#if showSettings}
-    <div class="inputs" transition:fade={{ duration: 300 }}>
-      <h2>Image</h2>
+        <NumberInput bind:value={config.width} min={1} max={3840} forceMinMaxNumber={true}>
+          Width
+        </NumberInput>
+        
+        <NumberInput bind:value={config.height} min={1} max={3840} forceMinMaxNumber={true}>
+          Height
+        </NumberInput>
+  
+        <h2>Coordinates</h2>
+  
+        <ToggleInput bind:value={useMouseForCoords}>
+          Use mouse for coordinates - Press M to toggle
+        </ToggleInput>
+  
+        <NumberInput bind:value={config.real} min={-3} max={3} step={0.01} disabled={useMouseForCoords}>
+          Real Component
+        </NumberInput>
+        
+        <NumberInput bind:value={config.imaginary} min={-3} max={3} step={0.01} disabled={useMouseForCoords}>
+          Imaginary Component
+        </NumberInput>
+  
+        <h2>Transformation</h2>
+  
+        <NumberInput bind:value={config.translationX} min={-3} max={3} step={0.01}>
+          Translation X
+        </NumberInput>
+        
+        <NumberInput bind:value={config.translationY} min={-3} max={3} step={0.01}>
+          Translation Y
+        </NumberInput>
+        
+        <NumberInput bind:value={config.rotation} min={0} max={Math.PI * 2} step={0.01}>
+          Rotation
+        </NumberInput>
+        
+        <NumberInput bind:value={config.scale} min={0.01} max={15} step={0.01}>
+          Scale
+        </NumberInput>
+      </div>
+    {/if}
+  </div>
 
-      <NumberInput bind:value={config.width} min={1} max={3840} forceMinMaxNumber={true}>
-        Width
-      </NumberInput>
-      
-      <NumberInput bind:value={config.height} min={1} max={3840} forceMinMaxNumber={true}>
-        Height
-      </NumberInput>
-
-      <h2>Coordinates</h2>
-
-      <ToggleInput bind:value={useMouseForCoords}>
-        Use mouse for coordinates - Press M to toggle
-      </ToggleInput>
-
-      <NumberInput bind:value={config.real} min={-3} max={3} step={0.01} disabled={useMouseForCoords}>
-        Real Component
-      </NumberInput>
-      
-      <NumberInput bind:value={config.imaginary} min={-3} max={3} step={0.01} disabled={useMouseForCoords}>
-        Imaginary Component
-      </NumberInput>
-
-      <h2>Transformation</h2>
-
-      <NumberInput bind:value={config.translationX} min={-3} max={3} step={0.01}>
-        Translation X
-      </NumberInput>
-      
-      <NumberInput bind:value={config.translationY} min={-3} max={3} step={0.01}>
-        Translation Y
-      </NumberInput>
-      
-      <NumberInput bind:value={config.rotation} min={0} max={Math.PI * 2} step={0.01}>
-        Rotation
-      </NumberInput>
-      
-      <NumberInput bind:value={config.scale} min={0.01} max={15} step={0.01}>
-        Scale
-      </NumberInput>
-    </div>
-  {/if}
 </div>
 
 <style>
-  canvas {
-    width: 100%;
-    height: 100%;
+  #window {
+    background-color: var(--col-bg);
+    overflow: hidden;
+    position: relative;
 
-    border-radius: 1em;
-    border: var(--border);
+    &:not(.fullscreen) {
+      border-radius: 1em;
+      border: var(--border);
+    }
+
+    &.fullscreen {
+      width: 100vw;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 999;
+    }
   }
 
+  .overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+
+  nav {
+    padding: 1em;
+    background-color: var(--col-mg);
+    border-bottom: var(--border);
+
+    &, .left, .right, .centre {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1em;
+    }
+
+    .centre {
+      flex-direction: column;
+      gap: 0;
+    }
+
+    button.settings, button.fullscreen-toggle {
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    button.settings img {
+      transition-property: transform;
+      transform: rotate(0.00001deg);
+
+      &.open {
+        transform: rotate(60deg);
+      }
+    }
+  }
+
+  .settings-window {
+
+  }
+
+  /*
   .overlay {
     position: absolute;
     padding: 1em;
@@ -194,21 +294,6 @@
       display: flex;
       align-items: center;
       gap: 1em;
-
-      button.settings {
-        padding: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        img {
-          transition-property: transform;
-
-          &.open {
-            transform: rotate(60deg);
-          }
-        }
-      }
     }
     
     .inputs {
@@ -224,5 +309,5 @@
       padding: 1em;
       border-radius: 1em;
     }
-  }
+  }*/
 </style>

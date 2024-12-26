@@ -4,6 +4,7 @@
 - Make page transitions
 - Move the bezier curve used in animations to a variable
 - Finish Julia
+- Change the default font for headings
 - Improve home page
   - Make the text more interesting
   - Add more info
