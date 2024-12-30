@@ -124,6 +124,8 @@
   }
 
   // TODO: make this only world if the start coord is in the canvas too?
+  // TODO: only move the mouse if left button is down, not all
+  // TODO: stop moving if we are updating the Julia coords
   function moveWithMouse(event: MouseEvent) {
     if (!pressedMouse) {
       return;
