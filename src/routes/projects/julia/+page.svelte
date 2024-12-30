@@ -13,11 +13,11 @@
   import { fly } from "svelte/transition";
 
   // TODO: add option for axes overlay
-  // TODO: make sure that keyboard input will be fine when held
-  // TODO: make pressing escape with fillscreen also disabled isFullscreen
+  // TODO: make pressing escape with fullscreen also disabled isFullscreen
   // TODO: disable selecting elements with TAB when fullscreened
   // TODO: add better controls for changing transform
   // TODO: possibly disable the resolution controls, they are only needed for rendering to a specific resolution
+  // TOOD: sensitivity controls
 
   let isFullscreen = $state(false);
   let showSettings = $state(false);
@@ -39,6 +39,7 @@
 
     if (isFullscreen) {
       document.documentElement.requestFullscreen();
+      canvas.focus();
     }
     else {
       document.exitFullscreen();
@@ -77,14 +78,33 @@
 
   // #endregion
 
-  // #region Mouse and Keybind Control
+  // #region Input
 
-  let useMouseForCoords = $state(false);
+  let pressedKeys: { [key: string]: boolean } = {};
+
+  function isCanvasFocused() {
+    return document.activeElement === canvas;
+  }
+
+  function canvasCountainsPoint(x: number, y: number) {
+    const rect = canvas.getBoundingClientRect();
+    return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
+  }
   
-  // Recalculates the mouse movement
+  // Mouse input
+  // TODO: moving around with the mouse
   function handleMouseMove(event: MouseEvent) {
-    if (!useMouseForCoords)
+    if (!isCanvasFocused() || !canvasCountainsPoint(event.clientX, event.clientY)) {
       return;
+    }
+
+    modifyJuliaCoords(event);
+  }
+
+  function modifyJuliaCoords(event: MouseEvent) {
+    if (!pressedKeys["KeyM"]) {
+      return;
+    }
 
     const canvasSize = canvas.getBoundingClientRect();
 
@@ -99,12 +119,44 @@
     config.imaginary = (y - height / 2) / height * 2;
   }
 
-  // Toggle whether mouse movement is used
-  function handleKeyPress(event: KeyboardEvent)
-  {
-    if (event.code === "KeyM") {
-      useMouseForCoords = !useMouseForCoords;
+  // Keyboard input
+  function handleKeyDown(event: KeyboardEvent) {
+    // Prevents repeated presses from holding a key down
+    if (!pressedKeys[event.code]) {
+      pressedKeys[event.code] = true;
+      onKeyDown(event.code);
     }
+  }
+
+  function handleKeyUp(event: KeyboardEvent) {
+    // Prevents repeated presses from holding a key down
+    if (pressedKeys[event.code]) {
+      pressedKeys[event.code] = false;
+      onKeyUp(event.code);
+    }
+  }
+
+  // These run regardless of focus or whether the mouse is over the canvas
+  function onKeyDown(key: string) {
+    
+  }
+
+  function onKeyUp(key: string) {
+    
+  }
+
+  // Scroll wheel input
+  function handleScroll(event: WheelEvent) {
+    if (!isCanvasFocused()) {
+      return;
+    }
+
+    // Zooming
+    event.preventDefault();
+
+    // We want scaling to be proportional to the existing scale
+    // Since adding 0.1 scale when we are already at 300 barely does anything
+    config.scale += config.scale * -event.deltaY / 1000;
   }
 
   // #endregion
@@ -144,10 +196,14 @@
 <svelte:window
   onresize={handleResize}
   onmousemove={handleMouseMove}
-  onkeypress={handleKeyPress}
-/>
+  onkeydown={handleKeyDown}
+  onkeyup={handleKeyUp} />
 
-<div id="window" class:fullscreen={isFullscreen}>
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<div id="window"
+  class:fullscreen={isFullscreen}
+  onclick={() => canvas.focus({ preventScroll: true })}>
   <nav bind:this={navbar}>
     <div class="left">
       <button
@@ -185,9 +241,10 @@
       width={config.width}
       height={config.height}
       bind:this={canvas}
-    ></canvas>
+      tabindex="0">
+    </canvas>
   
-    <div class="overlay">
+    <div class="overlay" onwheel={handleScroll}>
       <!-- Settings -->
       {#if showSettings}
       <!-- TODO: redo -->
@@ -203,16 +260,14 @@
           </NumberInput>
     
           <h2>Coordinates</h2>
+
+          <p>Hold M to change the coordinates with the mouse</p>
     
-          <ToggleInput bind:value={useMouseForCoords}>
-            Use mouse for coordinates - Press M to toggle
-          </ToggleInput>
-    
-          <NumberInput bind:value={config.real} min={-3} max={3} step={0.01} disabled={useMouseForCoords}>
+          <NumberInput bind:value={config.real} min={-3} max={3} step={0.01}>
             Real Component
           </NumberInput>
           
-          <NumberInput bind:value={config.imaginary} min={-3} max={3} step={0.01} disabled={useMouseForCoords}>
+          <NumberInput bind:value={config.imaginary} min={-3} max={3} step={0.01}>
             Imaginary Component
           </NumberInput>
     
