@@ -82,6 +82,7 @@
   // #region Input
 
   let pressedKeys: { [key: string]: boolean } = {};
+  let pressedMouse = false;
 
   function isCanvasFocused() {
     return document.activeElement === canvas;
@@ -93,13 +94,15 @@
   }
   
   // Mouse input
-  // TODO: moving around with the mouse
   function handleMouseMove(event: MouseEvent) {
-    if (!isCanvasFocused() || !canvasCountainsPoint(event.clientX, event.clientY)) {
+    if (!canvasCountainsPoint(event.clientX, event.clientY)) {
+      //TODO: bring back !isCanvasFocused() || 
+      // For some reason, is is false while clicking and dragging
       return;
     }
 
     modifyJuliaCoords(event);
+    moveWithMouse(event);
   }
 
   function modifyJuliaCoords(event: MouseEvent) {
@@ -120,7 +123,29 @@
     config.imaginary = (y - height / 2) / height * 2;
   }
 
+  // TODO: make this only world if the start coord is in the canvas too?
+  function moveWithMouse(event: MouseEvent) {
+    if (!pressedMouse) {
+      return;
+    }
+    console.log("E")
+
+    // Scale is included so we move more when we are zoomed in and less when we are zoomed out
+    // TODO: make 250 be an actual value to prevent mouse drifting
+    config.translationX -= event.movementX / 250 / config.scale;
+    config.translationY -= event.movementY / 250 / config.scale;
+  }
+
+  function handleMouseDown(event: MouseEvent) {
+    pressedMouse = true;
+  }
+
+  function handleMouseUp(event: MouseEvent) {
+    pressedMouse = false;
+  }
+
   // Keyboard input
+  // TODO: add WASD and arrow keys input
   function handleKeyDown(event: KeyboardEvent) {
     // Prevents repeated presses from holding a key down
     if (!pressedKeys[event.code]) {
@@ -157,6 +182,8 @@
 
     // We want scaling to be proportional to the existing scale
     // Since adding 0.1 scale when we are already at 300 barely does anything
+    // TODO: make 1000 be an actual value like the mouse
+    // TODO: zoom to mouse, not center of screen
     config.scale += config.scale * -event.deltaY / 1000;
   }
 
@@ -197,6 +224,8 @@
 <svelte:window
   onresize={handleResize}
   onmousemove={handleMouseMove}
+  onmousedown={handleMouseDown}
+  onmouseup={handleMouseUp}
   onkeydown={handleKeyDown}
   onkeyup={handleKeyUp} />
 
