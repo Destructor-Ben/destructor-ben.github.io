@@ -18,6 +18,7 @@
   // TODO: add better controls for changing transform
   // TODO: possibly disable the resolution controls, they are only needed for rendering to a specific resolution
   // TOOD: sensitivity controls
+  // TODO: add a focus indicator
 
   let isFullscreen = $state(false);
   let showSettings = $state(false);
