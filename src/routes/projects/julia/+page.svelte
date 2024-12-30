@@ -106,7 +106,7 @@
   }
 
   function modifyJuliaCoords(event: MouseEvent) {
-    if (!pressedKeys["KeyM"]) {
+    if (!pressedKeys["KeyJ"]) {
       return;
     }
 
@@ -293,7 +293,7 @@
     
           <h2>Coordinates</h2>
 
-          <p>Hold M to change the coordinates with the mouse</p>
+          <p>Hold J to change the coordinates with the mouse</p>
     
           <NumberInput bind:value={config.real} min={-3} max={3} step={0.01}>
             Real Component
