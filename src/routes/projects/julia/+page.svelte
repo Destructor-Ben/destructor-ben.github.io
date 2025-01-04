@@ -138,6 +138,7 @@
     config.translationY -= event.movementY / 250 / config.scale;
   }
 
+  // TODO: maybe prevent defaults? also for keys?
   function handleMouseDown(event: MouseEvent) {
     pressedMouse = true;
   }
