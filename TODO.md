@@ -4,7 +4,8 @@
 - Make page transitions
 - Move the bezier curve used in animations to a variable
 - Finish Julia
-- Change the default font for headings
+- Change the default font for headings - Montserrat (similar to Poppins)
+  - Also have a coding heading font? (Consolas)
 - Better styling for :focus
 - Improve home page
   - Make the text more interesting
