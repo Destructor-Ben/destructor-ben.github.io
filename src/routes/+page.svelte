@@ -152,7 +152,7 @@
   <div>
     <img class="pfp" src={ProfilePicture} alt="PFP" id="intro-pfp" />
     <p id="intro-info">
-      I'm a 16 year old guy from New Zealand <img
+      I'm a guy from New Zealand <img
         class="nz-flag"
         src={NZFlag}
         alt="NZ Flag"
