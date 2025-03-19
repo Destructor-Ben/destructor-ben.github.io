@@ -88,14 +88,14 @@
     return document.activeElement === canvas;
   }
 
-  function canvasCountainsPoint(x: number, y: number) {
+  function canvasContainsPoint(x: number, y: number) {
     const rect = canvas.getBoundingClientRect();
     return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
   }
   
   // Mouse input
   function handleMouseMove(event: MouseEvent) {
-    if (!canvasCountainsPoint(event.clientX, event.clientY)) {
+    if (!canvasContainsPoint(event.clientX, event.clientY) || showSettings) {
       //TODO: bring back !isCanvasFocused() || 
       // For some reason, is is false while clicking and dragging
       return;
@@ -176,7 +176,7 @@
 
   // Scroll wheel input
   function handleScroll(event: WheelEvent) {
-    if (!isCanvasFocused()) {
+    if (!isCanvasFocused() || showSettings) {
       return;
     }
 
@@ -274,53 +274,55 @@
       width={config.width}
       height={config.height}
       bind:this={canvas}
-      tabindex="0">
+      tabindex="0"
+      class:settings-open={showSettings}>
     </canvas>
   
     <div class="overlay" onwheel={handleScroll}>
       <!-- Settings -->
       {#if showSettings}
-      <!-- TODO: redo -->
         <div class="settings-window" transition:fly={{ x: '-100%', duration: 300 }}>
-          <h2>Image</h2>
-    
-          <NumberInput bind:value={config.width} min={1} max={3840} forceMinMaxNumber={true}>
-            Width
-          </NumberInput>
-          
-          <NumberInput bind:value={config.height} min={1} max={3840} forceMinMaxNumber={true}>
-            Height
-          </NumberInput>
-    
-          <h2>Coordinates</h2>
+          <div class="settings-container">
+            <h2>Image</h2>
+      
+            <NumberInput bind:value={config.width} min={1} max={3840} forceMinMaxNumber={true}>
+              Width
+            </NumberInput>
+            
+            <NumberInput bind:value={config.height} min={1} max={3840} forceMinMaxNumber={true}>
+              Height
+            </NumberInput>
+      
+            <h2>Coordinates</h2>
 
-          <p>Hold J to change the coordinates with the mouse</p>
-    
-          <NumberInput bind:value={config.real} min={-3} max={3} step={0.01}>
-            Real Component
-          </NumberInput>
-          
-          <NumberInput bind:value={config.imaginary} min={-3} max={3} step={0.01}>
-            Imaginary Component
-          </NumberInput>
-    
-          <h2>Transformation</h2>
-    
-          <NumberInput bind:value={config.translationX} min={-3} max={3} step={0.01}>
-            Translation X
-          </NumberInput>
-          
-          <NumberInput bind:value={config.translationY} min={-3} max={3} step={0.01}>
-            Translation Y
-          </NumberInput>
-          
-          <NumberInput bind:value={config.rotation} min={0} max={Math.PI * 2} step={0.01}>
-            Rotation
-          </NumberInput>
-          
-          <NumberInput bind:value={config.scale} min={0.01} max={15} step={0.01}>
-            Scale
-          </NumberInput>
+            <p>Hold J to change the coordinates with the mouse</p>
+      
+            <NumberInput bind:value={config.real} min={-3} max={3} step={0.01}>
+              Real Component
+            </NumberInput>
+            
+            <NumberInput bind:value={config.imaginary} min={-3} max={3} step={0.01}>
+              Imaginary Component
+            </NumberInput>
+      
+            <h2>Transformation</h2>
+      
+            <NumberInput bind:value={config.translationX} min={-3} max={3} step={0.01}>
+              Translation X
+            </NumberInput>
+            
+            <NumberInput bind:value={config.translationY} min={-3} max={3} step={0.01}>
+              Translation Y
+            </NumberInput>
+            
+            <NumberInput bind:value={config.rotation} min={0} max={Math.PI * 2} step={0.01}>
+              Rotation (Radians)
+            </NumberInput>
+            
+            <NumberInput bind:value={config.scale} min={0.01} max={15} step={0.01}>
+              Scale
+            </NumberInput>
+          </div>
         </div>
       {/if}
     </div>
@@ -339,7 +341,7 @@
     width: fit-content;
 
     &:not(.fullscreen) {
-      border-radius: 1em;
+      border-radius: 2em;
       border: var(--border);
     }
 
@@ -396,23 +398,43 @@
       height: 100%;
     }
 
+    canvas {
+      transition-property: opacity;
+
+      &.settings-open {
+        opacity: 0.5;
+      }
+    }
+
     .overlay {
       position: absolute;
       top: 0;
     }
     
-    /* TODO: properly style */
     .settings-window {
       display: flex;
       flex-direction: column;
       align-items: center;
+      height: calc(100% - 2em);
+      width: fit-content;
 
       background-color: color-mix(in srgb, var(--col-mg) 75%, transparent);
       border: var(--border);
 
-      gap: 0.5em;
+      margin: 1em;
       padding: 1em;
       border-radius: 1em;
+
+      /* TODO: style scrollbar */
+      .settings-container {
+        overflow-y: scroll;
+        padding-right: 1em;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5em;
+      }
     }
   }
 </style>

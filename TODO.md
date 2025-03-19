@@ -24,3 +24,4 @@
 
 - YouTube downloader
 - Movie downloader
+- Taylor series visualizer
