@@ -5,8 +5,7 @@
 <header>
   <RainbowLink href="/">Home</RainbowLink>
   <RainbowLink href="/projects">Projects</RainbowLink>
-  <RainbowLink href="https://github.com/Destructor-Ben">GitHub</RainbowLink>
-  <RainbowLink href="https://discord.gg/uQzTRx2V8Y">Discord Server</RainbowLink>
+  <RainbowLink href="/socials">Socials</RainbowLink>
 </header>
 
 <style>

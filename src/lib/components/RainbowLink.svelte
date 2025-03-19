@@ -4,7 +4,7 @@
 
   import type { Snippet } from "svelte";
 
-  let { children, href }: { children: Snippet, href: string } = $props();
+  let { children, href, className = "" }: { children: Snippet, href: string, className?: string } = $props();
 
   let element: HTMLElement;
   let isHovered = $state(false);
@@ -25,7 +25,7 @@
 </script>
 
 <RainbowBorder --opacity={isHovered ? "1" : "0"}>
-  <a class="button" href={href} onmouseenter={handleOnMouseEnter} onmouseleave={handleOnMouseExit} bind:this={element}>
+  <a class={"button " + className} href={href} onmouseenter={handleOnMouseEnter} onmouseleave={handleOnMouseExit} bind:this={element}>
     {@render children()}
   </a>
 </RainbowBorder>
