@@ -11,19 +11,23 @@
   import ToggleInput from "$lib/components/ToggleInput.svelte";
 
   import { fly } from "svelte/transition";
+  import SelectInput from "$lib/components/SelectInput.svelte";
 
   // TODO: add option for axes overlay
-  // TODO: make pressing escape with fullscreen also disabled isFullscreen
   // TODO: disable selecting elements with TAB when fullscreened
   // TODO: add better controls for changing transform
-  // TODO: possibly disable the resolution controls, they are only needed for rendering to a specific resolution
   // TOOD: sensitivity controls
   // TODO: add a focus indicator
+  // TODO: fix the select menu being shit
 
   let isFullscreen = $state(false);
   let showSettings = $state(false);
 
   let navbar: HTMLElement;
+
+  const fractalTypes = Object.keys(FractalType)
+                             .filter(key => typeof FractalType[key as any] === 'number')
+                             .map(key => ({ id: FractalType[key as any], name: key }));
 
   // Resize the canvas if we entered fullscreen
   function handleResize() {
@@ -38,14 +42,12 @@
   function toggleFullscreen() {
     isFullscreen = !isFullscreen;
 
+    // Focus canvas and reset canvas size
     if (isFullscreen) {
-      document.documentElement.requestFullscreen();
       canvas.focus();
+      handleResize();
     }
     else {
-      document.exitFullscreen();
-
-      // Reset canvas size
       config.width = defaultConfig.width;
       config.height = defaultConfig.height;
     }
@@ -284,26 +286,50 @@
         <div class="settings-window" transition:fly={{ x: '-100%', duration: 300 }}>
           <div class="settings-container">
             <h2>Image</h2>
+
+            <p>
+              Avoid messing with these because they are automatically set.
+              <br />
+              If you want an image at a specific resolution, fullscreen, then change the width and height.
+            </p>
       
-            <NumberInput bind:value={config.width} min={1} max={3840} forceMinMaxNumber={true}>
+            <NumberInput bind:value={config.width} min={1} max={3840} forceMinMaxNumber={true} disabled={!isFullscreen}>
               Width
             </NumberInput>
             
-            <NumberInput bind:value={config.height} min={1} max={3840} forceMinMaxNumber={true}>
+            <NumberInput bind:value={config.height} min={1} max={3840} forceMinMaxNumber={true} disabled={!isFullscreen}>
               Height
             </NumberInput>
-      
-            <h2>Coordinates</h2>
 
-            <p>Hold J to change the coordinates with the mouse</p>
-      
-            <NumberInput bind:value={config.real} min={-3} max={3} step={0.01}>
-              Real Component
-            </NumberInput>
-            
-            <NumberInput bind:value={config.imaginary} min={-3} max={3} step={0.01}>
-              Imaginary Component
-            </NumberInput>
+            <h2>Fractal Type</h2>
+
+            <SelectInput bind:value={config.fractal} options={fractalTypes}>
+              Fractal
+            </SelectInput>
+
+            {#if config.fractal === FractalType.Julia}
+              <h2>Julia Coordinates</h2>
+
+              <p>Hold J to change the coordinates with the mouse.</p>
+        
+              <NumberInput bind:value={config.real} min={-3} max={3} step={0.01}>
+                Real Component
+              </NumberInput>
+              
+              <NumberInput bind:value={config.imaginary} min={-3} max={3} step={0.01}>
+                Imaginary Component
+              </NumberInput>
+            {/if}
+
+            {#if config.fractal === FractalType.Mandelbrot}
+              <h2>Mandelbrot Exponent</h2>
+
+              <p>Negative and fractional exponents are allowed.</p>
+              
+              <NumberInput bind:value={config.exponent} min={-5} max={5} step={0.01}>
+                Exponent
+              </NumberInput>
+            {/if}
       
             <h2>Transformation</h2>
       
@@ -321,6 +347,16 @@
             
             <NumberInput bind:value={config.scale} min={0.01} max={15} step={0.01}>
               Scale
+            </NumberInput>
+
+            <h2>Renderer</h2>
+
+            <NumberInput bind:value={config.maxIterations} min={1} max={1000} step={1}>
+              Iterations - Higher means more quality but slower
+            </NumberInput>
+
+            <NumberInput bind:value={config.radius} min={1} max={1000} step={0.01}>
+              Escape Radius - How far a point must travel to be considered part of the set
             </NumberInput>
           </div>
         </div>
@@ -434,6 +470,10 @@
         flex-direction: column;
         align-items: center;
         gap: 0.5em;
+
+        p {
+          text-align: center;
+        }
       }
     }
   }

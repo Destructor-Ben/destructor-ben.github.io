@@ -26,6 +26,7 @@ export const functionDetails = {
 
     // Update position
     // TODO: innefficient
+    // TODO: allow doing exponent with julia
     //float tempX = x * x - y * y + cx;
     //y = 2.0 * x * y + cy;
     float tempX = pow((x * x + y * y), uExponent / 2.0) * cos(uExponent * atan(y, x)) + cx;

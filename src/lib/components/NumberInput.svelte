@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
 
+  // TODO: add colouring for being disabled
   interface Props {
     children: Snippet,
     value: number,
