@@ -1,5 +1,11 @@
 # To Do List
 
+Add iCloud Icons extension and TrackMySpa to projects list?
+ASMR sound generator
+Julia
+Calculator
+Games
+
 - Make the mobile version better
 - Make page transitions
 - Move the bezier curve used in animations to a variable
@@ -24,4 +30,3 @@
 
 - YouTube downloader
 - Movie downloader
-- Taylor series visualizer
