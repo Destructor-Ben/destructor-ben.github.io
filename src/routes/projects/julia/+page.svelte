@@ -83,6 +83,8 @@
 
   // #region Input
 
+  // TODO: this could benefit from being put into an input handler file
+
   let pressedKeys: { [key: string]: boolean } = {};
   let pressedMouse = false;
 
@@ -125,19 +127,18 @@
     config.imaginary = (y - height / 2) / height * 2;
   }
 
-  // TODO: make this only world if the start coord is in the canvas too?
+  // TODO: make this only worlk if the start coord is in the canvas too?
   // TODO: only move the mouse if left button is down, not all
   // TODO: stop moving if we are updating the Julia coords
   function moveWithMouse(event: MouseEvent) {
     if (!pressedMouse) {
       return;
     }
-    console.log("E")
 
     // Scale is included so we move more when we are zoomed in and less when we are zoomed out
     // TODO: make 250 be an actual value to prevent mouse drifting
-    config.translationX -= event.movementX / 250 / config.scale;
-    config.translationY -= event.movementY / 250 / config.scale;
+    config.translationX -= event.movementX * 3.5 / config.width / config.scale;
+    config.translationY -= event.movementY * 3.5 / config.height / config.scale;
   }
 
   // TODO: maybe prevent defaults? also for keys?
@@ -187,9 +188,25 @@
 
     // We want scaling to be proportional to the existing scale
     // Since adding 0.1 scale when we are already at 300 barely does anything
-    // TODO: make 1000 be an actual value like the mouse
+    const scrollUnits = event.deltaMode;
+    let scrollAmount = event.deltaY;
+
+    switch (scrollUnits) {
+      case 0: // Pixels
+        break;
+      case 1: // Lines
+        scrollAmount *= 16; // Estimate, but should work
+        break;
+      case 2: // Pages
+        scrollAmount *= window.innerHeight;
+        break;
+    }
+
+    // Scale to make scrolling 1 page double in size
+    scrollAmount /= window.innerHeight;
+
     // TODO: zoom to mouse, not center of screen
-    config.scale += config.scale * -event.deltaY / 1000;
+    config.scale -= config.scale * scrollAmount;
   }
 
   // #endregion
