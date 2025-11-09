@@ -1,3 +1,5 @@
+<!-- TODO: move this to a separate repo? -->
+
 <script lang="ts">
   import SettingsImg from "$lib/img/settings.svg";
   import FullscreenOpenImg from "$lib/img/fullscreen-open.svg";
@@ -6,6 +8,7 @@
   import JuliaRenderer from "$lib/julia/julia-renderer";
   import FractalType from "$lib/julia/fractal-type";
   import { defaultConfig } from "$lib/julia/julia-config";
+  import Logger from "$lib/julia/julia-logger";
 
   import NumberInput from "$lib/components/NumberInput.svelte";
   import ToggleInput from "$lib/components/ToggleInput.svelte";
@@ -213,25 +216,24 @@
 
   // #region Saving
 
-  // TODO: save and load images + animations
   function saveImage() {
-    console.log("Saving image...");
-
-    const imgLink = canvas.toDataURL("image/png");
+    Logger.log("Saving image...");
 
     // Create a temporary link element and "click" it
-    let link = document.createElement("a");
+    const imgLink = canvas.toDataURL("image/png");
+    const link = document.createElement("a");
     link.href = imgLink;
     link.download = "Julia.png";
     link.click();
 
-    console.log("Image saved");
+    Logger.log("Image saved");
   }
 
+  // TODO: save animations
   function saveAnimation() {
-    console.log("Saving animation...");
+    Logger.info("Saving animation...");
     
-    console.log("Animation saved");
+    Logger.info("Animation saved");
   }
 
   // TODO: save and load configs
@@ -266,6 +268,7 @@
         <img src={SettingsImg} alt="Open Settings" width=30 height=30 class:open={showSettings} />
       </button>
 
+      <button onclick={saveImage} class="button">Save Image</button>
       <!-- TODO: saving fractal image
       <button onclick={saveImage} class="button">Save Image - Not Working</button>
       <button onclick={saveAnimation} class="button">Save Animation - Not Working</button>
