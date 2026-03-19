@@ -162,6 +162,11 @@ export default class JuliaRenderer {
     );
 
     // Color
+    this.uniformLocations.fractalColorStrength = gl.getUniformLocation(
+      this.program,
+      "uFractalColorStrength",
+    );
+
     this.uniformLocations.fractalColor = gl.getUniformLocation(
       this.program,
       "uFractalColor",
@@ -265,6 +270,7 @@ export default class JuliaRenderer {
     const config = this.config;
 
     // Update color settings
+    gl.uniform1f(uniforms.fractalColorStrength, config.fractalColorStrength);
     gl.uniform4f(uniforms.fractalColor, config.fractalColorR, config.fractalColorG, config.fractalColorB, config.fractalColorA);
     gl.uniform4f(uniforms.backgroundColor, config.backgroundColorR, config.backgroundColorG, config.backgroundColorB, config.backgroundColorA);
     

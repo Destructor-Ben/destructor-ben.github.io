@@ -375,6 +375,29 @@
             <NumberInput bind:value={config.radius} min={1} max={1000} step={0.01}>
               Escape Radius - How far a point must travel to be considered part of the set
             </NumberInput>
+
+            <h2>Falloff</h2>
+
+            <h2>Falloff Color</h2>
+            <NumberInput bind:value={config.fractalColorR} min={0} max={1} step={0.01}>R</NumberInput>
+            <NumberInput bind:value={config.fractalColorG} min={0} max={1} step={0.01}>G</NumberInput>
+            <NumberInput bind:value={config.fractalColorB} min={0} max={1} step={0.01}>B</NumberInput>
+            <NumberInput bind:value={config.fractalColorA} min={0} max={1} step={0.01}>A</NumberInput>
+            <NumberInput bind:value={config.fractalColorStrength} min={0} max={1000} step={0.01}>Strength (allows blowing out)</NumberInput>
+
+            <h2>Background Color</h2>
+            <NumberInput bind:value={config.backgroundColorR} min={0} max={1} step={0.01}>R</NumberInput>
+            <NumberInput bind:value={config.backgroundColorG} min={0} max={1} step={0.01}>G</NumberInput>
+            <NumberInput bind:value={config.backgroundColorB} min={0} max={1} step={0.01}>B</NumberInput>
+            <NumberInput bind:value={config.backgroundColorA} min={0} max={1} step={0.01}>A</NumberInput>
+
+            <h2>Set Color</h2>
+            <ToggleInput bind:value={config.useSetColorOverValue}>Whether to use the color provided below for pixels in the set, or to pretend that pixels in the set have the value provided below.</ToggleInput>
+            <NumberInput bind:value={config.setValue} min={0} max={1} step={0.01}>The value of pixels in the set</NumberInput>
+            <NumberInput bind:value={config.setColorR} min={0} max={1} step={0.01}>R</NumberInput>
+            <NumberInput bind:value={config.setColorG} min={0} max={1} step={0.01}>G</NumberInput>
+            <NumberInput bind:value={config.setColorB} min={0} max={1} step={0.01}>B</NumberInput>
+            <NumberInput bind:value={config.setColorA} min={0} max={1} step={0.01}>A</NumberInput>
           </div>
         </div>
       {/if}

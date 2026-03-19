@@ -13,7 +13,7 @@
 
   // TODO: clean up the animation itself
   // Either just make a cool animation or make it shape into my pfp
-  // Use these colours
+  // Use these colors
   /*
   --col-rainbow-1: #df406f;
   --col-rainbow-2: #fbda34;

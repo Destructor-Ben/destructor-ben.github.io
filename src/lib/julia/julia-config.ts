@@ -14,10 +14,13 @@ export const defaultConfig: Config = {
   maxIterations: 100,
   radius: 4,
 
-  fractalColorR: 180,
-  fractalColorG: 111,
-  fractalColorB: 214,
+  // TODO: rename to falloff colour
+  fractalColorR: 180 / 255,
+  fractalColorG: 111 / 255,
+  fractalColorB: 214 / 255,
   fractalColorA: 1,
+  fractalColorStrength: 255,
+
   backgroundColorR: 0,
   backgroundColorG: 0,
   backgroundColorB: 0,
@@ -69,6 +72,8 @@ export interface Config {
   fractalColorG: number;
   fractalColorB: number;
   fractalColorA: number;
+  fractalColorStrength: number;
+
   backgroundColorR: number;
   backgroundColorG: number;
   backgroundColorB: number;

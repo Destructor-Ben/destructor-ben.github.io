@@ -1,10 +1,14 @@
 # To Do List
 
-Add iCloud Icons extension and TrackMySpa to projects list?
+Redo styling
+Remove julia code from homepage, perhaps bake the animation
+Actually make it interesting
+Use catpuccin colours
+
+Move various projects into their own repos
+
 ASMR sound generator
 Julia
-Calculator
-Games
 
 - Make the mobile version better
 - Make page transitions

@@ -3,6 +3,7 @@ precision highp float;
 
 {{uniforms}}
 
+uniform float uFractalColorStrength;
 uniform vec4 uFractalColor;
 uniform vec4 uBackgroundColor;
 
@@ -52,5 +53,5 @@ void main() {
     }
 
     // Calculate final color
-    FragColor = mix(uBackgroundColor, uFractalColor, vec4(pixelValue));
+    FragColor = mix(uBackgroundColor, uFractalColor * uFractalColorStrength, vec4(pixelValue));
 }
