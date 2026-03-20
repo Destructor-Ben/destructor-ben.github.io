@@ -14,5 +14,17 @@ export default {
     adapter: adapter({
       fallback: "404.html", // Needed for GitHub Pages
     }),
+
+		prerender: {
+			handleHttpError: ({ path, referrer, message }) => {
+				// ignore deliberate link to shiny 404 page
+				if (path === '/projects/julia' && referrer === '/projects') {
+					return;
+				}
+
+				// otherwise fail the build
+				throw new Error(message);
+			}
+		}
   },
 };
