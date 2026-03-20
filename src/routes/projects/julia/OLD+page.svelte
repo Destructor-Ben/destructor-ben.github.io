@@ -12,6 +12,7 @@
 
   import { fly } from "svelte/transition";
   import SelectInput from "$lib/components/SelectInput.svelte";
+  import FalloffType from "$lib/julia/falloff-type";
 
   // TODO: add option for axes overlay
   // TODO: disable selecting elements with TAB when fullscreened
@@ -28,6 +29,10 @@
   const fractalTypes = Object.keys(FractalType)
                              .filter(key => typeof FractalType[key as any] === 'number')
                              .map(key => ({ id: FractalType[key as any], name: key }));
+
+  const falloffTypes = Object.keys(FalloffType)
+                             .filter(key => typeof FalloffType[key as any] === 'number')
+                             .map(key => ({ id: FalloffType[key as any], name: key }));
 
   // Resize the canvas if we entered fullscreen
   function handleResize() {
@@ -377,26 +382,30 @@
             </NumberInput>
 
             <h2>Falloff</h2>
+            <NumberInput bind:value={config.falloffStrength} min={0} max={10000} step={0.01}>Falloff strength</NumberInput>
+            <SelectInput bind:value={config.falloffType} options={falloffTypes}>
+              Falloff type
+            </SelectInput>
 
             <h2>Falloff Color</h2>
-            <NumberInput bind:value={config.fractalColorR} min={0} max={1} step={0.01}>R</NumberInput>
-            <NumberInput bind:value={config.fractalColorG} min={0} max={1} step={0.01}>G</NumberInput>
-            <NumberInput bind:value={config.fractalColorB} min={0} max={1} step={0.01}>B</NumberInput>
+            <NumberInput bind:value={config.fractalColorR} min={0} max={255} step={1}>R</NumberInput>
+            <NumberInput bind:value={config.fractalColorG} min={0} max={255} step={1}>G</NumberInput>
+            <NumberInput bind:value={config.fractalColorB} min={0} max={255} step={1}>B</NumberInput>
             <NumberInput bind:value={config.fractalColorA} min={0} max={1} step={0.01}>A</NumberInput>
             <NumberInput bind:value={config.fractalColorStrength} min={0} max={1000} step={0.01}>Strength (allows blowing out)</NumberInput>
 
             <h2>Background Color</h2>
-            <NumberInput bind:value={config.backgroundColorR} min={0} max={1} step={0.01}>R</NumberInput>
-            <NumberInput bind:value={config.backgroundColorG} min={0} max={1} step={0.01}>G</NumberInput>
-            <NumberInput bind:value={config.backgroundColorB} min={0} max={1} step={0.01}>B</NumberInput>
+            <NumberInput bind:value={config.backgroundColorR} min={0} max={255} step={1}>R</NumberInput>
+            <NumberInput bind:value={config.backgroundColorG} min={0} max={255} step={1}>G</NumberInput>
+            <NumberInput bind:value={config.backgroundColorB} min={0} max={255} step={1}>B</NumberInput>
             <NumberInput bind:value={config.backgroundColorA} min={0} max={1} step={0.01}>A</NumberInput>
 
             <h2>Set Color</h2>
             <ToggleInput bind:value={config.useSetColorOverValue}>Whether to use the color provided below for pixels in the set, or to pretend that pixels in the set have the value provided below.</ToggleInput>
             <NumberInput bind:value={config.setValue} min={0} max={1} step={0.01}>The value of pixels in the set</NumberInput>
-            <NumberInput bind:value={config.setColorR} min={0} max={1} step={0.01}>R</NumberInput>
-            <NumberInput bind:value={config.setColorG} min={0} max={1} step={0.01}>G</NumberInput>
-            <NumberInput bind:value={config.setColorB} min={0} max={1} step={0.01}>B</NumberInput>
+            <NumberInput bind:value={config.setColorR} min={0} max={255} step={1}>R</NumberInput>
+            <NumberInput bind:value={config.setColorG} min={0} max={255} step={1}>G</NumberInput>
+            <NumberInput bind:value={config.setColorB} min={0} max={255} step={1}>B</NumberInput>
             <NumberInput bind:value={config.setColorA} min={0} max={1} step={0.01}>A</NumberInput>
           </div>
         </div>

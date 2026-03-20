@@ -15,9 +15,9 @@ export const defaultConfig: Config = {
   radius: 4,
 
   // TODO: rename to falloff colour
-  fractalColorR: 180 / 255,
-  fractalColorG: 111 / 255,
-  fractalColorB: 214 / 255,
+  fractalColorR: 180,
+  fractalColorG: 111,
+  fractalColorB: 214,
   fractalColorA: 1,
   fractalColorStrength: 255,
 
