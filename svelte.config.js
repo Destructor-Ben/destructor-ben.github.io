@@ -17,12 +17,11 @@ export default {
 
 		prerender: {
 			handleHttpError: ({ path, referrer, message }) => {
-				// ignore deliberate link to shiny 404 page
-				if (path === '/projects/julia' && referrer === '/projects') {
+				// Julia is hosted on a different repo
+				if (path === '/julia' && referrer === '/projects') {
 					return;
 				}
 
-				// otherwise fail the build
 				throw new Error(message);
 			}
 		}

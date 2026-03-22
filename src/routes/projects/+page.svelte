@@ -14,7 +14,7 @@
       name: "Julia",
       summary: "Online fractal renderer",
       previewImage: JuliaThumbnail,
-      url: "/projects/julia",
+      url: "/julia",
     },
     {
       name: "Minecraft Remake",
